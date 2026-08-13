@@ -4,10 +4,6 @@
 
 let allItems = [];
 
-/**
- * 渲染物品卡片至容器
- * @param {Array} items
- */
 function renderCards(items) {
   const container = document.getElementById('items-container');
   const countEl = document.getElementById('result-count');
@@ -41,14 +37,13 @@ function renderCards(items) {
   countEl.textContent = `共找到 ${items.length} 件物資`;
 }
 
-/**
- * 依搜尋條件過濾
- */
 function filterItems() {
   const keyword = document.getElementById('search-input').value.trim().toLowerCase();
   const category = document.getElementById('category-select').value;
 
-  let result = allItems.filter(item => item.status === 'available');
+  // 合併 localStorage 刊登 + 內建資料
+  const localItems = JSON.parse(localStorage.getItem('donated_items') || '[]');
+  let result = [...localItems, ...allItems].filter(item => item.status === 'available');
 
   if (keyword) {
     result = result.filter(item =>
@@ -64,27 +59,16 @@ function filterItems() {
   renderCards(result);
 }
 
-/**
- * 重設搜尋條件
- */
 function resetFilters() {
   document.getElementById('search-input').value = '';
   document.getElementById('category-select').value = '';
   filterItems();
 }
 
-// 頁面初始化
 document.addEventListener('DOMContentLoaded', () => {
-  fetch('data/items.json')
-    .then(res => res.json())
-    .then(items => {
-      allItems = items;
-      filterItems();
-    })
-    .catch(() => {
-      document.getElementById('items-container').innerHTML =
-        '<div class="col-12 text-center text-danger py-4">無法載入物資資料，請重新整理頁面。</div>';
-    });
+  // 直接使用內嵌資料，無需 fetch
+  allItems = ITEMS_DATA;
+  filterItems();
 
   document.getElementById('search-input').addEventListener('input', filterItems);
   document.getElementById('category-select').addEventListener('change', filterItems);

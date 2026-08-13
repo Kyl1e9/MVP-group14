@@ -130,6 +130,7 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/items-data.js"></script>
   <script src="js/main.js"></script>
   <script>
     function renderRow(item, idx, isLocal) {
@@ -168,45 +169,27 @@
     }
 
     function loadListings() {
-      fetch('data/items.json')
-        .then(res => res.json())
-        .then(jsonItems => {
-          const localItems = JSON.parse(localStorage.getItem('donated_items') || '[]');
-          const allItems = [...localItems, ...jsonItems];
+      const localItems = JSON.parse(localStorage.getItem('donated_items') || '[]');
+      const allItems = [...localItems, ...ITEMS_DATA];
 
-          // 統計
-          const available = allItems.filter(i => i.status === 'available').length;
-          const claimed = allItems.filter(i => i.status === 'claimed').length;
-          const categories = new Set(allItems.map(i => i.category)).size;
-          document.getElementById('stat-total').textContent = allItems.length;
-          document.getElementById('stat-available').textContent = available;
-          document.getElementById('stat-claimed').textContent = claimed;
-          document.getElementById('stat-categories').textContent = categories;
+      // 統計
+      const available = allItems.filter(i => i.status === 'available').length;
+      const claimed = allItems.filter(i => i.status === 'claimed').length;
+      const categories = new Set(allItems.map(i => i.category)).size;
+      document.getElementById('stat-total').textContent = allItems.length;
+      document.getElementById('stat-available').textContent = available;
+      document.getElementById('stat-claimed').textContent = claimed;
+      document.getElementById('stat-categories').textContent = categories;
 
-          // 列表
-          const tbody = document.getElementById('listings-tbody');
-          if (allItems.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">尚無刊登物品</td></tr>';
-            return;
-          }
-          tbody.innerHTML = allItems.map((item, idx) =>
-            renderRow(item, idx, item.source === 'local')
-          ).join('');
-        })
-        .catch(() => {
-          // JSON 載入失敗時只顯示 localStorage
-          const localItems = JSON.parse(localStorage.getItem('donated_items') || '[]');
-          const tbody = document.getElementById('listings-tbody');
-          if (localItems.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger py-3">無法載入資料</td></tr>';
-            return;
-          }
-          document.getElementById('stat-total').textContent = localItems.length;
-          document.getElementById('stat-available').textContent = localItems.filter(i => i.status === 'available').length;
-          document.getElementById('stat-claimed').textContent = localItems.filter(i => i.status === 'claimed').length;
-          document.getElementById('stat-categories').textContent = new Set(localItems.map(i => i.category)).size;
-          tbody.innerHTML = localItems.map((item, idx) => renderRow(item, idx, true)).join('');
-        });
+      // 列表
+      const tbody = document.getElementById('listings-tbody');
+      if (allItems.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">尚無刊登物品</td></tr>';
+        return;
+      }
+      tbody.innerHTML = allItems.map((item, idx) =>
+        renderRow(item, idx, item.source === 'local')
+      ).join('');
     }
 
     loadListings();

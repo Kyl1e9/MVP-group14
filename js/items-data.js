@@ -1,0 +1,150 @@
+// ============================
+// items-data.js — 內嵌物品資料
+// 直接以 JS 變數提供，相容 file:// 與 GitHub Pages
+// ============================
+const ITEMS_DATA = [
+  {
+    "id": 1,
+    "title": "七成新電風扇",
+    "category": "家電",
+    "condition": "七成新",
+    "description": "TECO 東元立扇，高度可調節，三段風速，功能正常。因換新冷氣，不再需要，希望給有需要的人。尺寸約高 120cm。",
+    "location": "台北市大安區",
+    "image": "https://placehold.co/400x300/e8f5e9/2e7d32?text=電風扇",
+    "donor": "王小明",
+    "date": "2025-06-01",
+    "status": "available"
+  },
+  {
+    "id": 2,
+    "title": "嬰兒推車（可折疊）",
+    "category": "嬰幼兒用品",
+    "condition": "九成新",
+    "description": "英國品牌輕便推車，可單手折疊，附雨罩與置物袋。孩子長大後不再使用，外觀幾乎全新。適合 0-3 歲寶寶。",
+    "location": "新北市板橋區",
+    "image": "https://placehold.co/400x300/e3f2fd/1565c0?text=嬰兒推車",
+    "donor": "林美玲",
+    "date": "2025-06-03",
+    "status": "available"
+  },
+  {
+    "id": 3,
+    "title": "木製書桌（附椅子）",
+    "category": "家具",
+    "condition": "七成新",
+    "description": "實木書桌，桌面 120x60cm，附一張辦公椅。搬家時無法帶走，整套贈出。需自行搬運，地點在板橋。",
+    "location": "新北市板橋區",
+    "image": "https://placehold.co/400x300/fff3e0/e65100?text=木製書桌",
+    "donor": "陳大偉",
+    "date": "2025-06-04",
+    "status": "available"
+  },
+  {
+    "id": 4,
+    "title": "Python 程式設計入門書（5本）",
+    "category": "書籍",
+    "condition": "九成新",
+    "description": "Python 相關書籍共 5 本，包含入門、進階與資料分析主題。書況良好，書頁乾淨，無劃記。適合自學者或大學生。",
+    "location": "台北市信義區",
+    "image": "https://placehold.co/400x300/f3e5f5/6a1b9a?text=Python書籍",
+    "donor": "張志遠",
+    "date": "2025-06-05",
+    "status": "available"
+  },
+  {
+    "id": 5,
+    "title": "冬季羽絨外套 M 號",
+    "category": "衣物",
+    "condition": "九成新",
+    "description": "黑色羽絨外套，M 號（女款），品牌 Uniqlo，輕量保暖。穿過兩季，無破損，已清洗乾淨。因體型改變，出讓給有需要的人。",
+    "location": "台北市中山區",
+    "image": "https://placehold.co/400x300/fce4ec/880e4f?text=羽絨外套",
+    "donor": "黃淑芬",
+    "date": "2025-06-06",
+    "status": "available"
+  },
+  {
+    "id": 6,
+    "title": "兒童腳踏車 16 吋",
+    "category": "嬰幼兒用品",
+    "condition": "七成新",
+    "description": "適合 4-6 歲小朋友，附輔助輪與手把安全帽（S 號）。輪胎、剎車均正常，外觀有小刮痕屬正常使用痕跡。",
+    "location": "桃園市中壢區",
+    "image": "https://placehold.co/400x300/e8f5e9/1b5e20?text=兒童腳踏車",
+    "donor": "李建宏",
+    "date": "2025-06-07",
+    "status": "available"
+  },
+  {
+    "id": 7,
+    "title": "微波爐（格蘭仕 700W）",
+    "category": "家電",
+    "condition": "五成新",
+    "description": "格蘭仕 700W 微波爐，加熱、解凍功能正常，外觀有使用痕跡。因廚房改裝不再適用，希望送給需要的家庭。",
+    "location": "台中市西屯區",
+    "image": "https://placehold.co/400x300/e8f5e9/2e7d32?text=微波爐",
+    "donor": "吳雅雯",
+    "date": "2025-06-08",
+    "status": "claimed"
+  },
+  {
+    "id": 8,
+    "title": "客廳沙發（三人座）",
+    "category": "家具",
+    "condition": "五成新",
+    "description": "布面三人座沙發，淺灰色，長約 185cm。因搬家換裝潢風格，需讓出。請自行搬運，台中西屯可取。",
+    "location": "台中市西屯區",
+    "image": "https://placehold.co/400x300/fff3e0/bf360c?text=三人沙發",
+    "donor": "蔡俊豪",
+    "date": "2025-06-09",
+    "status": "available"
+  },
+  {
+    "id": 9,
+    "title": "日文學習套書（N3-N1）",
+    "category": "書籍",
+    "condition": "七成新",
+    "description": "日文檢定 N3 至 N1 考試用書，共 8 本，包含文法、單字及歷屆試題。少部分頁面有鉛筆劃線，可用橡皮擦去除。",
+    "location": "台北市文山區",
+    "image": "https://placehold.co/400x300/f3e5f5/4a148c?text=日文套書",
+    "donor": "許雅婷",
+    "date": "2025-06-10",
+    "status": "available"
+  },
+  {
+    "id": 10,
+    "title": "嬰兒床（含床墊）",
+    "category": "嬰幼兒用品",
+    "condition": "七成新",
+    "description": "標準嬰兒床，尺寸 120x60cm，含原廠床墊，床欄可調高低。孩子已長大不再使用，整套贈出，需自取。",
+    "location": "高雄市左營區",
+    "image": "https://placehold.co/400x300/e3f2fd/0d47a1?text=嬰兒床",
+    "donor": "鄭宗翰",
+    "date": "2025-06-11",
+    "status": "available"
+  },
+  {
+    "id": 11,
+    "title": "男士西裝外套 L 號（含褲）",
+    "category": "衣物",
+    "condition": "九成新",
+    "description": "深藍色正式西裝，上衣 L 號配 33 腰褲，僅穿過數次，無破損、無變形。適合面試或正式場合使用。",
+    "location": "台北市松山區",
+    "image": "https://placehold.co/400x300/fce4ec/4a148c?text=男士西裝",
+    "donor": "馮政偉",
+    "date": "2025-06-12",
+    "status": "available"
+  },
+  {
+    "id": 12,
+    "title": "桌上型電風扇（全新未拆）",
+    "category": "家電",
+    "condition": "全新",
+    "description": "全新未拆封桌扇，品牌聲寶，原廠包裝完整，為贈品未使用。USB 供電，靜音設計，適合桌面使用。",
+    "location": "新竹市東區",
+    "image": "https://placehold.co/400x300/e8f5e9/1b5e20?text=桌上型電扇",
+    "donor": "賴秀珍",
+    "date": "2025-06-14",
+    "status": "available"
+  }
+];
