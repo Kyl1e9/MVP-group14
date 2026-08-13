@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>物品詳情 — 閒置物資共享平台</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- 導覽列 -->
+  <nav class="navbar navbar-expand-lg sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">♻️ 物資共享平台</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="index.html">首頁</a></li>
+          <li class="nav-item"><a class="nav-link" href="browse.html">尋找物資</a></li>
+          <li class="nav-item"><a class="nav-link" href="my-listings.html">我的刊登</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">關於平台</a></li>
+          <li class="nav-item ms-lg-2">
+            <a class="nav-link btn-navbar-cta" href="donate.html">我要提供物資</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-content">
+    <div class="container">
+      <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">首頁</a></li>
+          <li class="breadcrumb-item"><a href="browse.html">尋找物資</a></li>
+          <li class="breadcrumb-item active" id="breadcrumb-title">物品詳情</li>
+        </ol>
+      </nav>
+
+      <!-- 詳情內容（動態填入） -->
+      <div id="detail-container">
+        <div class="text-center py-5 text-muted">載入中...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 頁尾 -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <div class="footer-brand">♻️ 物資共享平台</div>
+          <p class="mt-2" style="font-size:0.88rem;">讓閒置物資找到需要的人，<br>共同打造零廢棄的生活圈。</p>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="text-white fw-bold mb-2">快速連結</h6>
+          <ul class="list-unstyled mb-0" style="font-size:0.9rem;">
+            <li><a href="index.html">首頁</a></li>
+            <li><a href="browse.html">尋找物資</a></li>
+            <li><a href="donate.html">我要提供物資</a></li>
+            <li><a href="about.html">關於平台</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="text-white fw-bold mb-2">聯絡我們</h6>
+          <p style="font-size:0.88rem;">如有問題，歡迎來信：<br>
+            <a href="mailto:contact@shareplatform.tw">contact@shareplatform.tw</a>
+          </p>
+        </div>
+      </div>
+      <div class="footer-copy text-center border-top pt-3 mt-2">
+        © 2025 閒置物資共享平台 MVP-group14 · All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/item-detail.js"></script>
+</body>
+</html>

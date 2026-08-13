@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>首頁 — 閒置物資共享平台</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- 導覽列 -->
+  <nav class="navbar navbar-expand-lg sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">♻️ 物資共享平台</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="index.html">首頁</a></li>
+          <li class="nav-item"><a class="nav-link" href="browse.html">尋找物資</a></li>
+          <li class="nav-item"><a class="nav-link" href="my-listings.html">我的刊登</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">關於平台</a></li>
+          <li class="nav-item ms-lg-2">
+            <a class="nav-link btn-navbar-cta" href="donate.html">我要提供物資</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero 區塊 -->
+  <section class="hero-section">
+    <div class="container text-center">
+      <h1>讓閒置物資，找到真正需要的人</h1>
+      <p class="mt-3 mb-4">免費提供或索取生活物品，一起減少浪費、傳遞溫暖。</p>
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="donate.html" class="btn-hero-primary btn">我要提供物資</a>
+        <a href="browse.html" class="btn-hero-outline btn">尋找需要的物資</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 平台特色 -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="section-title text-center" style="text-align:center !important;">為什麼選擇我們？</h2>
+      <div class="row g-4 mt-1">
+        <div class="col-md-4">
+          <div class="feature-card">
+            <span class="feature-icon">🆓</span>
+            <h5>完全免費</h5>
+            <p class="text-muted">所有物品皆免費提供，不收取任何費用，讓愛心零門檻傳遞。</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <span class="feature-icon">🌱</span>
+            <h5>愛物惜物</h5>
+            <p class="text-muted">讓仍有使用價值的物品繼續發揮功能，延長物品生命週期。</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <span class="feature-icon">🤝</span>
+            <h5>社區共享</h5>
+            <p class="text-muted">連結有需要的人與願意分享的人，建立互助的社區網絡。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最新物資 -->
+  <section class="py-4 pb-5" style="background-color:#f0f4f0;">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title mb-0">最新物資</h2>
+        <a href="browse.html" class="btn btn-outline-success btn-sm">查看全部 →</a>
+      </div>
+      <div class="row g-3" id="latest-items-container">
+        <!-- 動態載入 -->
+        <div class="col-12 text-center py-4 text-muted">載入中...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 使用步驟 -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="section-title text-center" style="text-align:center !important;">如何使用？</h2>
+      <div class="row g-4 mt-2 text-center">
+        <div class="col-md-6">
+          <h5 class="text-success fw-bold mb-3">📦 提供物資</h5>
+          <div class="d-flex flex-column gap-2">
+            <div class="p-3 bg-white rounded border">① 點選「我要提供物資」填寫物品資訊</div>
+            <div class="p-3 bg-white rounded border">② 審核通過後，物品刊登在平台上</div>
+            <div class="p-3 bg-white rounded border">③ 收到索取申請後，與對方約定取件</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <h5 class="text-success fw-bold mb-3">🛍️ 索取物資</h5>
+          <div class="d-flex flex-column gap-2">
+            <div class="p-3 bg-white rounded border">① 瀏覽或搜尋需要的物品</div>
+            <div class="p-3 bg-white rounded border">② 點選物品，按下「我要索取」填寫申請</div>
+            <div class="p-3 bg-white rounded border">③ 等候提供者確認，約定取件時間地點</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 頁尾 -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <div class="footer-brand">♻️ 物資共享平台</div>
+          <p class="mt-2" style="font-size:0.88rem;">讓閒置物資找到需要的人，<br>共同打造零廢棄的生活圈。</p>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="text-white fw-bold mb-2">快速連結</h6>
+          <ul class="list-unstyled mb-0" style="font-size:0.9rem;">
+            <li><a href="index.html">首頁</a></li>
+            <li><a href="browse.html">尋找物資</a></li>
+            <li><a href="donate.html">我要提供物資</a></li>
+            <li><a href="about.html">關於平台</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="text-white fw-bold mb-2">聯絡我們</h6>
+          <p style="font-size:0.88rem;">如有問題，歡迎來信：<br>
+            <a href="mailto:contact@shareplatform.tw">contact@shareplatform.tw</a>
+          </p>
+        </div>
+      </div>
+      <div class="footer-copy text-center border-top pt-3 mt-2">
+        © 2025 閒置物資共享平台 MVP-group14 · All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // 首頁：載入最新物資（前 6 筆）
+    fetch('data/items.json')
+      .then(res => res.json())
+      .then(items => {
+        const container = document.getElementById('latest-items-container');
+        const latest = items.filter(i => i.status === 'available').slice(0, 6);
+        if (latest.length === 0) {
+          container.innerHTML = '<div class="col-12 text-center text-muted">目前沒有可用物資</div>';
+          return;
+        }
+        container.innerHTML = latest.map(item => `
+          <div class="col-sm-6 col-md-4">
+            <a href="item-detail.html?id=${item.id}" class="item-card">
+              <img src="${item.image}" alt="${item.title}" loading="lazy" />
+              <div class="card-body">
+                <span class="item-category-badge">${item.category}</span>
+                <h3 class="card-title mt-2">${item.title}</h3>
+                <div class="item-meta">📍 ${item.location} &nbsp;·&nbsp; 🕐 ${item.date}</div>
+              </div>
+            </a>
+          </div>
+        `).join('');
+      })
+      .catch(() => {
+        document.getElementById('latest-items-container').innerHTML =
+          '<div class="col-12 text-center text-danger">無法載入物資資料</div>';
+      });
+  </script>
+</body>
+</html>

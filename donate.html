@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我要提供物資 — 閒置物資共享平台</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- 導覽列 -->
+  <nav class="navbar navbar-expand-lg sticky-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">♻️ 物資共享平台</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="index.html">首頁</a></li>
+          <li class="nav-item"><a class="nav-link" href="browse.html">尋找物資</a></li>
+          <li class="nav-item"><a class="nav-link" href="my-listings.html">我的刊登</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">關於平台</a></li>
+          <li class="nav-item ms-lg-2">
+            <a class="nav-link btn-navbar-cta" href="donate.html">我要提供物資</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-content">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+
+          <div class="form-page-header">
+            <h2>📦 我要提供物資</h2>
+            <p>填寫以下資訊，讓有需要的人找到你的物品。所有物品皆免費提供。</p>
+          </div>
+
+          <!-- 成功訊息（送出後顯示） -->
+          <div id="success-msg" class="alert alert-success d-none" role="alert">
+            🎉 感謝您的提供！我們已收到您的物資資訊，審核通過後將刊登於平台。
+          </div>
+
+          <div class="bg-white rounded border p-4">
+            <form id="donate-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST"
+                  class="needs-validation" novalidate>
+
+              <!-- 物品名稱 -->
+              <div class="mb-3">
+                <label for="item-title" class="form-label fw-semibold">物品名稱 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="item-title" name="item_title"
+                       placeholder="例：七成新書桌、嬰兒推車..." required />
+                <div class="invalid-feedback">請填寫物品名稱。</div>
+              </div>
+
+              <!-- 分類 -->
+              <div class="mb-3">
+                <label for="item-category" class="form-label fw-semibold">分類 <span class="text-danger">*</span></label>
+                <select class="form-select" id="item-category" name="item_category" required>
+                  <option value="">請選擇分類...</option>
+                  <option value="家電">家電</option>
+                  <option value="家具">家具</option>
+                  <option value="書籍">書籍</option>
+                  <option value="衣物">衣物</option>
+                  <option value="嬰幼兒用品">嬰幼兒用品</option>
+                  <option value="其他">其他</option>
+                </select>
+                <div class="invalid-feedback">請選擇物品分類。</div>
+              </div>
+
+              <!-- 物品狀況 -->
+              <div class="mb-3">
+                <label for="item-condition" class="form-label fw-semibold">物品狀況 <span class="text-danger">*</span></label>
+                <select class="form-select" id="item-condition" name="item_condition" required>
+                  <option value="">請選擇狀況...</option>
+                  <option value="全新">全新（未使用）</option>
+                  <option value="九成新">九成新</option>
+                  <option value="七成新">七成新</option>
+                  <option value="五成新">五成新（功能正常）</option>
+                  <option value="需修繕">需修繕</option>
+                </select>
+                <div class="invalid-feedback">請選擇物品狀況。</div>
+              </div>
+
+              <!-- 描述 -->
+              <div class="mb-3">
+                <label for="item-desc" class="form-label fw-semibold">物品描述 <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="item-desc" name="item_description" rows="4"
+                          placeholder="請詳細描述物品的外觀、尺寸、使用狀況等..." required></textarea>
+                <div class="invalid-feedback">請填寫物品描述。</div>
+              </div>
+
+              <!-- 地區 -->
+              <div class="mb-3">
+                <label for="item-location" class="form-label fw-semibold">物品所在地區 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="item-location" name="item_location"
+                       placeholder="例：台北市大安區、新北市板橋區..." required />
+                <div class="invalid-feedback">請填寫物品所在地區。</div>
+              </div>
+
+              <!-- 聯絡方式 -->
+              <div class="mb-3">
+                <label for="item-contact" class="form-label fw-semibold">聯絡方式 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="item-contact" name="contact"
+                       placeholder="Email 或電話，方便索取者與您聯繫" required />
+                <div class="invalid-feedback">請填寫聯絡方式。</div>
+              </div>
+
+              <div class="alert alert-info py-2 px-3" style="font-size:0.85rem;">
+                ℹ️ 表單送出後，資料將由 Formspree 接收。使用前請將表單 action 替換為您的
+                <a href="https://formspree.io" target="_blank">Formspree</a> endpoint。
+              </div>
+
+              <div class="d-grid mt-3">
+                <button type="submit" class="btn btn-success btn-lg">送出物資資訊</button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 頁尾 -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <div class="footer-brand">♻️ 物資共享平台</div>
+          <p class="mt-2" style="font-size:0.88rem;">讓閒置物資找到需要的人，<br>共同打造零廢棄的生活圈。</p>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="text-white fw-bold mb-2">快速連結</h6>
+          <ul class="list-unstyled mb-0" style="font-size:0.9rem;">
+            <li><a href="index.html">首頁</a></li>
+            <li><a href="browse.html">尋找物資</a></li>
+            <li><a href="donate.html">我要提供物資</a></li>
+            <li><a href="about.html">關於平台</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="text-white fw-bold mb-2">聯絡我們</h6>
+          <p style="font-size:0.88rem;">如有問題，歡迎來信：<br>
+            <a href="mailto:contact@shareplatform.tw">contact@shareplatform.tw</a>
+          </p>
+        </div>
+      </div>
+      <div class="footer-copy text-center border-top pt-3 mt-2">
+        © 2025 閒置物資共享平台 MVP-group14 · All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Bootstrap 5 表單驗證
+    const form = document.getElementById('donate-form');
+    form.addEventListener('submit', function (e) {
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      form.classList.add('was-validated');
+    });
+  </script>
+</body>
+</html>
