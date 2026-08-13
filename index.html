@@ -15,14 +15,18 @@
     --purple-light: #ede9fe;
     --orange: #f59e0b;
     --orange-light: #fef3c7;
+    --pink: #ec4899;
+    --pink-light: #fce7f3;
+    --teal: #0d9488;
+    --teal-light: #ccfbf1;
     --bg: #f1f5f9;
     --surface: #ffffff;
     --border: #e2e8f0;
     --text: #0f172a;
     --muted: #64748b;
-    --radius: 12px;
-    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.06);
-    --shadow-hover: 0 4px 16px rgba(37,99,235,.18);
+    --radius: 14px;
+    --shadow: 0 2px 8px rgba(0,0,0,.07), 0 6px 20px rgba(0,0,0,.05);
+    --shadow-hover: 0 8px 30px rgba(37,99,235,.2);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -35,17 +39,18 @@
 
   /* ── Header ── */
   header {
-    background: var(--surface);
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
-    padding: 0 32px;
+    padding: 0 36px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 60px;
+    height: 62px;
     position: sticky;
     top: 0;
     z-index: 200;
-    box-shadow: 0 1px 8px rgba(0,0,0,.06);
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
   }
   .logo {
     display: flex;
@@ -55,19 +60,20 @@
     font-weight: 800;
     color: var(--primary);
     letter-spacing: -0.3px;
+    text-decoration: none;
   }
   .logo-icon {
-    width: 32px; height: 32px;
-    background: var(--primary);
-    border-radius: 8px;
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
   }
-  .logo-icon svg { width: 18px; height: 18px; fill: #fff; }
-  nav { display: flex; align-items: center; gap: 4px; }
+  nav { display: flex; align-items: center; gap: 2px; }
   nav a {
     text-decoration: none;
     color: var(--muted);
-    padding: 6px 14px;
+    padding: 7px 15px;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
@@ -76,73 +82,87 @@
   nav a:hover { background: var(--primary-light); color: var(--primary); }
   nav a.active { background: var(--primary-light); color: var(--primary); font-weight: 700; }
   .nav-donate {
-    background: var(--primary) !important;
+    background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
     color: #fff !important;
-    margin-left: 8px;
+    margin-left: 10px;
+    font-weight: 700 !important;
+    box-shadow: 0 3px 10px rgba(37,99,235,.35);
   }
-  .nav-donate:hover { background: var(--primary-dark) !important; }
+  .nav-donate:hover { opacity: .9; transform: translateY(-1px); }
 
   /* ── Hero ── */
   .hero {
-    background: linear-gradient(135deg, #1e40af 0%, #2563eb 45%, #0ea5e9 100%);
-    padding: 72px 24px 80px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 35%, #2563eb 65%, #7c3aed 100%);
+    padding: 80px 24px 110px;
     text-align: center;
     position: relative;
     overflow: hidden;
   }
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  .hero-circles {
+    position: absolute; inset: 0; pointer-events: none;
   }
+  .hero-circles span {
+    position: absolute;
+    border-radius: 50%;
+    opacity: .08;
+  }
+  .hero-circles span:nth-child(1) { width:400px;height:400px;background:#7c3aed;top:-100px;left:-80px; }
+  .hero-circles span:nth-child(2) { width:300px;height:300px;background:#2563eb;bottom:-80px;right:-60px; }
+  .hero-circles span:nth-child(3) { width:200px;height:200px;background:#10b981;top:40px;right:15%; }
   .hero-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(255,255,255,.18);
-    border: 1px solid rgba(255,255,255,.3);
-    color: #fff;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.25);
+    color: rgba(255,255,255,.95);
     font-size: 12px;
     font-weight: 600;
-    padding: 4px 14px;
+    padding: 5px 16px;
     border-radius: 20px;
-    margin-bottom: 20px;
-    letter-spacing: 0.5px;
+    margin-bottom: 22px;
+    letter-spacing: 0.6px;
   }
   .hero h1 {
-    font-size: 36px;
-    font-weight: 800;
+    font-size: 42px;
+    font-weight: 900;
     color: #fff;
-    margin-bottom: 14px;
-    letter-spacing: -0.5px;
-    line-height: 1.3;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+    line-height: 1.2;
   }
-  .hero p { color: rgba(255,255,255,.85); font-size: 16px; margin-bottom: 36px; }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(90deg, #34d399, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p { color: rgba(255,255,255,.75); font-size: 16px; margin-bottom: 38px; line-height: 1.8; }
   .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
   .btn-primary {
-    background: #fff;
+    background: linear-gradient(135deg, #fff, #f0f4ff);
     color: var(--primary);
     border: none;
-    padding: 13px 30px;
-    border-radius: 10px;
+    padding: 14px 32px;
+    border-radius: 12px;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 800;
     cursor: pointer;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 4px 14px rgba(0,0,0,.15);
-    transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 6px 20px rgba(0,0,0,.2);
+    transition: transform .18s, box-shadow .18s;
   }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.2); }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,.25); }
   .btn-secondary {
-    background: rgba(255,255,255,.15);
+    background: rgba(255,255,255,.1);
     color: #fff;
-    border: 1.5px solid rgba(255,255,255,.5);
-    padding: 13px 30px;
-    border-radius: 10px;
+    border: 1.5px solid rgba(255,255,255,.4);
+    padding: 14px 32px;
+    border-radius: 12px;
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
@@ -150,117 +170,161 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    transition: background .15s;
+    transition: background .15s, transform .18s;
   }
-  .btn-secondary:hover { background: rgba(255,255,255,.25); }
+  .btn-secondary:hover { background: rgba(255,255,255,.2); transform: translateY(-2px); }
+
+  /* ── Wave ── */
+  .wave {
+    margin-top: -2px;
+    line-height: 0;
+  }
+  .wave svg { display: block; width: 100%; }
 
   /* ── Stats Bar ── */
   .stats-bar {
     background: var(--surface);
+    padding: 0 24px 4px;
     border-bottom: 1px solid var(--border);
-    padding: 0 24px;
   }
   .stats-inner {
-    max-width: 900px;
+    max-width: 920px;
     margin: 0 auto;
     display: flex;
     justify-content: center;
-    gap: 0;
   }
   .stat-item {
     flex: 1;
-    max-width: 200px;
+    max-width: 220px;
     text-align: center;
-    padding: 20px 16px;
+    padding: 22px 16px;
     border-right: 1px solid var(--border);
+    position: relative;
   }
   .stat-item:last-child { border-right: none; }
-  .stat-number { font-size: 26px; font-weight: 800; color: var(--primary); line-height: 1; }
-  .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .stat-number {
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--primary), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 5px; }
 
   /* ── Main ── */
-  .container { max-width: 900px; margin: 0 auto; padding: 36px 24px; }
+  .container { max-width: 920px; margin: 0 auto; padding: 40px 24px; }
 
   /* ── Search ── */
   .search-section {
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: var(--radius);
-    padding: 28px;
-    margin-bottom: 32px;
+    padding: 28px 32px;
+    margin-bottom: 36px;
     box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
   }
-  .search-section h2 { font-size: 17px; font-weight: 700; margin-bottom: 16px; }
+  .search-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--purple), var(--pink));
+  }
+  .search-section h2 { font-size: 17px; font-weight: 800; margin-bottom: 16px; }
   .search-bar { display: flex; gap: 10px; }
   .search-bar input {
     flex: 1;
     border: 1.5px solid var(--border);
     border-radius: 10px;
-    padding: 12px 16px;
+    padding: 13px 18px;
     font-size: 14px;
     background: var(--bg);
     outline: none;
     color: var(--text);
-    transition: border-color .15s;
+    transition: border-color .15s, box-shadow .15s;
   }
-  .search-bar input:focus { border-color: var(--primary); background: #fff; }
+  .search-bar input:focus {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+  }
   .search-bar button {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--purple));
     color: #fff;
     border: none;
-    padding: 12px 24px;
+    padding: 13px 26px;
     border-radius: 10px;
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 6px;
-    transition: background .15s;
+    gap: 7px;
+    transition: opacity .15s, transform .15s;
+    box-shadow: 0 3px 12px rgba(37,99,235,.3);
   }
-  .search-bar button:hover { background: var(--primary-dark); }
+  .search-bar button:hover { opacity: .9; transform: translateY(-1px); }
 
   /* ── Section Title ── */
   .section-title {
-    font-size: 17px;
-    font-weight: 800;
-    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 900;
+    margin-bottom: 18px;
     color: var(--text);
     display: flex;
     align-items: center;
     gap: 10px;
+    letter-spacing: -0.3px;
   }
   .section-title::before {
     content: '';
     display: inline-block;
-    width: 4px; height: 18px;
-    background: linear-gradient(180deg, var(--primary), var(--accent));
+    width: 5px; height: 20px;
+    background: linear-gradient(180deg, var(--primary), var(--purple));
     border-radius: 3px;
+    flex-shrink: 0;
   }
 
   /* ── Categories ── */
-  .categories { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+  .categories { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }
   .category-tag {
     background: var(--surface);
     border: 1.5px solid var(--border);
     border-radius: 24px;
-    padding: 7px 18px;
+    padding: 8px 20px;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--muted);
     cursor: pointer;
     text-decoration: none;
-    transition: all .15s;
+    transition: all .18s;
+    box-shadow: 0 1px 4px rgba(0,0,0,.04);
   }
-  .category-tag:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
-  .category-tag.active { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 700; }
+  .category-tag:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37,99,235,.15);
+  }
+  .category-tag.active {
+    background: linear-gradient(135deg, var(--primary), var(--purple));
+    border-color: transparent;
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(37,99,235,.35);
+  }
 
   /* ── Item Cards ── */
   .items-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 18px;
-    margin-bottom: 36px;
+    grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
   }
   .item-card {
     background: var(--surface);
@@ -269,58 +333,101 @@
     overflow: hidden;
     cursor: pointer;
     box-shadow: var(--shadow);
-    transition: transform .18s, box-shadow .18s, border-color .18s;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
     display: flex;
     flex-direction: column;
   }
   .item-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     box-shadow: var(--shadow-hover);
     border-color: var(--primary);
   }
   .item-thumb {
-    height: 110px;
+    height: 120px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 44px;
+    font-size: 50px;
+    position: relative;
+    overflow: hidden;
   }
-  .item-thumb.purple { background: var(--purple-light); }
-  .item-thumb.blue   { background: var(--primary-light); }
-  .item-thumb.orange { background: var(--orange-light); }
-  .item-thumb.green  { background: var(--accent-light); }
-  .item-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+  .item-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    filter: blur(0);
+  }
+  .item-thumb.purple { background: linear-gradient(135deg, #ede9fe, #ddd6fe); }
+  .item-thumb.blue   { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+  .item-thumb.orange { background: linear-gradient(135deg, #fef3c7, #fde68a); }
+  .item-thumb.green  { background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
+  .item-thumb.pink   { background: linear-gradient(135deg, #fce7f3, #fbcfe8); }
+  .item-thumb.teal   { background: linear-gradient(135deg, #ccfbf1, #99f6e4); }
+  .item-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
   .item-category {
     font-size: 11px;
     font-weight: 700;
-    color: var(--purple);
-    background: var(--purple-light);
     border-radius: 6px;
-    padding: 2px 8px;
+    padding: 3px 9px;
     display: inline-block;
     margin-bottom: 10px;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.4px;
   }
-  .item-category.blue  { color: var(--primary); background: var(--primary-light); }
-  .item-category.orange{ color: #b45309; background: var(--orange-light); }
-  .item-category.green { color: #065f46; background: var(--accent-light); }
-  .item-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; line-height: 1.4; }
-  .item-card p  { font-size: 12px; color: var(--muted); margin-bottom: 14px; flex: 1; }
+  .item-category.purple { color: var(--purple); background: var(--purple-light); }
+  .item-category.blue   { color: var(--primary); background: var(--primary-light); }
+  .item-category.orange { color: #b45309; background: var(--orange-light); }
+  .item-category.green  { color: #065f46; background: var(--accent-light); }
+  .item-category.pink   { color: #9d174d; background: var(--pink-light); }
+  .item-category.teal   { color: var(--teal); background: var(--teal-light); }
+  .item-card h3 { font-size: 14px; font-weight: 800; margin-bottom: 6px; line-height: 1.4; }
+  .item-card p  { font-size: 12px; color: var(--muted); margin-bottom: 16px; flex: 1; line-height: 1.6; }
   .item-footer  { display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--muted); }
-  .item-status  { display: inline-flex; align-items: center; gap: 5px; }
+  .item-status  { display: inline-flex; align-items: center; gap: 5px; font-weight: 600; color: var(--accent); }
   .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
   .request-btn {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--purple));
     color: #fff;
     border: none;
-    padding: 6px 14px;
-    border-radius: 7px;
+    padding: 7px 16px;
+    border-radius: 8px;
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
-    transition: background .15s;
+    transition: opacity .15s, transform .15s;
+    box-shadow: 0 2px 8px rgba(37,99,235,.3);
   }
-  .request-btn:hover { background: var(--primary-dark); }
+  .request-btn:hover { opacity: .9; transform: translateY(-1px); }
+
+  /* ── Feature Banner ── */
+  .feature-banner {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .feature-card {
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.1);
+    bottom: -30px; right: -30px;
+  }
+  .feature-card.c1 { background: linear-gradient(135deg, #2563eb, #7c3aed); }
+  .feature-card.c2 { background: linear-gradient(135deg, #0d9488, #10b981); }
+  .feature-card.c3 { background: linear-gradient(135deg, #f59e0b, #ec4899); }
+  .feature-card .fc-icon { font-size: 32px; margin-bottom: 10px; }
+  .feature-card h4 { font-size: 15px; font-weight: 800; margin-bottom: 5px; }
+  .feature-card p  { font-size: 12px; opacity: .85; line-height: 1.6; }
 
   /* ── My Listings ── */
   .my-listings {
@@ -328,43 +435,51 @@
     border: 1.5px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
-    margin-bottom: 32px;
+    margin-bottom: 36px;
     box-shadow: var(--shadow);
+    position: relative;
   }
-  .my-listings-header {
-    padding: 20px 24px 0;
+  .my-listings::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--teal));
   }
+  .my-listings-header { padding: 22px 26px 0; }
   .listing-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 24px;
+    padding: 16px 26px;
     border-bottom: 1px solid #f8fafc;
     font-size: 14px;
     transition: background .12s;
   }
-  .listing-row:hover { background: #fafbfc; }
+  .listing-row:hover { background: #fafbff; }
   .listing-row:last-child { border-bottom: none; }
   .listing-left { display: flex; align-items: center; gap: 14px; }
   .listing-icon {
-    width: 40px; height: 40px;
-    border-radius: 10px;
+    width: 44px; height: 44px;
+    border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
-    background: var(--bg);
+    font-size: 22px;
     flex-shrink: 0;
   }
-  .listing-name { font-weight: 700; font-size: 14px; }
-  .listing-meta { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .listing-icon.i1 { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+  .listing-icon.i2 { background: linear-gradient(135deg, #fef3c7, #fde68a); }
+  .listing-icon.i3 { background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
+  .listing-name { font-weight: 800; font-size: 14px; }
+  .listing-meta { color: var(--muted); font-size: 12px; margin-top: 3px; }
   .badge {
     font-size: 11px;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 20px;
     font-weight: 700;
     letter-spacing: 0.3px;
   }
-  .badge-green  { background: var(--accent-light); color: #065f46; }
-  .badge-yellow { background: var(--orange-light);  color: #92400e; }
+  .badge-green  { background: linear-gradient(135deg, #d1fae5, #a7f3d0); color: #065f46; }
+  .badge-yellow { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; }
   .badge-gray   { background: #f1f5f9; color: var(--muted); }
 
   /* ── About ── */
@@ -372,60 +487,79 @@
     background: var(--surface);
     border: 1.5px solid var(--border);
     border-radius: var(--radius);
-    padding: 28px;
-    margin-bottom: 32px;
+    padding: 32px;
+    margin-bottom: 36px;
     box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
   }
-  .about-desc { color: var(--muted); font-size: 14px; margin: 10px 0 24px; }
-  .about-steps { display: flex; gap: 16px; flex-wrap: wrap; }
+  .about-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--orange), var(--pink), var(--purple));
+  }
+  .about-desc { color: var(--muted); font-size: 14px; margin: 12px 0 28px; line-height: 1.8; }
+  .about-steps { display: flex; gap: 18px; flex-wrap: wrap; }
   .about-step {
     flex: 1;
     min-width: 150px;
     background: var(--bg);
-    border-radius: 10px;
-    padding: 20px 16px;
+    border-radius: 12px;
+    padding: 24px 18px;
     text-align: center;
-    border: 1px solid var(--border);
-    transition: border-color .15s;
+    border: 1.5px solid var(--border);
+    transition: border-color .15s, transform .18s;
+    position: relative;
+    overflow: hidden;
   }
-  .about-step:hover { border-color: var(--primary); }
-  .step-number {
-    width: 36px; height: 36px;
+  .about-step::before {
+    content: '';
+    position: absolute;
+    width: 60px; height: 60px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary), #0ea5e9);
+    background: rgba(37,99,235,.05);
+    bottom: -15px; right: -15px;
+  }
+  .about-step:hover { border-color: var(--primary); transform: translateY(-3px); }
+  .step-number {
+    width: 40px; height: 40px;
+    border-radius: 50%;
     color: #fff;
-    font-size: 15px;
-    font-weight: 800;
+    font-size: 16px;
+    font-weight: 900;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 12px;
-    box-shadow: 0 3px 10px rgba(37,99,235,.3);
+    margin: 0 auto 14px;
+    box-shadow: 0 4px 12px rgba(37,99,235,.35);
   }
-  .about-step h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-  .about-step p  { font-size: 12px; color: var(--muted); }
+  .step-number.s1 { background: linear-gradient(135deg, #2563eb, #7c3aed); }
+  .step-number.s2 { background: linear-gradient(135deg, #0d9488, #10b981); }
+  .step-number.s3 { background: linear-gradient(135deg, #f59e0b, #ec4899); }
+  .about-step h4 { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+  .about-step p  { font-size: 12px; color: var(--muted); line-height: 1.6; }
 
   /* ── Footer ── */
   footer {
+    background: #0f172a;
+    color: rgba(255,255,255,.6);
     text-align: center;
     font-size: 12px;
-    color: var(--muted);
-    border-top: 1px solid var(--border);
-    padding: 24px;
-    background: var(--surface);
+    padding: 28px 24px;
   }
+  footer strong { color: rgba(255,255,255,.9); }
 </style>
 </head>
 <body>
 
 <!-- Header -->
 <header>
-  <div class="logo">
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-    </div>
+  <a class="logo" href="#">
+    <div class="logo-icon">🤝</div>
     物資共享平台
-  </div>
+  </a>
   <nav>
     <a href="#" class="active">首頁</a>
     <a href="#search">尋找物資</a>
@@ -437,19 +571,27 @@
 
 <!-- Hero -->
 <div class="hero">
-  <div class="hero-badge">🌱 免費物資共享，減少浪費</div>
-  <h1>讓閒置物資<br>流向最需要的地方</h1>
-  <p>登記您的閒置物品，或尋找所需物資<br>讓每一樣東西都能繼續發揮價值</p>
+  <div class="hero-circles">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="hero-badge">🌱 免費物資共享平台 · 讓每樣東西都有價值</div>
+  <h1>讓閒置物資<br><em>流向最需要的地方</em></h1>
+  <p>登記您的閒置物品，或尋找所需物資<br>讓每一樣東西都能繼續發揮它的價值</p>
   <div class="hero-actions">
     <a href="#" class="btn-primary">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
-      我要提供物資
+      📦 我要提供物資
     </a>
     <a href="#search" class="btn-secondary">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-      尋找物資
+      🔍 我要尋找物資
     </a>
   </div>
+</div>
+
+<!-- Wave -->
+<div class="wave">
+  <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#ffffff"/>
+  </svg>
 </div>
 
 <!-- Stats Bar -->
@@ -457,19 +599,19 @@
   <div class="stats-inner">
     <div class="stat-item">
       <div class="stat-number">1,248</div>
-      <div class="stat-label">物資刊登數</div>
+      <div class="stat-label">📋 物資刊登數</div>
     </div>
     <div class="stat-item">
       <div class="stat-number">836</div>
-      <div class="stat-label">成功媒合次數</div>
+      <div class="stat-label">🤝 成功媒合次數</div>
     </div>
     <div class="stat-item">
       <div class="stat-number">412</div>
-      <div class="stat-label">活躍用戶</div>
+      <div class="stat-label">👥 活躍用戶</div>
     </div>
     <div class="stat-item">
       <div class="stat-number">98%</div>
-      <div class="stat-label">用戶滿意度</div>
+      <div class="stat-label">⭐ 用戶滿意度</div>
     </div>
   </div>
 </div>
@@ -477,11 +619,30 @@
 <!-- Main -->
 <div class="container">
 
+  <!-- Feature Banner -->
+  <div class="feature-banner">
+    <div class="feature-card c1">
+      <div class="fc-icon">🎁</div>
+      <h4>免費贈送</h4>
+      <p>閒置物品找新家<br>讓愛流動不浪費</p>
+    </div>
+    <div class="feature-card c2">
+      <div class="fc-icon">🔒</div>
+      <h4>安全媒合</h4>
+      <p>平台審核把關<br>交易安心有保障</p>
+    </div>
+    <div class="feature-card c3">
+      <div class="fc-icon">⚡</div>
+      <h4>快速配對</h4>
+      <p>即時通知提醒<br>物資迅速找到主人</p>
+    </div>
+  </div>
+
   <!-- 搜尋 -->
   <div class="search-section" id="search">
     <h2>🔍 尋找物資</h2>
     <div class="search-bar">
-      <input type="text" placeholder="搜尋物品名稱，例如：嬰兒車、書籍、電風扇…" />
+      <input type="text" placeholder="搜尋物品名稱，例如：嬰兒車、書籍、電風扇、衣物…" />
       <button>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         搜尋
@@ -492,7 +653,7 @@
   <!-- 分類 -->
   <div class="section-title">分類瀏覽</div>
   <div class="categories">
-    <a href="#" class="category-tag active">全部</a>
+    <a href="#" class="category-tag active">✨ 全部</a>
     <a href="#" class="category-tag">🔌 家電用品</a>
     <a href="#" class="category-tag">📚 書籍文具</a>
     <a href="#" class="category-tag">🍼 嬰幼兒用品</a>
@@ -509,12 +670,12 @@
     <div class="item-card">
       <div class="item-thumb purple">🍼</div>
       <div class="item-body">
-        <span class="item-category">嬰幼兒用品</span>
+        <span class="item-category purple">嬰幼兒用品</span>
         <h3>嬰兒推車</h3>
         <p>九成新，附雨罩，適合 0–3 歲，自取優先。</p>
         <div class="item-footer">
           <span class="item-status"><span class="dot"></span>可索取</span>
-          <button class="request-btn">索取</button>
+          <button class="request-btn">我要索取</button>
         </div>
       </div>
     </div>
@@ -527,7 +688,7 @@
         <p>國一至國三各科，保存良好，免費贈送。</p>
         <div class="item-footer">
           <span class="item-status"><span class="dot"></span>可索取</span>
-          <button class="request-btn">索取</button>
+          <button class="request-btn">我要索取</button>
         </div>
       </div>
     </div>
@@ -540,7 +701,7 @@
         <p>功能正常，外觀些微刮痕，附遙控器。</p>
         <div class="item-footer">
           <span class="item-status"><span class="dot"></span>可索取</span>
-          <button class="request-btn">索取</button>
+          <button class="request-btn">我要索取</button>
         </div>
       </div>
     </div>
@@ -553,7 +714,33 @@
         <p>僅穿過數次，深藍色，品牌款，保暖佳。</p>
         <div class="item-footer">
           <span class="item-status"><span class="dot"></span>可索取</span>
-          <button class="request-btn">索取</button>
+          <button class="request-btn">我要索取</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="item-card">
+      <div class="item-thumb pink">🛋</div>
+      <div class="item-body">
+        <span class="item-category pink">家具寢具</span>
+        <h3>單人床墊</h3>
+        <p>使用不到一年，乾淨無污漬，需自行搬運。</p>
+        <div class="item-footer">
+          <span class="item-status"><span class="dot"></span>可索取</span>
+          <button class="request-btn">我要索取</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="item-card">
+      <div class="item-thumb teal">🥫</div>
+      <div class="item-body">
+        <span class="item-category teal">食品物資</span>
+        <h3>即期罐頭 × 20 罐</h3>
+        <p>效期三個月內，品項多元，歡迎有需要的人領取。</p>
+        <div class="item-footer">
+          <span class="item-status"><span class="dot"></span>可索取</span>
+          <button class="request-btn">我要索取</button>
         </div>
       </div>
     </div>
@@ -567,62 +754,65 @@
     </div>
     <div class="listing-row">
       <div class="listing-left">
-        <div class="listing-icon">🚲</div>
+        <div class="listing-icon i1">🚲</div>
         <div>
           <div class="listing-name">二手腳踏車</div>
           <div class="listing-meta">刊登日期：2025-08-10　索取申請：3 件</div>
         </div>
       </div>
-      <span class="badge badge-green">刊登中</span>
+      <span class="badge badge-green">✅ 刊登中</span>
     </div>
     <div class="listing-row">
       <div class="listing-left">
-        <div class="listing-icon">📦</div>
+        <div class="listing-icon i2">📦</div>
         <div>
           <div class="listing-name">木製書架</div>
           <div class="listing-meta">刊登日期：2025-08-05　索取申請：1 件</div>
         </div>
       </div>
-      <span class="badge badge-yellow">待確認</span>
+      <span class="badge badge-yellow">⏳ 待確認</span>
     </div>
     <div class="listing-row">
       <div class="listing-left">
-        <div class="listing-icon">🧩</div>
+        <div class="listing-icon i3">🧩</div>
         <div>
           <div class="listing-name">兒童積木組</div>
           <div class="listing-meta">刊登日期：2025-07-28　已完成媒合</div>
         </div>
       </div>
-      <span class="badge badge-gray">已完成</span>
+      <span class="badge badge-gray">🏁 已完成</span>
     </div>
   </div>
 
   <!-- 關於平台 -->
   <div class="about-section" id="about">
     <div class="section-title">關於平台</div>
-    <p class="about-desc">物資共享平台致力於媒合物資提供者與需求者，減少浪費並幫助有需要的人。加入我們，讓每一樣物品都能延續它的價值。</p>
+    <p class="about-desc">物資共享平台致力於媒合物資提供者與需求者，減少浪費並幫助有需要的人。<br>加入我們，讓每一樣物品都能延續它的生命與價值。</p>
     <div class="about-steps">
       <div class="about-step">
-        <div class="step-number">1</div>
-        <h4>登記物資</h4>
-        <p>填寫物品資訊並拍照上傳</p>
+        <div class="step-number s1">1</div>
+        <h4>🖊 登記物資</h4>
+        <p>填寫物品資訊並拍照上傳，輕鬆刊登</p>
       </div>
       <div class="about-step">
-        <div class="step-number">2</div>
-        <h4>等待媒合</h4>
-        <p>需求者瀏覽並提出索取</p>
+        <div class="step-number s2">2</div>
+        <h4>🔔 等待媒合</h4>
+        <p>需求者瀏覽並提出索取，即時通知提醒</p>
       </div>
       <div class="about-step">
-        <div class="step-number">3</div>
-        <h4>確認交接</h4>
-        <p>雙方聯繫完成物資交接</p>
+        <div class="step-number s3">3</div>
+        <h4>🤝 確認交接</h4>
+        <p>雙方聯繫確認，完成溫暖的物資交接</p>
       </div>
     </div>
   </div>
 
 </div>
 
-<footer>© 2025 物資共享平台　Made with IBM Bob</footer>
+<!-- Footer -->
+<footer>
+  <strong>物資共享平台</strong> · 讓愛流動，讓物資不浪費 · © 2025 · Made with IBM Bob
+</footer>
 
 </body>
 </html>
