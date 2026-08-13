@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>物資提供登記平台</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    background: #f7f8fa;
+    color: #1f2328;
+  }
+
+  /* ── Header ── */
+  header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header .logo {
+    font-size: 17px;
+    font-weight: 700;
+    color: #3b82d4;
+    letter-spacing: 0.5px;
+  }
+  nav a {
+    text-decoration: none;
+    color: #57606a;
+    margin-left: 24px;
+    font-size: 14px;
+  }
+  nav a:hover { color: #3b82d4; }
+  nav a.active { color: #3b82d4; font-weight: 600; border-bottom: 2px solid #3b82d4; padding-bottom: 2px; }
+
+  /* ── Hero ── */
+  .hero {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 48px 24px;
+    text-align: center;
+  }
+  .hero h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+  .hero p { color: #57606a; font-size: 15px; margin-bottom: 28px; }
+  .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: #3b82d4;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-secondary {
+    background: #ffffff;
+    color: #3b82d4;
+    border: 1px solid #3b82d4;
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  /* ── Main layout ── */
+  .container { max-width: 760px; margin: 0 auto; padding: 32px 24px; }
+
+  /* ── Search Section ── */
+  .search-section {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+  .search-section h2 { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+  .search-bar { display: flex; gap: 10px; }
+  .search-bar input {
+    flex: 1;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 14px;
+    background: #f7f8fa;
+    outline: none;
+  }
+  .search-bar button {
+    background: #3b82d4;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* ── Section Title ── */
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #1f2328;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background: #3b82d4;
+    border-radius: 2px;
+  }
+
+  /* ── Categories ── */
+  .categories { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+  .category-tag {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: #57606a;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .category-tag:hover, .category-tag.active {
+    background: #3b82d4;
+    border-color: #3b82d4;
+    color: #fff;
+  }
+
+  /* ── Item Cards ── */
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .item-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 18px;
+    cursor: pointer;
+  }
+  .item-card:hover { border-color: #3b82d4; }
+  .item-card .item-category {
+    font-size: 11px;
+    font-weight: 600;
+    color: #7c5cd8;
+    background: #f3f0ff;
+    border-radius: 4px;
+    padding: 2px 8px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .item-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .item-card p { font-size: 13px; color: #57606a; margin-bottom: 14px; }
+  .item-card .item-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #57606a;
+  }
+  .request-btn {
+    background: #3b82d4;
+    color: #fff;
+    border: none;
+    padding: 5px 14px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .item-status {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    margin-right: 4px;
+  }
+
+  /* ── My Listings ── */
+  .my-listings {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+  .listing-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+  }
+  .listing-row:last-child { border-bottom: none; }
+  .listing-name { font-weight: 600; }
+  .listing-meta { color: #57606a; font-size: 12px; margin-top: 2px; }
+  .badge {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-yellow { background: #fef9c3; color: #854d0e; }
+  .badge-gray { background: #f1f5f9; color: #57606a; }
+
+  /* ── About ── */
+  .about-section {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 28px;
+  }
+  .about-section p { color: #57606a; font-size: 14px; margin-top: 10px; }
+  .about-steps { display: flex; gap: 16px; margin-top: 18px; flex-wrap: wrap; }
+  .about-step {
+    flex: 1;
+    min-width: 140px;
+    background: #f7f8fa;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .step-number {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #3b82d4;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+  }
+  .about-step h4 { font-size: 14px; font-weight: 600; }
+  .about-step p { font-size: 13px; margin-top: 4px; }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: #57606a;
+    border-top: 1px solid #e5e7eb;
+    padding: 20px 24px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">物資共享平台</div>
+  <nav>
+    <a href="#" class="active">首頁</a>
+    <a href="#search">尋找物資</a>
+    <a href="#my-listings">我的刊登</a>
+    <a href="#about">關於平台</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h1>讓物資流向最需要的地方</h1>
+  <p>登記閒置物資、或尋找所需物品，讓每一樣東西都能發揮價值。</p>
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">我要提供物資</a>
+    <a href="#search" class="btn-secondary">尋找物資</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="search-section" id="search">
+    <h2>尋找物資</h2>
+    <div class="search-bar">
+      <input type="text" placeholder="搜尋物品名稱，例如：嬰兒車、書籍、家電…" />
+      <button>搜尋</button>
+    </div>
+  </div>
+
+  <div class="section-title">分類瀏覽</div>
+  <div class="categories">
+    <a href="#" class="category-tag active">全部</a>
+    <a href="#" class="category-tag">家電用品</a>
+    <a href="#" class="category-tag">書籍文具</a>
+    <a href="#" class="category-tag">嬰幼兒用品</a>
+    <a href="#" class="category-tag">衣物鞋包</a>
+    <a href="#" class="category-tag">家具寢具</a>
+    <a href="#" class="category-tag">食品物資</a>
+    <a href="#" class="category-tag">其他</a>
+  </div>
+
+  <div class="section-title">最新刊登</div>
+  <div class="items-grid">
+    <div class="item-card">
+      <span class="item-category">嬰幼兒用品</span>
+      <h3>嬰兒推車</h3>
+      <p>九成新，附雨罩，適合 0–3 歲使用，自取優先。</p>
+      <div class="item-footer">
+        <span><span class="item-status"></span>可索取</span>
+        <button class="request-btn">我要索取</button>
+      </div>
+    </div>
+    <div class="item-card">
+      <span class="item-category">書籍文具</span>
+      <h3>國中參考書 × 10 本</h3>
+      <p>涵蓋國一至國三各科，保存良好，免費贈送。</p>
+      <div class="item-footer">
+        <span><span class="item-status"></span>可索取</span>
+        <button class="request-btn">我要索取</button>
+      </div>
+    </div>
+    <div class="item-card">
+      <span class="item-category">家電用品</span>
+      <h3>電風扇（立扇）</h3>
+      <p>功能正常，外觀些微刮痕，附遙控器，需自行搬運。</p>
+      <div class="item-footer">
+        <span><span class="item-status"></span>可索取</span>
+        <button class="request-btn">我要索取</button>
+      </div>
+    </div>
+    <div class="item-card">
+      <span class="item-category">衣物鞋包</span>
+      <h3>冬季外套 M 號</h3>
+      <p>僅穿過數次，深藍色，品牌款，保暖效果佳。</p>
+      <div class="item-footer">
+        <span><span class="item-status"></span>可索取</span>
+        <button class="request-btn">我要索取</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-listings" id="my-listings">
+    <div class="section-title" style="margin-bottom:16px;">我的刊登</div>
+    <div class="listing-row">
+      <div>
+        <div class="listing-name">二手腳踏車</div>
+        <div class="listing-meta">刊登日期：2025-08-10　索取申請：3 件</div>
+      </div>
+      <span class="badge badge-green">刊登中</span>
+    </div>
+    <div class="listing-row">
+      <div>
+        <div class="listing-name">木製書架</div>
+        <div class="listing-meta">刊登日期：2025-08-05　索取申請：1 件</div>
+      </div>
+      <span class="badge badge-yellow">待確認</span>
+    </div>
+    <div class="listing-row">
+      <div>
+        <div class="listing-name">兒童積木組</div>
+        <div class="listing-meta">刊登日期：2025-07-28　已完成媒合</div>
+      </div>
+      <span class="badge badge-gray">已完成</span>
+    </div>
+  </div>
+
+  <div class="about-section" id="about">
+    <div class="section-title" style="margin-bottom:0;">關於平台</div>
+    <p>物資共享平台致力於媒合物資提供者與需求者，減少浪費並幫助有需要的人。</p>
+    <div class="about-steps">
+      <div class="about-step">
+        <div class="step-number">1</div>
+        <h4>登記物資</h4>
+        <p>填寫物品資訊並上傳照片</p>
+      </div>
+      <div class="about-step">
+        <div class="step-number">2</div>
+        <h4>等待媒合</h4>
+        <p>有需求者提出索取申請</p>
+      </div>
+      <div class="about-step">
+        <div class="step-number">3</div>
+        <h4>確認交接</h4>
+        <p>雙方確認後完成物資交接</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>Made with IBM Bob</footer>
+
+</body>
+</html>
