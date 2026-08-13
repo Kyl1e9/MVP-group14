@@ -47,8 +47,7 @@
 
           <!-- 申請表單 -->
           <div class="bg-white rounded border p-4">
-            <form id="request-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST"
-                  class="needs-validation" novalidate>
+            <form id="request-form" class="needs-validation" novalidate>
 
               <input type="hidden" name="item_id" id="hidden-item-id" />
               <input type="hidden" name="item_title" id="hidden-item-title" />
@@ -75,11 +74,6 @@
                 <textarea class="form-control" id="req-reason" name="reason" rows="4"
                           placeholder="請說明您需要此物品的原因，有助於提供者評估..." required></textarea>
                 <div class="invalid-feedback">請填寫索取原因。</div>
-              </div>
-
-              <div class="alert alert-info py-2 px-3" style="font-size:0.85rem;">
-                ℹ️ 表單送出後，資料將由 Formspree 接收。使用前請將表單 action 替換為您的
-                <a href="https://formspree.io" target="_blank">Formspree</a> endpoint。
               </div>
 
               <div class="d-grid mt-3">
