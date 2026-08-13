@@ -375,6 +375,13 @@
     justify-content: center;
     font-size: 46px;
   }
+  .item-thumb-img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+    background: #e8e4de;
+  }
   .item-thumb.t-purple { background: linear-gradient(135deg, #e8e2ef, #d8d0e4); }
   .item-thumb.t-blue   { background: linear-gradient(135deg, #dce8f0, #c8dcea); }
   .item-thumb.t-sand   { background: linear-gradient(135deg, #ede8dc, #e0d8c8); }
@@ -615,21 +622,21 @@
 
   <div class="section-title">分類瀏覽</div>
   <div class="categories">
-    <a href="#" class="category-tag active">✨ 全部</a>
-    <a href="#" class="category-tag">🔌 家電用品</a>
-    <a href="#" class="category-tag">📚 書籍文具</a>
-    <a href="#" class="category-tag">🍼 嬰幼兒用品</a>
-    <a href="#" class="category-tag">👕 衣物鞋包</a>
-    <a href="#" class="category-tag">🛋 家具寢具</a>
-    <a href="#" class="category-tag">🥫 食品物資</a>
-    <a href="#" class="category-tag">📦 其他</a>
+    <a href="search.html" class="category-tag active">✨ 全部</a>
+    <a href="search.html?cat=家電用品" class="category-tag">🔌 家電用品</a>
+    <a href="search.html?cat=書籍文具" class="category-tag">📚 書籍文具</a>
+    <a href="search.html?cat=嬰幼兒用品" class="category-tag">🍼 嬰幼兒用品</a>
+    <a href="search.html?cat=衣物鞋包" class="category-tag">👕 衣物鞋包</a>
+    <a href="search.html?cat=家具寢具" class="category-tag">🛋 家具寢具</a>
+    <a href="search.html?cat=食品物資" class="category-tag">🥫 食品物資</a>
+    <a href="search.html?cat=其他" class="category-tag">📦 其他</a>
   </div>
 
   <div class="section-title">最新刊登</div>
   <div class="items-grid">
 
     <div class="item-card">
-      <div class="item-thumb t-purple">🍼</div>
+      <img class="item-thumb-img" src="https://picsum.photos/seed/baby1/400/260" alt="嬰兒推車" loading="lazy">
       <div class="item-body">
         <span class="item-tag purple">嬰幼兒用品</span>
         <h3>嬰兒推車</h3>
@@ -642,7 +649,7 @@
     </div>
 
     <div class="item-card">
-      <div class="item-thumb t-blue">📚</div>
+      <img class="item-thumb-img" src="https://picsum.photos/seed/book2/400/260" alt="國中參考書" loading="lazy">
       <div class="item-body">
         <span class="item-tag blue">書籍文具</span>
         <h3>國中參考書 × 10 本</h3>
@@ -655,7 +662,7 @@
     </div>
 
     <div class="item-card">
-      <div class="item-thumb t-sand">🌀</div>
+      <img class="item-thumb-img" src="https://picsum.photos/seed/elec3/400/260" alt="電風扇" loading="lazy">
       <div class="item-body">
         <span class="item-tag sand">家電用品</span>
         <h3>電風扇（立扇）</h3>
@@ -668,7 +675,7 @@
     </div>
 
     <div class="item-card">
-      <div class="item-thumb t-green">🧥</div>
+      <img class="item-thumb-img" src="https://picsum.photos/seed/cloth4/400/260" alt="冬季外套" loading="lazy">
       <div class="item-body">
         <span class="item-tag green">衣物鞋包</span>
         <h3>冬季外套 M 號</h3>
@@ -681,7 +688,7 @@
     </div>
 
     <div class="item-card">
-      <div class="item-thumb t-rose">🛋</div>
+      <img class="item-thumb-img" src="https://picsum.photos/seed/furn5/400/260" alt="單人床墊" loading="lazy">
       <div class="item-body">
         <span class="item-tag rose">家具寢具</span>
         <h3>單人床墊</h3>
@@ -694,7 +701,7 @@
     </div>
 
     <div class="item-card">
-      <div class="item-thumb t-teal">🥫</div>
+      <img class="item-thumb-img" src="https://picsum.photos/seed/food6/400/260" alt="即期罐頭" loading="lazy">
       <div class="item-body">
         <span class="item-tag teal">食品物資</span>
         <h3>即期罐頭 × 20 罐</h3>
