@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的刊登 — 物資共享平台</title>
+<style>
+  :root{
+    --m-blue:#7e9bb5;--m-blue-l:#e8eef4;
+    --m-purple:#9b8ea8;--m-purple-l:#eeebf2;
+    --m-green:#84a898;--m-green-l:#e4eee9;
+    --m-rose:#b8958a;--m-rose-l:#f2e9e7;
+    --m-sand:#b8a98a;--m-sand-l:#f2ede3;
+    --m-teal:#7aa3a0;--m-teal-l:#e3efee;
+    --bg:#f5f4f1;--surface:#fafaf8;--border:#dedad4;
+    --text:#3a3530;--muted:#7d7570;--radius:14px;
+    --shadow:0 2px 8px rgba(58,53,48,.06),0 6px 20px rgba(58,53,48,.04);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Segoe UI","Noto Sans TC",system-ui,sans-serif;font-size:15px;line-height:1.7;background:var(--bg);color:var(--text)}
+
+  /* ── Header ── */
+  header{background:rgba(250,250,248,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 36px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:200;box-shadow:0 1px 10px rgba(58,53,48,.05)}
+  .logo{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:800;color:var(--m-blue);text-decoration:none}
+  .logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--m-blue),var(--m-purple));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;padding:7px 14px;border-radius:8px;transition:background .15s,color .15s}
+  .back-btn:hover{background:var(--m-blue-l);color:var(--m-blue)}
+
+  /* ── Page hero ── */
+  .page-hero{background:linear-gradient(135deg,#5a7080 0%,#7a8a94 50%,#9b8ea8 100%);padding:36px 24px 52px;text-align:center;position:relative;overflow:hidden}
+  .page-hero h1{font-size:22px;font-weight:900;color:#fff;margin-bottom:6px}
+  .page-hero p{font-size:14px;color:rgba(255,255,255,.75)}
+  .wave{margin-top:-2px;line-height:0}.wave svg{display:block;width:100%}
+
+  /* ── Container ── */
+  .container{max-width:760px;margin:0 auto;padding:28px 20px 60px}
+
+  /* ── Tabs ── */
+  .tabs{display:flex;gap:6px;margin-bottom:24px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:5px}
+  .tab-btn{flex:1;padding:9px 12px;border:none;background:none;border-radius:9px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+  .tab-btn:hover{background:var(--bg);color:var(--text)}
+  .tab-btn.active{background:#fff;color:var(--text);box-shadow:0 1px 6px rgba(58,53,48,.1)}
+  .tab-badge{font-size:11px;background:var(--m-blue-l);color:var(--m-blue);border-radius:20px;padding:1px 8px;font-weight:800}
+  .tab-btn.active .tab-badge{background:var(--m-blue);color:#fff}
+  .tab-badge.yellow{background:var(--m-sand-l);color:#8a7240}
+  .tab-btn.active .tab-badge.yellow{background:var(--m-sand);color:#fff}
+  .tab-badge.gray{background:#eeecea;color:var(--muted)}
+  .tab-btn.active .tab-badge.gray{background:#888;color:#fff}
+
+  /* ── Tab panels ── */
+  .tab-panel{display:none}.tab-panel.active{display:block}
+
+  /* ── Listing card ── */
+  .listing-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s,border-color .2s}
+  .listing-card:hover{border-color:var(--m-blue);box-shadow:0 6px 20px rgba(126,155,181,.15)}
+  .listing-card-header{padding:16px 20px;display:flex;align-items:center;gap:14px;cursor:pointer}
+  .listing-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+  .i1{background:linear-gradient(135deg,var(--m-blue-l),#d2e2ee)}
+  .i2{background:linear-gradient(135deg,var(--m-sand-l),#e8e0cc)}
+  .i3{background:linear-gradient(135deg,var(--m-green-l),#d2e6da)}
+  .i4{background:linear-gradient(135deg,var(--m-purple-l),#e0d8ec)}
+  .listing-info{flex:1}
+  .listing-name{font-weight:800;font-size:15px}
+  .listing-meta{font-size:12px;color:var(--muted);margin-top:2px}
+  .listing-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .badge{font-size:11px;padding:4px 13px;border-radius:20px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
+  .badge-green{background:var(--m-green-l);color:#5a8272}
+  .badge-yellow{background:var(--m-sand-l);color:#8a7240}
+  .badge-gray{background:#eeecea;color:var(--muted)}
+  .chevron{color:var(--muted);font-size:18px;transition:transform .2s}
+  .listing-card.open .chevron{transform:rotate(90deg)}
+
+  /* ── Requests panel ── */
+  .req-panel{display:none;border-top:1px solid var(--border);padding:16px 20px 20px;background:var(--bg)}
+  .listing-card.open .req-panel{display:block}
+  .req-panel-title{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px}
+  .req-card{background:#fff;border:1.5px solid var(--border);border-radius:11px;padding:14px 16px;margin-bottom:10px}
+  .req-card:last-child{margin-bottom:0}
+  .req-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .req-card-name{font-weight:800;font-size:14px}
+  .req-card-time{font-size:11px;color:var(--muted)}
+  .req-card-row{font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:6px;margin-top:4px}
+  .req-card-row span{color:var(--text);font-weight:600}
+  .req-card-actions{display:flex;gap:8px;margin-top:12px}
+  .btn-accept{flex:1;background:linear-gradient(135deg,var(--m-green),var(--m-teal));color:#fff;border:none;padding:9px 14px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s}
+  .btn-accept:hover{opacity:.85}
+  .btn-decline{padding:9px 14px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s}
+  .btn-decline:hover{background:#f5eeee;border-color:#d9b0a8;color:var(--m-rose)}
+
+  /* ── Done card ── */
+  .done-card{background:#fff;border:1.5px solid #d8ecd6;border-radius:11px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
+  .done-icon{font-size:24px;margin-top:2px}
+  .done-info{font-size:13px;flex:1}
+  .done-info strong{color:var(--text)}
+  .done-sub{font-size:11px;color:var(--muted);margin-top:3px}
+
+  /* ── Empty state ── */
+  .empty{text-align:center;padding:48px 20px;color:var(--muted)}
+  .empty-icon{font-size:44px;margin-bottom:14px}
+  .empty p{font-size:14px;margin-bottom:18px}
+  .btn-add{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--m-blue),var(--m-purple));color:#fff;padding:10px 22px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;transition:opacity .15s}
+  .btn-add:hover{opacity:.88}
+
+  footer{text-align:center;font-size:12px;color:rgba(255,255,255,.5);background:#3a3530;padding:24px;margin-top:40px}
+  footer strong{color:rgba(255,255,255,.8)}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html"><div class="logo-icon">🤝</div>物資共享平台</a>
+  <a class="back-btn" href="index.html">← 返回首頁</a>
+</header>
+
+<div class="page-hero">
+  <h1>📋 我的刊登</h1>
+  <p>管理您的物資刊登、查看索取申請與媒合狀況</p>
+</div>
+<div class="wave">
+  <svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,25 C360,50 1080,0 1440,25 L1440,50 L0,50 Z" fill="#f5f4f1"/>
+  </svg>
+</div>
+
+<div class="container">
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('active',this)">
+      🟢 刊登中 <span class="tab-badge" id="badge-active">2</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('pending',this)">
+      ⏳ 待確認 <span class="tab-badge yellow" id="badge-pending">2</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('done',this)">
+      🏁 已媒合完成 <span class="tab-badge gray" id="badge-done">1</span>
+    </button>
+  </div>
+
+  <!-- ── 刊登中（無索取申請）── -->
+  <div class="tab-panel active" id="panel-active">
+
+    <div class="listing-card" id="card-scooter">
+      <div class="listing-card-header" onclick="toggleCard('card-scooter')">
+        <div class="listing-icon i4">🛴</div>
+        <div class="listing-info">
+          <div class="listing-name">滑板車</div>
+          <div class="listing-meta">刊登日期：2025-08-13　索取申請：0 件</div>
+        </div>
+        <div class="listing-right">
+          <span class="badge badge-green">✅ 刊登中</span>
+          <span class="chevron">›</span>
+        </div>
+      </div>
+      <div class="req-panel">
+        <div class="req-panel-title">尚無索取申請</div>
+        <div class="empty" style="padding:20px 0 4px">
+          <div class="empty-icon">🔔</div>
+          <p style="margin-bottom:0">目前尚無人提出索取，待有申請時會顯示在此處</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="listing-card" id="card-yoga">
+      <div class="listing-card-header" onclick="toggleCard('card-yoga')">
+        <div class="listing-icon i3">🧘</div>
+        <div class="listing-info">
+          <div class="listing-name">瑜珈墊</div>
+          <div class="listing-meta">刊登日期：2025-08-12　索取申請：0 件</div>
+        </div>
+        <div class="listing-right">
+          <span class="badge badge-green">✅ 刊登中</span>
+          <span class="chevron">›</span>
+        </div>
+      </div>
+      <div class="req-panel">
+        <div class="req-panel-title">尚無索取申請</div>
+        <div class="empty" style="padding:20px 0 4px">
+          <div class="empty-icon">🔔</div>
+          <p style="margin-bottom:0">目前尚無人提出索取，待有申請時會顯示在此處</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── 待確認（有索取申請，尚未接受）── -->
+  <div class="tab-panel" id="panel-pending">
+
+    <div class="listing-card" id="card-bike">
+      <div class="listing-card-header" onclick="toggleCard('card-bike')">
+        <div class="listing-icon i1">🚲</div>
+        <div class="listing-info">
+          <div class="listing-name">二手腳踏車</div>
+          <div class="listing-meta">刊登日期：2025-08-10　索取申請：3 件</div>
+        </div>
+        <div class="listing-right">
+          <span class="badge badge-yellow">⏳ 待確認</span>
+          <span class="chevron">›</span>
+        </div>
+      </div>
+      <div class="req-panel">
+        <div class="req-panel-title">索取申請（共 3 件）</div>
+        <div class="req-card" id="req-1">
+          <div class="req-card-top">
+            <div class="req-card-name">👤 陳小明</div>
+            <div class="req-card-time">2025-08-11 09:23</div>
+          </div>
+          <div class="req-card-row">📞 手機：<span>0912-345-678</span></div>
+          <div class="req-card-row">📍 地址：<span>台北市大安區復興南路一段100號</span></div>
+          <div class="req-card-row">💬 備註：<span>方便週末取件，謝謝！</span></div>
+          <div class="req-card-actions">
+            <button class="btn-accept" onclick="acceptReq('req-1','陳小明')">✅ 接受媒合</button>
+            <button class="btn-decline" onclick="declineReq('req-1')">✕ 婉拒</button>
+          </div>
+        </div>
+        <div class="req-card" id="req-2">
+          <div class="req-card-top">
+            <div class="req-card-name">👤 林佳慧</div>
+            <div class="req-card-time">2025-08-11 14:07</div>
+          </div>
+          <div class="req-card-row">📞 手機：<span>0923-456-789</span></div>
+          <div class="req-card-row">📍 地址：<span>新北市板橋區文化路二段50號</span></div>
+          <div class="req-card-actions">
+            <button class="btn-accept" onclick="acceptReq('req-2','林佳慧')">✅ 接受媒合</button>
+            <button class="btn-decline" onclick="declineReq('req-2')">✕ 婉拒</button>
+          </div>
+        </div>
+        <div class="req-card" id="req-3">
+          <div class="req-card-top">
+            <div class="req-card-name">👤 王大偉</div>
+            <div class="req-card-time">2025-08-12 08:55</div>
+          </div>
+          <div class="req-card-row">📞 手機：<span>0934-567-890</span></div>
+          <div class="req-card-row">📍 地址：<span>台北市信義區松仁路100號</span></div>
+          <div class="req-card-row">💬 備註：<span>可以配合對方時間</span></div>
+          <div class="req-card-actions">
+            <button class="btn-accept" onclick="acceptReq('req-3','王大偉')">✅ 接受媒合</button>
+            <button class="btn-decline" onclick="declineReq('req-3')">✕ 婉拒</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="listing-card" id="card-shelf">
+      <div class="listing-card-header" onclick="toggleCard('card-shelf')">
+        <div class="listing-icon i2">📦</div>
+        <div class="listing-info">
+          <div class="listing-name">木製書架</div>
+          <div class="listing-meta">刊登日期：2025-08-05　索取申請：1 件</div>
+        </div>
+        <div class="listing-right">
+          <span class="badge badge-yellow">⏳ 待確認</span>
+          <span class="chevron">›</span>
+        </div>
+      </div>
+      <div class="req-panel">
+        <div class="req-panel-title">索取申請（共 1 件）</div>
+        <div class="req-card" id="req-4">
+          <div class="req-card-top">
+            <div class="req-card-name">👤 張美玲</div>
+            <div class="req-card-time">2025-08-06 16:40</div>
+          </div>
+          <div class="req-card-row">📞 手機：<span>0945-678-901</span></div>
+          <div class="req-card-row">📍 地址：<span>桃園市中壢區中山路200號</span></div>
+          <div class="req-card-row">💬 備註：<span>書架用來放孩子課本，非常需要，感謝！</span></div>
+          <div class="req-card-actions">
+            <button class="btn-accept" onclick="acceptReq('req-4','張美玲')">✅ 接受媒合</button>
+            <button class="btn-decline" onclick="declineReq('req-4')">✕ 婉拒</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── 已媒合完成 ── -->
+  <div class="tab-panel" id="panel-done">
+
+    <div class="listing-card" id="card-blocks">
+      <div class="listing-card-header" onclick="toggleCard('card-blocks')">
+        <div class="listing-icon i3">🧩</div>
+        <div class="listing-info">
+          <div class="listing-name">兒童積木組</div>
+          <div class="listing-meta">刊登日期：2025-07-28　媒合完成：2025-07-29</div>
+        </div>
+        <div class="listing-right">
+          <span class="badge badge-gray">🏁 已完成</span>
+          <span class="chevron">›</span>
+        </div>
+      </div>
+      <div class="req-panel">
+        <div class="req-panel-title">媒合紀錄</div>
+        <div class="done-card">
+          <div class="done-icon">🎉</div>
+          <div class="done-info">
+            <strong>蘇小芸</strong> 已成功索取
+            <div class="done-sub">📞 0956-789-012</div>
+            <div class="done-sub">📍 台中市西屯區市政路300號</div>
+            <div class="done-sub">📅 媒合時間：2025-07-29 10:15</div>
+            <div class="done-sub">💬 寶寶一定很喜歡，感謝您的愛心！</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<footer><strong>物資共享平台</strong> · 讓愛流動，讓物資不浪費 · © 2025 · Made with IBM Bob</footer>
+
+<script>
+function switchTab(name, btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+}
+
+function toggleCard(id){
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+}
+
+function acceptReq(reqId, name){
+  const card = document.getElementById(reqId);
+  card.style.borderColor = '#84a898';
+  card.style.background = '#edf5f0';
+  card.querySelector('.req-card-actions').innerHTML =
+    `<span style="font-size:13px;color:#5a8272;font-weight:700">🎉 已接受 ${name} 的索取申請！將盡快與對方聯繫。</span>`;
+}
+
+function declineReq(reqId){
+  const card = document.getElementById(reqId);
+  card.style.opacity = '0';
+  card.style.transition = 'opacity .3s';
+  setTimeout(()=>card.remove(), 300);
+}
+</script>
+</body>
+</html>

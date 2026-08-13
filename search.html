@@ -100,6 +100,41 @@
   .btn-close-modal{padding:13px 20px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
   .btn-close-modal:hover{background:var(--bg)}
 
+  /* ── 索取表單 Modal ── */
+  .req-modal-overlay{display:none;position:fixed;inset:0;background:rgba(58,53,48,.5);backdrop-filter:blur(5px);z-index:600;align-items:center;justify-content:center;padding:20px}
+  .req-modal-overlay.show{display:flex}
+  .req-modal{background:var(--surface);border-radius:18px;max-width:480px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(58,53,48,.22);animation:popIn .22s ease;position:relative}
+  .req-modal-header{padding:24px 28px 0;display:flex;align-items:center;justify-content:space-between}
+  .req-modal-header h3{font-size:17px;font-weight:900}
+  .req-modal-item-info{margin:4px 28px 0;padding:12px 16px;background:var(--bg);border-radius:10px;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:10px}
+  .req-modal-item-info strong{color:var(--text);font-weight:800}
+  .req-form{padding:20px 28px 28px;display:flex;flex-direction:column;gap:16px}
+  .req-form label{font-size:12px;font-weight:700;color:var(--text);margin-bottom:5px;display:block}
+  .req-form label span{color:var(--m-rose)}
+  .req-form input,.req-form select,.req-form textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-size:14px;background:var(--bg);color:var(--text);outline:none;font-family:inherit;transition:border-color .15s,box-shadow .15s}
+  .req-form input:focus,.req-form select:focus,.req-form textarea:focus{border-color:var(--m-blue);background:#fff;box-shadow:0 0 0 3px rgba(126,155,181,.14)}
+  .req-form textarea{resize:vertical;min-height:72px}
+  .req-form select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%237d7570'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+  .pickup-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .pickup-opt input[type=radio]{display:none}
+  .pickup-opt label{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 10px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;background:var(--bg);transition:all .15s;text-align:center}
+  .pickup-opt label .po-icon{font-size:22px}
+  .pickup-opt input[type=radio]:checked+label{border-color:var(--m-blue);background:var(--m-blue-l);color:var(--m-blue);box-shadow:0 2px 8px rgba(126,155,181,.2)}
+  .req-divider{height:1px;background:var(--border);margin:4px 0}
+  .req-form-actions{display:flex;gap:10px;margin-top:4px}
+  .btn-submit-req{flex:1;background:linear-gradient(135deg,var(--m-blue),var(--m-purple));color:#fff;border:none;padding:13px 20px;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(126,155,181,.3);transition:opacity .15s,transform .15s}
+  .btn-submit-req:hover{opacity:.88;transform:translateY(-2px)}
+  .btn-cancel-req{padding:13px 20px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
+  .btn-cancel-req:hover{background:var(--bg)}
+
+  /* 成功畫面 */
+  .req-success{display:none;padding:40px 28px;text-align:center}
+  .req-success.show{display:block}
+  .req-success-icon{font-size:52px;margin-bottom:16px}
+  .req-success h3{font-size:18px;font-weight:900;margin-bottom:8px}
+  .req-success p{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:24px}
+  .btn-back-search{background:linear-gradient(135deg,var(--m-blue),var(--m-purple));color:#fff;border:none;padding:12px 28px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer}
+
   footer{text-align:center;font-size:12px;color:rgba(255,255,255,.5);background:#3a3530;padding:24px;margin-top:40px}
   footer strong{color:rgba(255,255,255,.8)}
 </style>
@@ -159,9 +194,50 @@
       <div class="modal-info-grid" id="modalInfoGrid"></div>
       <div class="modal-desc" id="modalDesc"></div>
       <div class="modal-actions">
-        <button class="btn-request">✅ 我要索取</button>
+        <button class="btn-request" onclick="openRequestForm(currentModalId)">✅ 我要索取</button>
         <button class="btn-close-modal" onclick="document.getElementById('detailModal').classList.remove('show')">關閉</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- 索取表單 Modal -->
+<div class="req-modal-overlay" id="reqModal" onclick="closeReqModal(event)">
+  <div class="req-modal">
+    <div id="reqFormView">
+      <div class="req-modal-header">
+        <h3>📋 填寫索取資料</h3>
+      </div>
+      <div class="req-modal-item-info" id="reqItemInfo"></div>
+      <form class="req-form" onsubmit="submitRequest(event)">
+        <div>
+          <label>姓名 <span>*</span></label>
+          <input type="text" id="reqName" placeholder="請輸入您的姓名" required>
+        </div>
+        <div>
+          <label>手機號碼 <span>*</span></label>
+          <input type="tel" id="reqPhone" placeholder="例：0912-345-678" required pattern="[0-9\-]{8,12}">
+        </div>
+        <div>
+          <label>寄送地址 <span>*</span></label>
+          <input type="text" id="reqAddress" placeholder="例：台北市大安區忠孝東路四段1號" required>
+        </div>
+        <div class="req-divider"></div>
+        <div>
+          <label>備註（選填）</label>
+          <textarea id="reqNote" placeholder="可填寫方便取件時間、備注說明…"></textarea>
+        </div>
+        <div class="req-form-actions">
+          <button type="submit" class="btn-submit-req">✅ 送出索取申請</button>
+          <button type="button" class="btn-cancel-req" onclick="document.getElementById('reqModal').classList.remove('show')">取消</button>
+        </div>
+      </form>
+    </div>
+    <div class="req-success" id="reqSuccess">
+      <div class="req-success-icon">🎉</div>
+      <h3>索取申請已送出！</h3>
+      <p id="reqSuccessMsg">我們已將您的索取資料通知刊登者，<br>請耐心等候對方與您聯繫。</p>
+      <button class="btn-back-search" onclick="document.getElementById('reqModal').classList.remove('show')">繼續瀏覽物資</button>
     </div>
   </div>
 </div>
@@ -284,6 +360,7 @@ const ITEMS = [
 ];
 
 let currentFilter = '全部';
+let currentModalId = null;
 
 function setFilter(cat, el){
   currentFilter = cat;
@@ -334,7 +411,7 @@ function renderItems(list){
         </div>
         <div class="item-footer">
           <span class="item-status"><span class="dot"></span>可索取</span>
-          <button class="request-btn" onclick="event.stopPropagation()">我要索取</button>
+          <button class="request-btn" onclick="event.stopPropagation();openRequestForm(${i.id})">我要索取</button>
         </div>
       </div>
     </div>`;
@@ -361,6 +438,7 @@ function openModal(id){
     <div class="info-cell"><div class="info-label">分類</div><div class="info-value">${i.cat}</div></div>
   `;
   document.getElementById('detailModal').classList.add('show');
+  currentModalId = id;
 }
 
 function closeModal(e){
@@ -368,16 +446,50 @@ function closeModal(e){
     document.getElementById('detailModal').classList.remove('show');
 }
 
+function openRequestForm(id){
+  const i = ITEMS.find(x=>x.id===id);
+  if(!i) return;
+  // 關閉詳情 Modal
+  document.getElementById('detailModal').classList.remove('show');
+  // 填入物品資訊
+  document.getElementById('reqItemInfo').innerHTML =
+    `<span style="font-size:18px">📦</span> <span>索取：<strong>${i.name}</strong>（${i.cat}・${i.cond}）</span>`;
+  // 重置表單與成功畫面
+  document.getElementById('reqFormView').style.display = 'block';
+  document.getElementById('reqSuccess').classList.remove('show');
+  document.querySelector('#reqModal form').reset();
+  // 顯示 Modal
+  document.getElementById('reqModal').classList.add('show');
+}
+
+function closeReqModal(e){
+  if(e.target===document.getElementById('reqModal'))
+    document.getElementById('reqModal').classList.remove('show');
+}
+
+function submitRequest(e){
+  e.preventDefault();
+  const name    = document.getElementById('reqName').value.trim();
+  const address = document.getElementById('reqAddress').value.trim();
+  // 顯示成功畫面
+  document.getElementById('reqFormView').style.display = 'none';
+  document.getElementById('reqSuccessMsg').innerHTML =
+    `<strong>${name}</strong> 您好，索取申請已送出！<br>寄送方式：寄送到府<br>寄送地址：${address}<br>刊登者將盡快與您聯繫。`;
+  document.getElementById('reqSuccess').classList.add('show');
+}
+
 // URL 帶入關鍵字或分類
 const params = new URLSearchParams(location.search);
 const urlQ   = params.get('q');
 const urlCat = params.get('cat');
+const urlReq = params.get('req');
 if(urlQ) document.getElementById('searchInput').value = urlQ;
 if(urlCat){
   const chip = [...document.querySelectorAll('.chip')].find(c=>c.textContent.includes(urlCat));
   if(chip) setFilter(urlCat, chip);
 }
 filterItems();
+if(urlReq) openRequestForm(Number(urlReq));
 </script>
 </body>
 </html>

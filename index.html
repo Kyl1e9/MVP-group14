@@ -476,6 +476,44 @@
   .badge-yellow { background: var(--m-sand-l);   color: #8a7240; }
   .badge-gray   { background: #eeecea;            color: var(--muted); }
 
+  /* ── 刊登詳情 Modal ── */
+  .mgmt-overlay{display:none;position:fixed;inset:0;background:rgba(58,53,48,.45);backdrop-filter:blur(4px);z-index:500;align-items:center;justify-content:center;padding:20px}
+  .mgmt-overlay.show{display:flex}
+  .mgmt-modal{background:var(--surface);border-radius:18px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(58,53,48,.2);animation:popIn .22s ease}
+  @keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+  .mgmt-header{padding:24px 28px 0;display:flex;align-items:center;justify-content:space-between}
+  .mgmt-header h3{font-size:17px;font-weight:900}
+  .mgmt-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);padding:4px 8px;border-radius:6px;line-height:1}
+  .mgmt-close:hover{background:var(--bg)}
+  .mgmt-item-bar{margin:12px 28px 0;background:var(--bg);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px}
+  .mgmt-item-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .mgmt-item-icon.i1{background:linear-gradient(135deg,var(--m-blue-l),#d2e2ee)}
+  .mgmt-item-icon.i2{background:linear-gradient(135deg,var(--m-sand-l),#e8e0cc)}
+  .mgmt-item-icon.i3{background:linear-gradient(135deg,var(--m-green-l),#d2e6da)}
+  .mgmt-item-info{flex:1}
+  .mgmt-item-name{font-weight:800;font-size:14px}
+  .mgmt-item-sub{font-size:12px;color:var(--muted);margin-top:2px}
+  .mgmt-section-title{padding:20px 28px 10px;font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
+  .req-list{padding:0 28px 24px;display:flex;flex-direction:column;gap:12px}
+  .req-card{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px}
+  .req-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .req-card-name{font-weight:800;font-size:14px;display:flex;align-items:center;gap:6px}
+  .req-card-time{font-size:11px;color:var(--muted)}
+  .req-card-row{font-size:12px;color:var(--muted);display:flex;align-items:flex-start;gap:6px;margin-top:4px}
+  .req-card-row span{color:var(--text);font-weight:600}
+  .req-card-actions{display:flex;gap:8px;margin-top:12px}
+  .btn-accept{flex:1;background:linear-gradient(135deg,var(--m-green),var(--m-teal));color:#fff;border:none;padding:9px 14px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s}
+  .btn-accept:hover{opacity:.85}
+  .btn-decline{padding:9px 14px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s}
+  .btn-decline:hover{background:#f5eeee;border-color:#d9b0a8;color:var(--m-rose)}
+  .req-done-card{background:var(--bg);border:1.5px solid #d8ecd6;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+  .req-done-icon{font-size:22px}
+  .req-done-info{font-size:13px}.req-done-info strong{color:var(--text)}
+  .req-done-info .done-sub{font-size:11px;color:var(--muted);margin-top:2px}
+  .listing-row{cursor:pointer}
+  .listing-row-arrow{color:var(--muted);font-size:16px;margin-left:10px;transition:transform .15s}
+  .listing-row:hover .listing-row-arrow{transform:translateX(3px);color:var(--m-blue)}
+
   /* ── About ── */
   .about-section {
     background: var(--surface);
@@ -545,7 +583,7 @@
   <nav>
     <a href="#" class="active">首頁</a>
     <a href="#search">尋找物資</a>
-    <a href="#my-listings">我的刊登</a>
+    <a href="my-listings.html">我的刊登</a>
     <a href="#about">關於平台</a>
     <a href="donate.html" class="nav-donate">＋ 我要提供</a>
   </nav>
@@ -612,7 +650,7 @@
   <div class="search-section" id="search">
     <h2>🔍 尋找物資</h2>
     <div class="search-bar">
-      <input type="text" id="homeSearch" placeholder="搜尋物品名稱，例如：嬰兒車、書籍、電風扇、衣物…" />
+      <input type="text" id="homeSearch" placeholder="搜尋物品名稱，例如：嬰兒車、書籍、電風扇、衣物…" onkeydown="if(event.key==='Enter')goSearch()" />
       <button onclick="goSearch()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         搜尋
@@ -643,7 +681,7 @@
         <p>九成新，附雨罩，適合 0–3 歲，自取優先。</p>
         <div class="item-footer">
           <span class="item-status"><span class="dot"></span>可索取</span>
-          <button class="request-btn">我要索取</button>
+          <button class="request-btn" onclick="location.href='search.html?req=1'">我要索取</button>
         </div>
       </div>
     </div>
@@ -656,7 +694,7 @@
         <p>國一至國三各科，保存良好，免費贈送。</p>
         <div class="item-footer">
           <span class="item-status"><span class="dot"></span>可索取</span>
-          <button class="request-btn">我要索取</button>
+          <button class="request-btn" onclick="location.href='search.html?req=2'">我要索取</button>
         </div>
       </div>
     </div>
@@ -669,7 +707,7 @@
         <p>功能正常，外觀些微刮痕，附遙控器。</p>
         <div class="item-footer">
           <span class="item-status"><span class="dot"></span>可索取</span>
-          <button class="request-btn">我要索取</button>
+          <button class="request-btn" onclick="location.href='search.html?req=3'">我要索取</button>
         </div>
       </div>
     </div>
@@ -682,7 +720,7 @@
         <p>僅穿過數次，深藍色，品牌款，保暖佳。</p>
         <div class="item-footer">
           <span class="item-status"><span class="dot"></span>可索取</span>
-          <button class="request-btn">我要索取</button>
+          <button class="request-btn" onclick="location.href='search.html?req=4'">我要索取</button>
         </div>
       </div>
     </div>
@@ -695,7 +733,7 @@
         <p>使用不到一年，乾淨無污漬，需自行搬運。</p>
         <div class="item-footer">
           <span class="item-status"><span class="dot"></span>可索取</span>
-          <button class="request-btn">我要索取</button>
+          <button class="request-btn" onclick="location.href='search.html?req=5'">我要索取</button>
         </div>
       </div>
     </div>
@@ -708,7 +746,7 @@
         <p>效期三個月內，品項多元，歡迎有需要的人領取。</p>
         <div class="item-footer">
           <span class="item-status"><span class="dot"></span>可索取</span>
-          <button class="request-btn">我要索取</button>
+          <button class="request-btn" onclick="location.href='search.html?req=6'">我要索取</button>
         </div>
       </div>
     </div>
@@ -719,7 +757,7 @@
     <div class="my-listings-header">
       <div class="section-title">我的刊登</div>
     </div>
-    <div class="listing-row">
+    <div class="listing-row" onclick="openMgmt('bike')">
       <div class="listing-left">
         <div class="listing-icon i1">🚲</div>
         <div>
@@ -727,9 +765,12 @@
           <div class="listing-meta">刊登日期：2025-08-10　索取申請：3 件</div>
         </div>
       </div>
-      <span class="badge badge-green">✅ 刊登中</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span class="badge badge-green">✅ 刊登中</span>
+        <span class="listing-row-arrow">›</span>
+      </div>
     </div>
-    <div class="listing-row">
+    <div class="listing-row" onclick="openMgmt('shelf')">
       <div class="listing-left">
         <div class="listing-icon i2">📦</div>
         <div>
@@ -737,9 +778,12 @@
           <div class="listing-meta">刊登日期：2025-08-05　索取申請：1 件</div>
         </div>
       </div>
-      <span class="badge badge-yellow">⏳ 待確認</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span class="badge badge-yellow">⏳ 待確認</span>
+        <span class="listing-row-arrow">›</span>
+      </div>
     </div>
-    <div class="listing-row">
+    <div class="listing-row" onclick="openMgmt('blocks')">
       <div class="listing-left">
         <div class="listing-icon i3">🧩</div>
         <div>
@@ -747,7 +791,10 @@
           <div class="listing-meta">刊登日期：2025-07-28　已完成媒合</div>
         </div>
       </div>
-      <span class="badge badge-gray">🏁 已完成</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span class="badge badge-gray">🏁 已完成</span>
+        <span class="listing-row-arrow">›</span>
+      </div>
     </div>
   </div>
 
@@ -775,6 +822,19 @@
 
 </div>
 
+<!-- 刊登詳情 Modal -->
+<div class="mgmt-overlay" id="mgmtOverlay" onclick="closeMgmt(event)">
+  <div class="mgmt-modal" id="mgmtModal">
+    <div class="mgmt-header">
+      <h3 id="mgmtTitle">刊登詳情</h3>
+      <button class="mgmt-close" onclick="document.getElementById('mgmtOverlay').classList.remove('show')">✕</button>
+    </div>
+    <div class="mgmt-item-bar" id="mgmtItemBar"></div>
+    <div class="mgmt-section-title" id="mgmtSectionTitle">索取申請</div>
+    <div class="req-list" id="mgmtReqList"></div>
+  </div>
+</div>
+
 <footer>
   <strong>物資共享平台</strong> · 讓愛流動，讓物資不浪費 · © 2025 · Made with IBM Bob
 </footer>
@@ -787,6 +847,91 @@
   document.getElementById('homeSearch').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') goSearch();
   });
+
+  // ── 刊登詳情資料 ──
+  const LISTINGS = {
+    bike: {
+      icon:'🚲', iconClass:'i1', name:'二手腳踏車', date:'2025-08-10', status:'刊登中',
+      requests:[
+        {id:1, name:'陳小明', phone:'0912-345-678', address:'台北市大安區復興南路一段100號', time:'2025-08-11 09:23', note:'方便週末取件，謝謝！'},
+        {id:2, name:'林佳慧', phone:'0923-456-789', address:'新北市板橋區文化路二段50號', time:'2025-08-11 14:07', note:''},
+        {id:3, name:'王大偉', phone:'0934-567-890', address:'台北市信義區松仁路100號', time:'2025-08-12 08:55', note:'可以配合對方時間'},
+      ]
+    },
+    shelf: {
+      icon:'📦', iconClass:'i2', name:'木製書架', date:'2025-08-05', status:'待確認',
+      requests:[
+        {id:4, name:'張美玲', phone:'0945-678-901', address:'桃園市中壢區中山路200號', time:'2025-08-06 16:40', note:'書架用來放孩子課本，非常需要，感謝！'},
+      ]
+    },
+    blocks: {
+      icon:'🧩', iconClass:'i3', name:'兒童積木組', date:'2025-07-28', status:'已完成',
+      done: {name:'蘇小芸', phone:'0956-789-012', address:'台中市西屯區市政路300號', time:'2025-07-29 10:15', note:'寶寶一定很喜歡，感謝您的愛心！'}
+    }
+  };
+
+  function openMgmt(key){
+    const d = LISTINGS[key];
+    document.getElementById('mgmtTitle').textContent = d.name + ' — 刊登詳情';
+    document.getElementById('mgmtItemBar').innerHTML = `
+      <div class="mgmt-item-icon ${d.iconClass}">${d.icon}</div>
+      <div class="mgmt-item-info">
+        <div class="mgmt-item-name">${d.name}</div>
+        <div class="mgmt-item-sub">刊登日期：${d.date}　狀態：${d.status}</div>
+      </div>`;
+
+    if(d.done){
+      // 已完成
+      document.getElementById('mgmtSectionTitle').textContent = '✅ 已完成媒合';
+      document.getElementById('mgmtReqList').innerHTML = `
+        <div class="req-done-card">
+          <div class="req-done-icon">🎉</div>
+          <div class="req-done-info">
+            <strong>${d.done.name}</strong> 已成功索取<br>
+            <div class="done-sub">📞 ${d.done.phone}　📍 ${d.done.address}</div>
+            <div class="done-sub">📅 媒合時間：${d.done.time}</div>
+            ${d.done.note ? `<div class="done-sub">💬 ${d.done.note}</div>` : ''}
+          </div>
+        </div>`;
+    } else {
+      document.getElementById('mgmtSectionTitle').textContent = `索取申請（共 ${d.requests.length} 件）`;
+      document.getElementById('mgmtReqList').innerHTML = d.requests.map(r=>`
+        <div class="req-card" id="reqCard${r.id}">
+          <div class="req-card-top">
+            <div class="req-card-name">👤 ${r.name}</div>
+            <div class="req-card-time">${r.time}</div>
+          </div>
+          <div class="req-card-row">📞 手機：<span>${r.phone}</span></div>
+          <div class="req-card-row">📍 地址：<span>${r.address}</span></div>
+          ${r.note ? `<div class="req-card-row">💬 備註：<span>${r.note}</span></div>` : ''}
+          <div class="req-card-actions">
+            <button class="btn-accept" onclick="acceptReq(${r.id},'${r.name}')">✅ 接受媒合</button>
+            <button class="btn-decline" onclick="declineReq(${r.id})">✕ 婉拒</button>
+          </div>
+        </div>`).join('');
+    }
+    document.getElementById('mgmtOverlay').classList.add('show');
+  }
+
+  function closeMgmt(e){
+    if(e.target===document.getElementById('mgmtOverlay'))
+      document.getElementById('mgmtOverlay').classList.remove('show');
+  }
+
+  function acceptReq(id, name){
+    const card = document.getElementById('reqCard'+id);
+    card.style.borderColor = '#84a898';
+    card.style.background = '#edf5f0';
+    card.querySelector('.req-card-actions').innerHTML =
+      `<span style="font-size:13px;color:#5a8272;font-weight:700">🎉 已接受 ${name} 的索取申請！刊登者將與您聯繫。</span>`;
+  }
+
+  function declineReq(id){
+    const card = document.getElementById('reqCard'+id);
+    card.style.opacity = '0';
+    card.style.transition = 'opacity .3s';
+    setTimeout(()=>card.remove(), 300);
+  }
 </script>
 </body>
 </html>
