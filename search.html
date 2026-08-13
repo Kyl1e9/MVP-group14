@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>搜尋物資 — 物資共享平台</title>
 <style>
-  :root {
-    --m-blue:#7e9bb5; --m-blue-l:#e8eef4;
-    --m-purple:#9b8ea8; --m-purple-l:#eeebf2;
-    --m-green:#84a898; --m-green-l:#e4eee9;
-    --m-rose:#b8958a;  --m-rose-l:#f2e9e7;
-    --m-sand:#b8a98a;  --m-sand-l:#f2ede3;
-    --m-teal:#7aa3a0;  --m-teal-l:#e3efee;
-    --bg:#f5f4f1; --surface:#fafaf8; --border:#dedad4;
-    --text:#3a3530; --muted:#7d7570; --radius:14px;
+  :root{
+    --m-blue:#7e9bb5;--m-blue-l:#e8eef4;
+    --m-purple:#9b8ea8;--m-purple-l:#eeebf2;
+    --m-green:#84a898;--m-green-l:#e4eee9;
+    --m-rose:#b8958a;--m-rose-l:#f2e9e7;
+    --m-sand:#b8a98a;--m-sand-l:#f2ede3;
+    --m-teal:#7aa3a0;--m-teal-l:#e3efee;
+    --bg:#f5f4f1;--surface:#fafaf8;--border:#dedad4;
+    --text:#3a3530;--muted:#7d7570;--radius:14px;
     --shadow:0 2px 8px rgba(58,53,48,.06),0 6px 20px rgba(58,53,48,.04);
     --shadow-hover:0 8px 28px rgba(126,155,181,.22);
   }
@@ -32,42 +32,74 @@
   .search-bar-wrap input{flex:1;border:none;border-radius:12px;padding:14px 20px;font-size:15px;background:rgba(255,255,255,.96);color:var(--text);outline:none;box-shadow:0 4px 16px rgba(0,0,0,.12)}
   .search-bar-wrap button{background:linear-gradient(135deg,var(--m-blue),var(--m-purple));color:#fff;border:none;padding:14px 26px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;box-shadow:0 3px 10px rgba(126,155,181,.35);transition:opacity .15s,transform .15s}
   .search-bar-wrap button:hover{opacity:.88;transform:translateY(-1px)}
-  .wave{margin-top:-2px;line-height:0}
-  .wave svg{display:block;width:100%}
+  .wave{margin-top:-2px;line-height:0}.wave svg{display:block;width:100%}
 
-  .container{max-width:1060px;margin:0 auto;padding:32px 24px 60px}
+  .container{max-width:1100px;margin:0 auto;padding:32px 24px 60px}
   .toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
-  .result-count{font-size:14px;color:var(--muted)}
-  .result-count strong{color:var(--text);font-weight:800}
+  .result-count{font-size:14px;color:var(--muted)}.result-count strong{color:var(--text);font-weight:800}
   .sort-select{border:1.5px solid var(--border);border-radius:8px;padding:7px 30px 7px 12px;font-size:13px;background:var(--surface);color:var(--text);outline:none;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%237d7570'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
 
   .filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
-  .chip{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:6px 16px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s}
-  .chip:hover{border-color:var(--m-blue);color:var(--m-blue);background:var(--m-blue-l)}
-  .chip.active{background:linear-gradient(135deg,var(--m-blue),var(--m-purple));border-color:transparent;color:#fff}
+  .chip{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:7px 18px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;user-select:none}
+  .chip:hover{border-color:var(--m-blue);color:var(--m-blue);background:var(--m-blue-l);transform:translateY(-1px)}
+  .chip.active{background:linear-gradient(135deg,var(--m-blue),var(--m-purple));border-color:transparent;color:#fff;box-shadow:0 3px 10px rgba(126,155,181,.3)}
 
-  .items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px}
+  /* ── 卡片網格 ── */
+  .items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px}
   .item-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s,border-color .2s;display:flex;flex-direction:column}
   .item-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-hover);border-color:var(--m-blue)}
-  .item-thumb{height:140px;width:100%;object-fit:cover;display:block;background:#e8e4de}
-  .item-body{padding:14px 16px;flex:1;display:flex;flex-direction:column}
-  .item-tag{font-size:10px;font-weight:700;border-radius:5px;padding:2px 8px;display:inline-block;margin-bottom:7px;letter-spacing:.3px}
+
+  .item-img-wrap{position:relative;height:160px;overflow:hidden;background:#e8e4de;flex-shrink:0}
+  .item-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+  .item-card:hover .item-img-wrap img{transform:scale(1.04)}
+  .item-cond-badge{position:absolute;top:10px;right:10px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.3px;backdrop-filter:blur(6px)}
+  .cond-new  {background:rgba(132,168,152,.9);color:#fff}
+  .cond-good {background:rgba(126,155,181,.9);color:#fff}
+  .cond-fair {background:rgba(184,169,138,.9);color:#fff}
+  .cond-used {background:rgba(155,142,168,.9);color:#fff}
+
+  .item-body{padding:16px;flex:1;display:flex;flex-direction:column;gap:5px}
+  .item-tag{font-size:10px;font-weight:700;border-radius:5px;padding:2px 8px;display:inline-block;letter-spacing:.3px;align-self:flex-start}
   .tag-purple{color:var(--m-purple);background:var(--m-purple-l)}
-  .tag-blue  {color:var(--m-blue)  ;background:var(--m-blue-l)  }
-  .tag-sand  {color:#8a7a5a        ;background:var(--m-sand-l)  }
-  .tag-green {color:var(--m-green) ;background:var(--m-green-l) }
-  .tag-rose  {color:var(--m-rose)  ;background:var(--m-rose-l)  }
-  .tag-teal  {color:var(--m-teal)  ;background:var(--m-teal-l)  }
-  .item-card h3{font-size:13px;font-weight:800;margin-bottom:3px;line-height:1.4}
-  .item-meta {font-size:11px;color:var(--muted);margin-bottom:2px}
-  .item-cond {font-size:11px;color:var(--muted);margin-bottom:10px;flex:1}
-  .item-footer{display:flex;align-items:center;justify-content:space-between;font-size:11px}
+  .tag-blue  {color:var(--m-blue)  ;background:var(--m-blue-l)}
+  .tag-sand  {color:#8a7a5a        ;background:var(--m-sand-l)}
+  .tag-green {color:var(--m-green) ;background:var(--m-green-l)}
+  .tag-rose  {color:var(--m-rose)  ;background:var(--m-rose-l)}
+  .tag-teal  {color:var(--m-teal)  ;background:var(--m-teal-l)}
+
+  .item-card h3{font-size:14px;font-weight:800;line-height:1.4;color:var(--text)}
+  .item-desc{font-size:12px;color:var(--muted);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .item-meta-row{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-top:4px;flex-wrap:wrap}
+  .meta-item{display:inline-flex;align-items:center;gap:3px}
+  .item-footer{display:flex;align-items:center;justify-content:space-between;font-size:11px;margin-top:auto;padding-top:10px;border-top:1px solid #f0ede8}
   .item-status{display:inline-flex;align-items:center;gap:4px;font-weight:600;color:var(--m-green)}
   .dot{width:6px;height:6px;border-radius:50%;background:var(--m-green)}
-  .request-btn{background:linear-gradient(135deg,var(--m-blue),var(--m-purple));color:#fff;border:none;padding:5px 12px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;transition:opacity .15s,transform .15s;box-shadow:0 2px 6px rgba(126,155,181,.28)}
+  .request-btn{background:linear-gradient(135deg,var(--m-blue),var(--m-purple));color:#fff;border:none;padding:6px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:opacity .15s,transform .15s;box-shadow:0 2px 6px rgba(126,155,181,.28)}
   .request-btn:hover{opacity:.88;transform:translateY(-1px)}
+
   .no-result{text-align:center;padding:60px 20px;color:var(--muted)}
   .no-result .nr-icon{font-size:48px;margin-bottom:16px}
+
+  /* ── 詳情 Modal ── */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(58,53,48,.45);backdrop-filter:blur(4px);z-index:500;align-items:center;justify-content:center;padding:20px}
+  .modal-overlay.show{display:flex}
+  .modal{background:var(--surface);border-radius:18px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(58,53,48,.2);animation:popIn .22s ease}
+  @keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal-img{width:100%;height:240px;object-fit:cover;border-radius:18px 18px 0 0;background:#e8e4de}
+  .modal-body{padding:26px 28px 30px}
+  .modal-tag{font-size:11px;font-weight:700;border-radius:6px;padding:3px 10px;display:inline-block;margin-bottom:10px}
+  .modal-title{font-size:20px;font-weight:900;margin-bottom:12px;letter-spacing:-.3px}
+  .modal-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .info-cell{background:var(--bg);border-radius:10px;padding:11px 14px}
+  .info-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px}
+  .info-value{font-size:13px;font-weight:700;color:var(--text)}
+  .modal-desc{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:20px}
+  .modal-actions{display:flex;gap:10px}
+  .btn-request{flex:1;background:linear-gradient(135deg,var(--m-blue),var(--m-purple));color:#fff;border:none;padding:13px 20px;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(126,155,181,.3);transition:opacity .15s,transform .15s}
+  .btn-request:hover{opacity:.88;transform:translateY(-2px)}
+  .btn-close-modal{padding:13px 20px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
+  .btn-close-modal:hover{background:var(--bg)}
+
   footer{text-align:center;font-size:12px;color:rgba(255,255,255,.5);background:#3a3530;padding:24px;margin-top:40px}
   footer strong{color:rgba(255,255,255,.8)}
 </style>
@@ -82,7 +114,7 @@
 <div class="search-hero">
   <h1>🔍 搜尋物資</h1>
   <div class="search-bar-wrap">
-    <input type="text" id="searchInput" placeholder="搜尋商品名稱、分類、刊登者…" oninput="filterItems()"/>
+    <input type="text" id="searchInput" placeholder="搜尋商品名稱、分類、刊登者、地點…" oninput="filterItems()"/>
     <button onclick="filterItems()">搜尋</button>
   </div>
 </div>
@@ -95,13 +127,12 @@
 <div class="container">
   <div class="toolbar">
     <div class="result-count" id="resultCount">共 <strong>100</strong> 筆物資</div>
-    <select class="sort-select" onchange="filterItems()" id="sortSel">
-      <option>最新刊登</option>
-      <option>最多申請</option>
-      <option>狀況最佳</option>
+    <select class="sort-select" id="sortSel" onchange="filterItems()">
+      <option value="newest">最新刊登</option>
+      <option value="cond">狀況最佳</option>
     </select>
   </div>
-  <div class="filter-bar" id="filterBar">
+  <div class="filter-bar">
     <div class="chip active" onclick="setFilter('全部',this)">✨ 全部</div>
     <div class="chip" onclick="setFilter('家電用品',this)">🔌 家電用品</div>
     <div class="chip" onclick="setFilter('書籍文具',this)">📚 書籍文具</div>
@@ -118,181 +149,233 @@
   </div>
 </div>
 
+<!-- 詳情 Modal -->
+<div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
+  <div class="modal" id="modalBox">
+    <img class="modal-img" id="modalImg" src="" alt="">
+    <div class="modal-body">
+      <span class="modal-tag" id="modalTag"></span>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-info-grid" id="modalInfoGrid"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-actions">
+        <button class="btn-request">✅ 我要索取</button>
+        <button class="btn-close-modal" onclick="document.getElementById('detailModal').classList.remove('show')">關閉</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer><strong>物資共享平台</strong> · 讓愛流動，讓物資不浪費 · © 2025 · Made with IBM Bob</footer>
 
 <script>
-// 每個分類對應的 Unsplash 關鍵字 seed（固定 seed 確保圖片穩定）
-const IMG = {
-  '家電用品':  (s)=>`https://picsum.photos/seed/elec${s}/400/280`,
-  '書籍文具':  (s)=>`https://picsum.photos/seed/book${s}/400/280`,
-  '嬰幼兒用品':(s)=>`https://picsum.photos/seed/baby${s}/400/280`,
-  '衣物鞋包':  (s)=>`https://picsum.photos/seed/cloth${s}/400/280`,
-  '家具寢具':  (s)=>`https://picsum.photos/seed/furn${s}/400/280`,
-  '食品物資':  (s)=>`https://picsum.photos/seed/food${s}/400/280`,
-  '其他':      (s)=>`https://picsum.photos/seed/misc${s}/400/280`,
-};
-const TAG = {
-  '家電用品':'tag-sand','書籍文具':'tag-blue','嬰幼兒用品':'tag-purple',
-  '衣物鞋包':'tag-green','家具寢具':'tag-rose','食品物資':'tag-teal','其他':'tag-blue'
-};
+const COND_MAP = {'全新':'cond-new','九成新':'cond-good','八成新':'cond-good','七成新':'cond-fair','六成新':'cond-fair','功能正常':'cond-used'};
+const TAG_MAP  = {'家電用品':'tag-sand','書籍文具':'tag-blue','嬰幼兒用品':'tag-purple','衣物鞋包':'tag-green','家具寢具':'tag-rose','食品物資':'tag-teal','其他':'tag-blue'};
+
+// Unsplash Source — 依商品英文關鍵字取得對應真實照片
+function imgUrl(item){
+  return `https://source.unsplash.com/400x300/?${encodeURIComponent(item.img)}&sig=${item.id}`;
+}
+function imgFallback(item){
+  return `https://picsum.photos/seed/${item.img.replace(/ /g,'')}${item.id}/400/300`;
+}
 
 const ITEMS = [
-  {id:1,  name:'嬰兒推車',          cat:'嬰幼兒用品', cond:'九成新',   donor:'台北小芸'},
-  {id:2,  name:'國中參考書組',       cat:'書籍文具',   cond:'八成新',   donor:'新北阿明'},
-  {id:3,  name:'電風扇（立扇）',     cat:'家電用品',   cond:'功能正常', donor:'桃園小珍'},
-  {id:4,  name:'冬季外套 M號',       cat:'衣物鞋包',   cond:'九成新',   donor:'台中小慧'},
-  {id:5,  name:'單人床墊',           cat:'家具寢具',   cond:'七成新',   donor:'台南阿賢'},
-  {id:6,  name:'即期罐頭組',         cat:'食品物資',   cond:'全新',     donor:'高雄小芬'},
-  {id:7,  name:'木製書架',           cat:'家具寢具',   cond:'八成新',   donor:'台北阿偉'},
-  {id:8,  name:'兒童積木組',         cat:'嬰幼兒用品', cond:'九成新',   donor:'新北小婷'},
-  {id:9,  name:'除濕機',             cat:'家電用品',   cond:'七成新',   donor:'桃園阿強'},
-  {id:10, name:'瑜珈墊',             cat:'其他',       cond:'九成新',   donor:'台中阿雅'},
-  {id:11, name:'小學課本套組',       cat:'書籍文具',   cond:'八成新',   donor:'台南小哲'},
-  {id:12, name:'嬰兒床',             cat:'嬰幼兒用品', cond:'八成新',   donor:'高雄小潔'},
-  {id:13, name:'微波爐',             cat:'家電用品',   cond:'功能正常', donor:'基隆阿傑'},
-  {id:14, name:'牛仔褲（多件）',     cat:'衣物鞋包',   cond:'七成新',   donor:'台北小美'},
-  {id:15, name:'木製餐桌椅組',       cat:'家具寢具',   cond:'六成新',   donor:'新竹阿志'},
-  {id:16, name:'白米 10kg',          cat:'食品物資',   cond:'全新',     donor:'苗栗小秋'},
-  {id:17, name:'電動牙刷',           cat:'其他',       cond:'九成新',   donor:'彰化阿龍'},
-  {id:18, name:'高中教科書套組',     cat:'書籍文具',   cond:'七成新',   donor:'南投小玲'},
-  {id:19, name:'嬰兒奶瓶組',         cat:'嬰幼兒用品', cond:'全新',     donor:'雲林阿文'},
-  {id:20, name:'空氣清淨機',         cat:'家電用品',   cond:'八成新',   donor:'嘉義小蓮'},
-  {id:21, name:'運動外套（S號）',    cat:'衣物鞋包',   cond:'九成新',   donor:'台南阿明'},
-  {id:22, name:'折疊書桌',           cat:'家具寢具',   cond:'八成新',   donor:'高雄小珊'},
-  {id:23, name:'泡麵箱',             cat:'食品物資',   cond:'全新',     donor:'屏東阿偉'},
-  {id:24, name:'二手腳踏車',         cat:'其他',       cond:'七成新',   donor:'台東小芸'},
-  {id:25, name:'文具整組',           cat:'書籍文具',   cond:'全新',     donor:'花蓮阿強'},
-  {id:26, name:'嬰兒背帶',           cat:'嬰幼兒用品', cond:'九成新',   donor:'宜蘭小慧'},
-  {id:27, name:'桌上型電風扇',       cat:'家電用品',   cond:'功能正常', donor:'基隆阿傑'},
-  {id:28, name:'冬季毛衣（多件）',   cat:'衣物鞋包',   cond:'八成新',   donor:'台北小婷'},
-  {id:29, name:'收納櫃',             cat:'家具寢具',   cond:'七成新',   donor:'新北阿賢'},
-  {id:30, name:'調理包禮盒',         cat:'食品物資',   cond:'全新',     donor:'桃園小芬'},
-  {id:31, name:'滑板車',             cat:'其他',       cond:'八成新',   donor:'台中阿雅'},
-  {id:32, name:'英文繪本組',         cat:'書籍文具',   cond:'九成新',   donor:'台南小哲'},
-  {id:33, name:'嬰兒學步車',         cat:'嬰幼兒用品', cond:'八成新',   donor:'高雄小潔'},
-  {id:34, name:'電暖器',             cat:'家電用品',   cond:'功能正常', donor:'新竹阿志'},
-  {id:35, name:'球鞋（26cm）',       cat:'衣物鞋包',   cond:'七成新',   donor:'苗栗小秋'},
-  {id:36, name:'雙人棉被',           cat:'家具寢具',   cond:'八成新',   donor:'彰化阿龍'},
-  {id:37, name:'餅乾禮盒',           cat:'食品物資',   cond:'全新',     donor:'南投小玲'},
-  {id:38, name:'釣魚竿套組',         cat:'其他',       cond:'七成新',   donor:'雲林阿文'},
-  {id:39, name:'大學教科書組',       cat:'書籍文具',   cond:'六成新',   donor:'嘉義小蓮'},
-  {id:40, name:'兒童安全座椅',       cat:'嬰幼兒用品', cond:'九成新',   donor:'台南阿明'},
-  {id:41, name:'洗衣機',             cat:'家電用品',   cond:'功能正常', donor:'高雄小珊'},
-  {id:42, name:'洋裝（多件）',       cat:'衣物鞋包',   cond:'九成新',   donor:'屏東阿偉'},
-  {id:43, name:'兒童書桌椅組',       cat:'家具寢具',   cond:'八成新',   donor:'台東小芸'},
-  {id:44, name:'麵條箱',             cat:'食品物資',   cond:'全新',     donor:'花蓮阿強'},
-  {id:45, name:'健身啞鈴組',         cat:'其他',       cond:'八成新',   donor:'宜蘭小慧'},
-  {id:46, name:'童書繪本組',         cat:'書籍文具',   cond:'九成新',   donor:'基隆阿傑'},
-  {id:47, name:'尿布（多包）',       cat:'嬰幼兒用品', cond:'全新',     donor:'台北小美'},
-  {id:48, name:'電鍋',               cat:'家電用品',   cond:'功能正常', donor:'新北阿志'},
-  {id:49, name:'皮帶（多條）',       cat:'衣物鞋包',   cond:'九成新',   donor:'桃園小秋'},
-  {id:50, name:'折疊椅（4張）',      cat:'家具寢具',   cond:'八成新',   donor:'台中阿龍'},
-  {id:51, name:'泡菜罐頭組',         cat:'食品物資',   cond:'全新',     donor:'台南小玲'},
-  {id:52, name:'直排輪',             cat:'其他',       cond:'七成新',   donor:'高雄阿文'},
-  {id:53, name:'語文練習本',         cat:'書籍文具',   cond:'全新',     donor:'屏東小蓮'},
-  {id:54, name:'嬰兒玩具組',         cat:'嬰幼兒用品', cond:'九成新',   donor:'台東阿明'},
-  {id:55, name:'冷氣（窗型）',       cat:'家電用品',   cond:'功能正常', donor:'花蓮小珊'},
-  {id:56, name:'帽子（多頂）',       cat:'衣物鞋包',   cond:'八成新',   donor:'宜蘭阿偉'},
-  {id:57, name:'置物架',             cat:'家具寢具',   cond:'八成新',   donor:'基隆小芸'},
-  {id:58, name:'蛋捲禮盒',           cat:'食品物資',   cond:'全新',     donor:'台北阿強'},
-  {id:59, name:'象棋組',             cat:'其他',       cond:'九成新',   donor:'新北小慧'},
-  {id:60, name:'國語辭典',           cat:'書籍文具',   cond:'七成新',   donor:'桃園阿賢'},
-  {id:61, name:'嬰兒圍欄',           cat:'嬰幼兒用品', cond:'八成新',   donor:'台中小芬'},
-  {id:62, name:'電熱水壺',           cat:'家電用品',   cond:'功能正常', donor:'台南阿傑'},
-  {id:63, name:'牛仔外套',           cat:'衣物鞋包',   cond:'八成新',   donor:'高雄小婷'},
-  {id:64, name:'矮凳（多個）',       cat:'家具寢具',   cond:'七成新',   donor:'屏東阿雅'},
-  {id:65, name:'茶葉禮盒',           cat:'食品物資',   cond:'全新',     donor:'台東阿哲'},
-  {id:66, name:'跳繩',               cat:'其他',       cond:'九成新',   donor:'花蓮小潔'},
-  {id:67, name:'字典工具書組',       cat:'書籍文具',   cond:'六成新',   donor:'宜蘭阿明'},
-  {id:68, name:'嬰兒浴盆',           cat:'嬰幼兒用品', cond:'九成新',   donor:'基隆小珊'},
-  {id:69, name:'掃地機器人',         cat:'家電用品',   cond:'功能正常', donor:'台北阿偉'},
-  {id:70, name:'圍巾（多條）',       cat:'衣物鞋包',   cond:'九成新',   donor:'新北小秋'},
-  {id:71, name:'電腦椅',             cat:'家具寢具',   cond:'七成新',   donor:'桃園阿龍'},
-  {id:72, name:'維他命禮盒',         cat:'食品物資',   cond:'全新',     donor:'台中小玲'},
-  {id:73, name:'飛盤',               cat:'其他',       cond:'八成新',   donor:'台南阿文'},
-  {id:74, name:'素描本（多本）',     cat:'書籍文具',   cond:'全新',     donor:'高雄小蓮'},
-  {id:75, name:'兒童帳篷',           cat:'嬰幼兒用品', cond:'九成新',   donor:'屏東阿明'},
-  {id:76, name:'烤箱',               cat:'家電用品',   cond:'功能正常', donor:'台東小珊'},
-  {id:77, name:'背包（多個）',       cat:'衣物鞋包',   cond:'八成新',   donor:'花蓮阿偉'},
-  {id:78, name:'沙發（兩人座）',     cat:'家具寢具',   cond:'六成新',   donor:'宜蘭小婷'},
-  {id:79, name:'果醬禮盒',           cat:'食品物資',   cond:'全新',     donor:'基隆阿雅'},
-  {id:80, name:'拼圖（多款）',       cat:'其他',       cond:'九成新',   donor:'台北阿哲'},
-  {id:81, name:'漫畫套組',           cat:'書籍文具',   cond:'七成新',   donor:'新北小潔'},
-  {id:82, name:'嬰兒搖椅',           cat:'嬰幼兒用品', cond:'八成新',   donor:'桃園阿明'},
-  {id:83, name:'咖啡機',             cat:'家電用品',   cond:'功能正常', donor:'台中小珊'},
-  {id:84, name:'手提包',             cat:'衣物鞋包',   cond:'九成新',   donor:'台南阿偉'},
-  {id:85, name:'鞋架',               cat:'家具寢具',   cond:'八成新',   donor:'高雄小秋'},
-  {id:86, name:'堅果禮盒',           cat:'食品物資',   cond:'全新',     donor:'屏東阿龍'},
-  {id:87, name:'桌遊套組',           cat:'其他',       cond:'九成新',   donor:'台東小玲'},
-  {id:88, name:'英文小說套組',       cat:'書籍文具',   cond:'八成新',   donor:'花蓮阿文'},
-  {id:89, name:'嬰兒監視器',         cat:'嬰幼兒用品', cond:'九成新',   donor:'宜蘭小蓮'},
-  {id:90, name:'吹風機',             cat:'家電用品',   cond:'功能正常', donor:'基隆阿明'},
-  {id:91, name:'布鞋（多雙）',       cat:'衣物鞋包',   cond:'七成新',   donor:'台北小珊'},
-  {id:92, name:'茶几',               cat:'家具寢具',   cond:'七成新',   donor:'新北阿偉'},
-  {id:93, name:'嬰兒奶粉罐',         cat:'嬰幼兒用品', cond:'全新',     donor:'桃園小婷'},
-  {id:94, name:'電子鍋',             cat:'家電用品',   cond:'功能正常', donor:'台中阿雅'},
-  {id:95, name:'羽絨背心',           cat:'衣物鞋包',   cond:'九成新',   donor:'台南阿哲'},
-  {id:96, name:'梳妝台',             cat:'家具寢具',   cond:'六成新',   donor:'高雄小潔'},
-  {id:97, name:'蜂蜜禮盒',           cat:'食品物資',   cond:'全新',     donor:'屏東阿明'},
-  {id:98, name:'四人帳篷',           cat:'其他',       cond:'八成新',   donor:'台東小珊'},
-  {id:99, name:'鋼琴初學書',         cat:'書籍文具',   cond:'九成新',   donor:'花蓮阿偉'},
-  {id:100,name:'嬰兒餐椅',           cat:'嬰幼兒用品', cond:'八成新',   donor:'宜蘭小婷'},
+  {id:1,  name:'嬰兒推車',        cat:'嬰幼兒用品', cond:'九成新',   donor:'台北小芸',   loc:'台北市大安區', img:'baby stroller',            desc:'九成新，附雨罩與收納袋，適合 0–3 歲，折疊方便，自取優先。'},
+  {id:2,  name:'國中參考書組',    cat:'書籍文具',   cond:'八成新',   donor:'新北阿明',   loc:'新北市板橋區', img:'textbooks stack study',     desc:'國一至國三各科參考書，共 12 冊，保存良好，無畫線，免費贈送。'},
+  {id:3,  name:'電風扇（立扇）',  cat:'家電用品',   cond:'功能正常', donor:'桃園小珍',   loc:'桃園市中壢區', img:'electric standing fan',     desc:'使用三年，功能完全正常，三段風速調節，外觀些微刮痕，需自行搬運。'},
+  {id:4,  name:'冬季外套 M號',    cat:'衣物鞋包',   cond:'九成新',   donor:'台中小慧',   loc:'台中市西屯區', img:'winter coat jacket',        desc:'深藍色品牌厚外套，M 碼，僅穿過兩次，保暖效果極佳，附原裝吊牌。'},
+  {id:5,  name:'單人床墊',        cat:'家具寢具',   cond:'七成新',   donor:'台南阿賢',   loc:'台南市東區',   img:'single bed mattress',       desc:'3.5 尺彈簧床墊，使用兩年，乾淨無污漬，需自行載運，不拆解。'},
+  {id:6,  name:'即期罐頭組',      cat:'食品物資',   cond:'全新',     donor:'高雄小芬',   loc:'高雄市三民區', img:'canned food pantry',        desc:'各式罐頭共 20 罐，效期三個月內，品項多元，歡迎有需要的家庭領取。'},
+  {id:7,  name:'木製書架',        cat:'家具寢具',   cond:'八成新',   donor:'台北阿偉',   loc:'台北市信義區', img:'wooden bookshelf furniture',desc:'四層實木書架，高 150cm，可承重，外觀輕微磨損，需自行拆卸搬運。'},
+  {id:8,  name:'兒童積木組',      cat:'嬰幼兒用品', cond:'九成新',   donor:'新北小婷',   loc:'新北市新莊區', img:'colorful building blocks',  desc:'大品牌積木 200 片，附收納桶，顏色鮮艷，適合 2–6 歲，益智玩具。'},
+  {id:9,  name:'除濕機',          cat:'家電用品',   cond:'七成新',   donor:'桃園阿強',   loc:'桃園市桃園區', img:'dehumidifier home',         desc:'12 公升除濕機，功能正常，濾網已清洗，搬家出清，附操作說明書。'},
+  {id:10, name:'瑜珈墊',          cat:'其他',       cond:'九成新',   donor:'台中阿雅',   loc:'台中市北屯區', img:'yoga mat purple exercise',  desc:'6mm 防滑瑜珈墊，紫色，使用次數極少，附收納袋，適合初學者。'},
+  {id:11, name:'小學課本套組',    cat:'書籍文具',   cond:'八成新',   donor:'台南小哲',   loc:'台南市仁德區', img:'elementary school books',   desc:'國小一至六年級各科課本，整套 30 冊，部分有輕微筆記，免費贈送。'},
+  {id:12, name:'嬰兒床',          cat:'嬰幼兒用品', cond:'八成新',   donor:'高雄小潔',   loc:'高雄市苓雅區', img:'baby crib wooden bed',      desc:'實木嬰兒床，附床墊，可調節高度，孩子已長大不需使用，附收納袋。'},
+  {id:13, name:'微波爐',          cat:'家電用品',   cond:'功能正常', donor:'基隆阿傑',   loc:'基隆市中正區', img:'microwave oven kitchen',    desc:'700W 微波爐，使用四年，加熱功能正常，外觀有使用痕跡，不含轉盤。'},
+  {id:14, name:'牛仔褲（多件）',  cat:'衣物鞋包',   cond:'七成新',   donor:'台北小美',   loc:'台北市中山區', img:'blue denim jeans pants',    desc:'男款牛仔褲三件，28/30/32 腰各一，品牌款，洗滌後保存，九分七分。'},
+  {id:15, name:'木製餐桌椅組',    cat:'家具寢具',   cond:'六成新',   donor:'新竹阿志',   loc:'新竹市東區',   img:'wooden dining table set',   desc:'四人座圓形餐桌+四張椅，實木，搬家出清，外觀有使用刮痕，需自取。'},
+  {id:16, name:'白米 10kg',       cat:'食品物資',   cond:'全新',     donor:'苗栗小秋',   loc:'苗栗縣頭份市', img:'white rice sack grain',     desc:'台灣在來米 10 公斤，原裝未開封，效期六個月，量多歡迎自取。'},
+  {id:17, name:'電動牙刷',        cat:'其他',       cond:'九成新',   donor:'彰化阿龍',   loc:'彰化縣彰化市', img:'electric toothbrush dental',desc:'音波電動牙刷，附 3 個替換刷頭，USB 充電，使用不到一個月。'},
+  {id:18, name:'高中教科書套組',  cat:'書籍文具',   cond:'七成新',   donor:'南投小玲',   loc:'南投縣南投市', img:'high school textbooks',     desc:'高一至高三各科課本，共 24 冊，部分有螢光筆記，適合準備複習的學生。'},
+  {id:19, name:'嬰兒奶瓶組',      cat:'嬰幼兒用品', cond:'全新',     donor:'雲林阿文',   loc:'雲林縣斗六市', img:'baby feeding bottle set',   desc:'玻璃奶瓶三支（120/150/240ml），全新未使用，附刷具組，日本品牌。'},
+  {id:20, name:'空氣清淨機',      cat:'家電用品',   cond:'八成新',   donor:'嘉義小蓮',   loc:'嘉義市西區',   img:'air purifier white home',   desc:'適用 15 坪空氣清淨機，濾網已更換，運作安靜，送濾網一片，附遙控器。'},
+  {id:21, name:'運動外套（S號）', cat:'衣物鞋包',   cond:'九成新',   donor:'台南阿明',   loc:'台南市永康區', img:'sports hoodie jacket',      desc:'灰色防風運動外套，S 碼，品牌款，輕量透氣，外觀幾乎全新，送人可惜。'},
+  {id:22, name:'折疊書桌',        cat:'家具寢具',   cond:'八成新',   donor:'高雄小珊',   loc:'高雄市前鎮區', img:'folding study desk',        desc:'100x50cm 折疊書桌，高度可調，輕便易收納，適合租屋族，附桌燈孔。'},
+  {id:23, name:'泡麵箱',          cat:'食品物資',   cond:'全新',     donor:'屏東阿偉',   loc:'屏東縣屏東市', img:'instant ramen noodles box', desc:'韓式泡麵一箱（40包），全新未拆，效期一年，整箱贈送不拆賣。'},
+  {id:24, name:'二手腳踏車',      cat:'其他',       cond:'七成新',   donor:'台東小芸',   loc:'台東縣台東市', img:'city bicycle used',         desc:'26 吋通勤腳踏車，七段變速，輪胎已更換，車鏈上油保養，需自取。'},
+  {id:25, name:'文具整組',        cat:'書籍文具',   cond:'全新',     donor:'花蓮阿強',   loc:'花蓮縣花蓮市', img:'stationery pen pencil set', desc:'全新文具禮盒，含自動鉛筆、鋼珠筆、尺、修正帶各兩支，適合開學用。'},
+  {id:26, name:'嬰兒背帶',        cat:'嬰幼兒用品', cond:'九成新',   donor:'宜蘭小慧',   loc:'宜蘭縣宜蘭市', img:'baby carrier ergonomic',    desc:'人體工學嬰兒背帶，適合 3–18 個月，四種背法，洗滌後保存良好。'},
+  {id:27, name:'桌上型電風扇',    cat:'家電用品',   cond:'功能正常', donor:'基隆阿傑',   loc:'基隆市七堵區', img:'small desk fan white',      desc:'USB 供電桌扇，三段風速，靜音設計，適合辦公桌或床頭使用，外殼完整。'},
+  {id:28, name:'冬季毛衣（多件）',cat:'衣物鞋包',   cond:'八成新',   donor:'台北小婷',   loc:'台北市文山區', img:'wool knit sweater winter',  desc:'M/L 各兩件，厚實保暖毛衣，顏色米白與深灰，洗滌後平整收納。'},
+  {id:29, name:'收納櫃',          cat:'家具寢具',   cond:'七成新',   donor:'新北阿賢',   loc:'新北市中和區', img:'storage cabinet organizer', desc:'五層塑鋼收納櫃，80cm 寬，搬家出清，外觀完整，可自行拆裝，需自取。'},
+  {id:30, name:'調理包禮盒',      cat:'食品物資',   cond:'全新',     donor:'桃園小芬',   loc:'桃園市蘆竹區', img:'ready meal food gift set',  desc:'台灣伴手禮調理包 10 包，麻婆豆腐、滷肉飯等口味，效期一年，全新未拆。'},
+  {id:31, name:'滑板車',          cat:'其他',       cond:'八成新',   donor:'台中阿雅',   loc:'台中市太平區', img:'kids kick scooter',         desc:'兒童三輪滑板車，適合 3–8 歲，剎車功能正常，輪子些微磨損，附手把保護套。'},
+  {id:32, name:'英文繪本組',      cat:'書籍文具',   cond:'九成新',   donor:'台南小哲',   loc:'台南市安平區', img:'english picture books set', desc:'英文繪本 15 本，含 Oxford Reading Tree 等系列，無塗鴉，適合幼稚園至小學。'},
+  {id:33, name:'嬰兒學步車',      cat:'嬰幼兒用品', cond:'八成新',   donor:'高雄小潔',   loc:'高雄市左營區', img:'baby walker learning toy',  desc:'音樂學步車，可調速輔助輪，適合 9–18 個月，外觀整潔，洗滌後收納。'},
+  {id:34, name:'電暖器',          cat:'家電用品',   cond:'功能正常', donor:'新竹阿志',   loc:'新竹縣竹北市', img:'electric space heater',     desc:'陶瓷電暖器 1200W，兩段溫控，使用兩年，外觀完整，附傾倒自動斷電功能。'},
+  {id:35, name:'球鞋（26cm）',    cat:'衣物鞋包',   cond:'七成新',   donor:'苗栗小秋',   loc:'苗栗縣苗栗市', img:'running sneakers shoes',    desc:'26cm 慢跑鞋，穿了半年，鞋面完整，鞋底尚有足夠紋路，已清洗乾淨。'},
+  {id:36, name:'雙人棉被',        cat:'家具寢具',   cond:'八成新',   donor:'彰化阿龍',   loc:'彰化縣員林市', img:'double duvet comforter',    desc:'冬季雙人棉被，6x7 尺，乾洗後收納，保暖度佳，附棉被袋，重量約 3kg。'},
+  {id:37, name:'餅乾禮盒',        cat:'食品物資',   cond:'全新',     donor:'南投小玲',   loc:'南投縣埔里鎮', img:'assorted cookies gift box', desc:'進口奶油餅乾禮盒兩盒，精美包裝，效期半年，未拆封，適合送禮或自用。'},
+  {id:38, name:'釣魚竿套組',      cat:'其他',       cond:'七成新',   donor:'雲林阿文',   loc:'雲林縣虎尾鎮', img:'fishing rod reel set',      desc:'4.5m 溪流竿 + 捲線器，附漁線與魚鉤組，使用約 10 次，功能正常。'},
+  {id:39, name:'大學教科書組',    cat:'書籍文具',   cond:'六成新',   donor:'嘉義小蓮',   loc:'嘉義縣太保市', img:'college university books',  desc:'大學工程數學、統計、程式設計共 8 冊，有筆記與螢光筆，畢業出清。'},
+  {id:40, name:'兒童安全座椅',    cat:'嬰幼兒用品', cond:'九成新',   donor:'台南阿明',   loc:'台南市歸仁區', img:'infant car seat safety',    desc:'ISOFIX 兒童安全座椅，適合 9–36 公斤，全套清洗乾淨，附使用說明書。'},
+  {id:41, name:'洗衣機',          cat:'家電用品',   cond:'功能正常', donor:'高雄小珊',   loc:'高雄市楠梓區', img:'front load washing machine',desc:'7kg 滾筒洗衣機，使用四年，功能正常，洗程完整，需自行搬運，可協助搬運至一樓。'},
+  {id:42, name:'洋裝（多件）',    cat:'衣物鞋包',   cond:'九成新',   donor:'屏東阿偉',   loc:'屏東縣潮州鎮', img:'women summer dress fashion',desc:'M/L 各一件，棉麻材質碎花洋裝，各穿過 1–2 次，洗滌後平整收納。'},
+  {id:43, name:'兒童書桌椅組',    cat:'家具寢具',   cond:'八成新',   donor:'台東小芸',   loc:'台東縣台東市', img:'kids study desk chair set', desc:'高度可調書桌+椅，適合 6–12 歲，外觀輕微磨損，功能完整，附書架夾。'},
+  {id:44, name:'麵條箱',          cat:'食品物資',   cond:'全新',     donor:'花蓮阿強',   loc:'花蓮縣花蓮市', img:'dry pasta noodles box',     desc:'義大利直麵一箱（20 包），全新原裝，效期 18 個月，不拆賣整箱贈送。'},
+  {id:45, name:'健身啞鈴組',      cat:'其他',       cond:'八成新',   donor:'宜蘭小慧',   loc:'宜蘭縣羅東鎮', img:'dumbbell set fitness gym',  desc:'2kg/3kg/5kg 各一對，六顆啞鈴，附收納架，使用痕跡輕微，功能完整。'},
+  {id:46, name:'童書繪本組',      cat:'書籍文具',   cond:'九成新',   donor:'基隆阿傑',   loc:'基隆市暖暖區', img:'colorful children picture books',desc:'台灣知名出版社繪本 20 本，附注音，適合 2–8 歲，無塗鴉，整套贈送。'},
+  {id:47, name:'尿布（多包）',    cat:'嬰幼兒用品', cond:'全新',     donor:'台北小美',   loc:'台北市南港區', img:'baby diapers newborn pack', desc:'L 號紙尿布三包（共 90 片），全新未拆，效期兩年，寶寶已改號碼故出讓。'},
+  {id:48, name:'電鍋',            cat:'家電用品',   cond:'功能正常', donor:'新北阿志',   loc:'新北市永和區', img:'rice cooker electric',      desc:'10 人份電鍋，煮飯蒸物皆可，使用三年功能正常，內鍋無刮痕，附蒸架。'},
+  {id:49, name:'皮帶（多條）',    cat:'衣物鞋包',   cond:'九成新',   donor:'桃園小秋',   loc:'桃園市楊梅區', img:'leather belt men fashion',  desc:'黑/棕皮帶各兩條，品牌款，牛皮材質，使用痕跡極少，附禮盒包裝。'},
+  {id:50, name:'折疊椅（4張）',   cat:'家具寢具',   cond:'八成新',   donor:'台中阿龍',   loc:'台中市豐原區', img:'folding chair set metal',   desc:'金屬折疊椅四張，整組贈送，外觀完整，可承重 120kg，自取為主。'},
+  {id:51, name:'泡菜罐頭組',      cat:'食品物資',   cond:'全新',     donor:'台南小玲',   loc:'台南市中西區', img:'kimchi korean food jar',    desc:'韓國進口泡菜罐頭六罐，全新原裝，效期一年，重口味愛好者必備。'},
+  {id:52, name:'直排輪',          cat:'其他',       cond:'七成新',   donor:'高雄阿文',   loc:'高雄市鼓山區', img:'inline skates roller blades',desc:'直排輪 M 號（26cm），使用約 20 次，輪軸無損，煞車片略磨損，附護具組。'},
+  {id:53, name:'語文練習本',      cat:'書籍文具',   cond:'全新',     donor:'屏東小蓮',   loc:'屏東縣東港鎮', img:'writing practice notebook', desc:'空白語文練習本 20 本，全新未用，適合小學生練習筆畫，整批贈送。'},
+  {id:54, name:'嬰兒玩具組',      cat:'嬰幼兒用品', cond:'九成新',   donor:'台東阿明',   loc:'台東縣成功鎮', img:'baby soft toy rattle',      desc:'布製搖鈴、感官球、咬咬玩具一組，無毒材質，洗滌後收納，適合 0–12 個月。'},
+  {id:55, name:'冷氣（窗型）',    cat:'家電用品',   cond:'功能正常', donor:'花蓮小珊',   loc:'花蓮縣壽豐鄉', img:'window air conditioner unit',desc:'1 噸窗型冷氣，使用三年，製冷正常，已清洗濾網，搬家出清，需自行搬運。'},
+  {id:56, name:'帽子（多頂）',    cat:'衣物鞋包',   cond:'八成新',   donor:'宜蘭阿偉',   loc:'宜蘭縣頭城鎮', img:'cap hat collection fashion',desc:'棒球帽/毛帽各三頂，品牌款，使用次數少，外觀完整，顏色多樣化。'},
+  {id:57, name:'置物架',          cat:'家具寢具',   cond:'八成新',   donor:'基隆小芸',   loc:'基隆市中山區', img:'metal storage shelf rack',  desc:'五層鐵製置物架，寬 60cm，可承重，外觀輕微鏽跡，功能完整，需自取。'},
+  {id:58, name:'蛋捲禮盒',        cat:'食品物資',   cond:'全新',     donor:'台北阿強',   loc:'台北市萬華區', img:'egg roll wafer tin cookies', desc:'傳統手工蛋捲禮盒兩盒，精美鐵盒包裝，效期四個月，未拆封，適合送禮。'},
+  {id:59, name:'象棋組',          cat:'其他',       cond:'九成新',   donor:'新北小慧',   loc:'新北市三重區', img:'chinese chess board game',  desc:'木製象棋組，棋子清晰，棋盤布面良好，使用次數少，附收納袋，完整一套。'},
+  {id:60, name:'國語辭典',        cat:'書籍文具',   cond:'七成新',   donor:'桃園阿賢',   loc:'桃園市大溪區', img:'chinese dictionary reference',desc:'國語辭典正版精裝版，書況良好，內頁輕微黃化，文字清晰，適合小學至國中。'},
+  {id:61, name:'嬰兒圍欄',        cat:'嬰幼兒用品', cond:'八成新',   donor:'台中小芬',   loc:'台中市清水區', img:'baby playpen gate fence',   desc:'八片組合式遊戲圍欄，附門片，直徑約 150cm，可自由組合形狀，無毒材質。'},
+  {id:62, name:'電熱水壺',        cat:'家電用品',   cond:'功能正常', donor:'台南阿傑',   loc:'台南市善化區', img:'electric kettle stainless',  desc:'1.7L 不鏽鋼熱水壺，煮沸功能正常，外觀有輕微水垢，已清潔，附原廠線。'},
+  {id:63, name:'牛仔外套',        cat:'衣物鞋包',   cond:'八成新',   donor:'高雄小婷',   loc:'高雄市鳳山區', img:'denim jacket blue fashion',  desc:'M 碼牛仔外套，淺藍色，品牌款，穿過三次，外觀無明顯磨損，洗滌後收納。'},
+  {id:64, name:'矮凳（多個）',    cat:'家具寢具',   cond:'七成新',   donor:'屏東阿雅',   loc:'屏東縣內埔鄉', img:'small wooden stool set',    desc:'原木矮凳五個，高 30cm，可承重，外觀有使用刮痕，整批贈送不拆賣。'},
+  {id:65, name:'茶葉禮盒',        cat:'食品物資',   cond:'全新',     donor:'台東阿哲',   loc:'台東縣鹿野鄉', img:'tea leaves gift box tin',   desc:'台灣高山茶禮盒，含烏龍茶與金萱茶各一罐，全新未開封，效期一年，可自取。'},
+  {id:66, name:'跳繩',            cat:'其他',       cond:'九成新',   donor:'花蓮小潔',   loc:'花蓮縣壽豐鄉', img:'jump rope fitness sport',   desc:'鋼珠培林跳繩，長度可調，握把舒適，使用不到一個月，幾乎全新狀態。'},
+  {id:67, name:'字典工具書組',    cat:'書籍文具',   cond:'六成新',   donor:'宜蘭阿明',   loc:'宜蘭縣員山鄉', img:'reference dictionary books', desc:'英漢辭典、成語辭典、百科全書共五冊，書況可用，部分書脊略有磨損。'},
+  {id:68, name:'嬰兒浴盆',        cat:'嬰幼兒用品', cond:'九成新',   donor:'基隆小珊',   loc:'基隆市安樂區', img:'baby bathtub inflatable',   desc:'折疊式嬰兒浴盆，附排水孔，防滑設計，洗滌消毒後收納，適合 0–2 歲。'},
+  {id:69, name:'掃地機器人',      cat:'家電用品',   cond:'功能正常', donor:'台北阿偉',   loc:'台北市內湖區', img:'robot vacuum cleaner smart', desc:'自動充電掃地機器人，電池續航約 90 分鐘，濾網已更換，附虛擬牆感應器。'},
+  {id:70, name:'圍巾（多條）',    cat:'衣物鞋包',   cond:'九成新',   donor:'新北小秋',   loc:'新北市汐止區', img:'wool scarf winter fashion',  desc:'羊毛混紡圍巾四條，多色可選，長 180cm，洗滌後整齊收納，各穿過 1–2 次。'},
+  {id:71, name:'電腦椅',          cat:'家具寢具',   cond:'七成新',   donor:'桃園阿龍',   loc:'桃園市龜山區', img:'office ergonomic chair',    desc:'人體工學電腦椅，高度可調，可旋轉，靠背略有磨損，氣壓棒功能正常。'},
+  {id:72, name:'維他命禮盒',      cat:'食品物資',   cond:'全新',     donor:'台中小玲',   loc:'台中市烏日區', img:'vitamin supplements health', desc:'複合維他命+維他命C禮盒，全新未拆，效期一年，適合日常保健使用。'},
+  {id:73, name:'飛盤',            cat:'其他',       cond:'八成新',   donor:'台南阿文',   loc:'台南市麻豆區', img:'frisbee disc outdoor sport', desc:'175g 標準飛盤兩個，使用過數次，外觀無裂痕，適合公園野餐活動使用。'},
+  {id:74, name:'素描本（多本）',  cat:'書籍文具',   cond:'全新',     donor:'高雄小蓮',   loc:'高雄市旗山區', img:'sketchbook art drawing pad', desc:'A4 素描本 10 本，全新未用，200g 厚紙，適合鉛筆炭筆水彩，整批贈送。'},
+  {id:75, name:'兒童帳篷',        cat:'嬰幼兒用品', cond:'九成新',   donor:'屏東阿明',   loc:'屏東縣琉球鄉', img:'kids indoor play tent',     desc:'室內兒童遊戲帳篷，直徑 120cm，附地墊，安裝簡易，使用次數少，外觀整潔。'},
+  {id:76, name:'烤箱',            cat:'家電用品',   cond:'功能正常', donor:'台東小珊',   loc:'台東縣長濱鄉', img:'countertop toaster oven',   desc:'25L 桌上型烤箱，上下加熱功能正常，外觀些許油污已清潔，附烤架與烤盤。'},
+  {id:77, name:'背包（多個）',    cat:'衣物鞋包',   cond:'八成新',   donor:'花蓮阿偉',   loc:'花蓮縣富里鄉', img:'backpack school travel bag', desc:'15 吋筆電後背包 + 登山包各一，防潑水材質，外觀完整，使用半年，附雨罩。'},
+  {id:78, name:'沙發（兩人座）',  cat:'家具寢具',   cond:'六成新',   donor:'宜蘭小婷',   loc:'宜蘭縣礁溪鄉', img:'two seater fabric sofa',    desc:'米色布面雙人沙發，坐感良好，外觀有輕微磨損，搬家出清，需自行載運。'},
+  {id:79, name:'果醬禮盒',        cat:'食品物資',   cond:'全新',     donor:'基隆阿雅',   loc:'基隆市七堵區', img:'fruit jam jar gift set',    desc:'手工果醬禮盒三罐（草莓/藍莓/橘子），全新未開，效期八個月，精美包裝。'},
+  {id:80, name:'拼圖（多款）',    cat:'其他',       cond:'九成新',   donor:'台北阿哲',   loc:'台北市士林區', img:'jigsaw puzzle pieces game', desc:'500/1000 片拼圖各兩組，完整無缺片，附盒子，適合親子或個人休閒娛樂。'},
+  {id:81, name:'漫畫套組',        cat:'書籍文具',   cond:'七成新',   donor:'新北小潔',   loc:'新北市蘆洲區', img:'manga comic books japanese',desc:'日漫全套共 40 冊，書況可用，部分書脊輕微磨損，附收納書盒，整套贈送。'},
+  {id:82, name:'嬰兒搖椅',        cat:'嬰幼兒用品', cond:'八成新',   donor:'桃園阿明',   loc:'桃園市八德區', img:'baby bouncer rocker chair', desc:'電動嬰兒搖椅，三段搖擺速度，附音樂與玩具吊架，外觀整潔，附原廠轉接器。'},
+  {id:83, name:'咖啡機',          cat:'家電用品',   cond:'功能正常', donor:'台中小珊',   loc:'台中市梧棲區', img:'espresso coffee machine',   desc:'全自動義式咖啡機，研磨沖泡一體，使用兩年，定期清潔保養，附說明書。'},
+  {id:84, name:'手提包',          cat:'衣物鞋包',   cond:'九成新',   donor:'台南阿偉',   loc:'台南市學甲區', img:'leather handbag tote woman',desc:'真皮手提包，棕色，品牌款，使用不到 5 次，外觀幾乎全新，附防塵袋。'},
+  {id:85, name:'鞋架',            cat:'家具寢具',   cond:'八成新',   donor:'高雄小秋',   loc:'高雄市大社區', img:'shoe rack organizer home',  desc:'六層金屬鞋架，可放 18–24 雙，外觀完整，可組裝拆解，附收納袋。'},
+  {id:86, name:'堅果禮盒',        cat:'食品物資',   cond:'全新',     donor:'屏東阿龍',   loc:'屏東縣竹田鄉', img:'mixed nuts healthy snack',  desc:'綜合堅果禮盒（核桃/杏仁/腰果），全新原裝，效期一年，量多適合家庭分享。'},
+  {id:87, name:'桌遊套組',        cat:'其他',       cond:'九成新',   donor:'台東小玲',   loc:'台東縣卑南鄉', img:'board game card strategy', desc:'卡坦島+五款卡牌遊戲，規則說明書完整，配件無缺，外觀良好，附收納袋。'},
+  {id:88, name:'英文小說套組',    cat:'書籍文具',   cond:'八成新',   donor:'花蓮阿文',   loc:'花蓮縣吉安鄉', img:'english novels fiction books',desc:'Harry Potter 全套 7 冊英文版，書況良好，少量螢光筆記，畢業出清。'},
+  {id:89, name:'嬰兒監視器',      cat:'嬰幼兒用品', cond:'九成新',   donor:'宜蘭小蓮',   loc:'宜蘭縣五結鄉', img:'baby monitor wifi camera',  desc:'WiFi 無線嬰兒監視器，夜視功能正常，附雙向對講，App 操作，附原廠充電座。'},
+  {id:90, name:'吹風機',          cat:'家電用品',   cond:'功能正常', donor:'基隆阿明',   loc:'基隆市信義區', img:'hair dryer ionic professional',desc:'負離子吹風機 1800W，冷熱風切換正常，使用兩年，外觀完整，附集中嘴。'},
+  {id:91, name:'布鞋（多雙）',    cat:'衣物鞋包',   cond:'七成新',   donor:'台北小珊',   loc:'台北市北投區', img:'canvas sneakers casual shoe',desc:'帆布鞋三雙（24/25/26cm），不同款式，使用半年，鞋面乾淨，鞋底有磨損。'},
+  {id:92, name:'茶几',            cat:'家具寢具',   cond:'七成新',   donor:'新北阿偉',   loc:'新北市土城區', img:'round coffee table living', desc:'圓形木製茶几，直徑 80cm，搬家出清，桌面有輕微刮痕，腳架穩固。'},
+  {id:93, name:'嬰兒奶粉罐',      cat:'嬰幼兒用品', cond:'全新',     donor:'桃園小婷',   loc:'桃園市觀音區', img:'infant formula milk powder',desc:'日本品牌嬰兒奶粉 900g，全新未開，效期一年，寶寶換品牌故出讓。'},
+  {id:94, name:'電子鍋',          cat:'家電用品',   cond:'功能正常', donor:'台中阿雅',   loc:'台中市大甲區', img:'electric pressure cooker',  desc:'6L 萬用鍋，煮飯/燉湯/蒸食，使用三年，功能完整，附食譜一冊，需自取。'},
+  {id:95, name:'羽絨背心',        cat:'衣物鞋包',   cond:'九成新',   donor:'台南阿哲',   loc:'台南市新化區', img:'down puffer vest lightweight',desc:'輕薄羽絨背心，M 碼，黑色，填充量足，收納成小包，使用兩次，近全新。'},
+  {id:96, name:'梳妝台',          cat:'家具寢具',   cond:'六成新',   donor:'高雄小潔',   loc:'高雄市甲仙區', img:'vanity dressing table mirror',desc:'附鏡梳妝台，含三個抽屜，桌面些許刮痕，鏡子完整，搬家出清，需自取。'},
+  {id:97, name:'蜂蜜禮盒',        cat:'食品物資',   cond:'全新',     donor:'屏東阿明',   loc:'屏東縣恆春鎮', img:'honey jar natural organic',  desc:'台灣龍眼蜂蜜禮盒兩罐，500g 裝，全新未開，效期兩年，農家直送，純正天然。'},
+  {id:98, name:'四人帳篷',        cat:'其他',       cond:'八成新',   donor:'台東小珊',   loc:'台東縣大武鄉', img:'camping tent four person',   desc:'四人帳篷，快速搭建，防雨係數 2000mm，使用四次，外觀整潔，附收納袋。'},
+  {id:99, name:'鋼琴初學書',      cat:'書籍文具',   cond:'九成新',   donor:'花蓮阿偉',   loc:'花蓮縣新城鄉', img:'piano music sheet beginner', desc:'拜爾鋼琴初學 + 哈農指法練習共三冊，附CD，書況良好，適合初學者自學。'},
+  {id:100,name:'嬰兒餐椅',        cat:'嬰幼兒用品', cond:'八成新',   donor:'宜蘭小婷',   loc:'宜蘭縣冬山鄉', img:'baby high chair feeding',    desc:'可調高度嬰兒餐椅，附餐盤與安全帶，已清潔，適合 6 個月以上，附安裝說明。'},
 ];
 
 let currentFilter = '全部';
 
-function setFilter(cat, el) {
+function setFilter(cat, el){
   currentFilter = cat;
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
   el.classList.add('active');
   filterItems();
 }
 
-function filterItems() {
+function filterItems(){
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
   let list = [...ITEMS];
-  if (currentFilter !== '全部') list = list.filter(i => i.cat === currentFilter);
-  if (q) list = list.filter(i =>
-    i.name.toLowerCase().includes(q) ||
-    i.cat.toLowerCase().includes(q) ||
-    i.donor.toLowerCase().includes(q) ||
-    i.cond.toLowerCase().includes(q)
+  if(currentFilter !== '全部') list = list.filter(i=>i.cat===currentFilter);
+  if(q) list = list.filter(i=>
+    i.name.toLowerCase().includes(q)||
+    i.cat.toLowerCase().includes(q)||
+    i.donor.toLowerCase().includes(q)||
+    i.cond.toLowerCase().includes(q)||
+    i.loc.toLowerCase().includes(q)||
+    i.desc.toLowerCase().includes(q)
   );
   renderItems(list);
 }
 
-function renderItems(list) {
+function renderItems(list){
   const grid = document.getElementById('itemsGrid');
   const nr   = document.getElementById('noResult');
   const rc   = document.getElementById('resultCount');
   rc.innerHTML = `共 <strong>${list.length}</strong> 筆物資`;
-  if (!list.length) { grid.innerHTML=''; nr.style.display='block'; return; }
-  nr.style.display = 'none';
-  grid.innerHTML = list.map(i => `
-    <div class="item-card">
-      <img class="item-thumb" src="${IMG[i.cat](i.id)}" alt="${i.name}" loading="lazy" onerror="this.style.background='#e0dbd4';this.style.height='140px'">
+  if(!list.length){grid.innerHTML='';nr.style.display='block';return;}
+  nr.style.display='none';
+  grid.innerHTML = list.map(i=>{
+    const imgSrc = `https://source.unsplash.com/400x300/?${encodeURIComponent(i.img)}&sig=${i.id}`;
+    const fallback = `https://picsum.photos/seed/${i.id}${i.name.charCodeAt(0)}/400/300`;
+    const condClass = COND_MAP[i.cond]||'cond-fair';
+    return `
+    <div class="item-card" onclick="openModal(${i.id})">
+      <div class="item-img-wrap">
+        <img src="${imgSrc}" alt="${i.name}" loading="lazy" onerror="this.src='${fallback}'">
+        <span class="item-cond-badge ${condClass}">${i.cond}</span>
+      </div>
       <div class="item-body">
-        <span class="item-tag ${TAG[i.cat]}">${i.cat}</span>
+        <span class="item-tag ${TAG_MAP[i.cat]}">${i.cat}</span>
         <h3>${i.name}</h3>
-        <div class="item-meta">🙋 ${i.donor}</div>
-        <div class="item-cond">物況：${i.cond}</div>
+        <p class="item-desc">${i.desc}</p>
+        <div class="item-meta-row">
+          <span class="meta-item">🙋 ${i.donor}</span>
+          <span class="meta-item">📍 ${i.loc}</span>
+        </div>
         <div class="item-footer">
           <span class="item-status"><span class="dot"></span>可索取</span>
-          <button class="request-btn">我要索取</button>
+          <button class="request-btn" onclick="event.stopPropagation()">我要索取</button>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
-// 支援從首頁帶入關鍵字或分類
+function openModal(id){
+  const i = ITEMS.find(x=>x.id===id);
+  if(!i) return;
+  const imgSrc  = `https://source.unsplash.com/560x240/?${encodeURIComponent(i.img)}&sig=m${i.id}`;
+  const fallback= `https://picsum.photos/seed/m${i.id}/560/240`;
+  document.getElementById('modalImg').src = imgSrc;
+  document.getElementById('modalImg').onerror = function(){this.src=fallback};
+  document.getElementById('modalImg').alt = i.name;
+  const tag = document.getElementById('modalTag');
+  tag.textContent = i.cat;
+  tag.className = `modal-tag ${TAG_MAP[i.cat]}`;
+  document.getElementById('modalTitle').textContent = i.name;
+  document.getElementById('modalDesc').textContent  = i.desc;
+  document.getElementById('modalInfoGrid').innerHTML = `
+    <div class="info-cell"><div class="info-label">物況</div><div class="info-value">${i.cond}</div></div>
+    <div class="info-cell"><div class="info-label">刊登者</div><div class="info-value">${i.donor}</div></div>
+    <div class="info-cell"><div class="info-label">地點</div><div class="info-value">${i.loc}</div></div>
+    <div class="info-cell"><div class="info-label">分類</div><div class="info-value">${i.cat}</div></div>
+  `;
+  document.getElementById('detailModal').classList.add('show');
+}
+
+function closeModal(e){
+  if(e.target===document.getElementById('detailModal'))
+    document.getElementById('detailModal').classList.remove('show');
+}
+
+// URL 帶入關鍵字或分類
 const params = new URLSearchParams(location.search);
 const urlQ   = params.get('q');
 const urlCat = params.get('cat');
-if (urlQ) document.getElementById('searchInput').value = urlQ;
-if (urlCat) {
-  const chip = [...document.querySelectorAll('.chip')].find(c => c.textContent.includes(urlCat));
-  if (chip) setFilter(urlCat, chip);
+if(urlQ) document.getElementById('searchInput').value = urlQ;
+if(urlCat){
+  const chip = [...document.querySelectorAll('.chip')].find(c=>c.textContent.includes(urlCat));
+  if(chip) setFilter(urlCat, chip);
 }
 filterItems();
 </script>
