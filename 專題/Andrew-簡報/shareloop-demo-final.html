@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ShareLoop — Demo Kit 10分鐘腳本</title>
+<style>
+/* 完全使用系統字型，不依賴任何外部資源，手機離線可用 */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, 'Segoe UI', 'PingFang TC', 'Noto Sans TC', sans-serif;
+  background: #f4f4f4;
+  color: #161616;
+  font-size: 15px;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  background: #161616;
+  color: #a8a8a8;
+  font-size: 12px;
+  padding: 0 20px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.topbar strong { color: #fff; font-size: 13px; }
+
+/* ── NAV ── */
+.nav {
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+  height: 48px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  overflow-x: auto;
+}
+.nav-logo {
+  font-size: 15px;
+  font-weight: 700;
+  color: #161616;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 16px;
+  white-space: nowrap;
+  border-right: 1px solid #e0e0e0;
+  flex-shrink: 0;
+}
+.nav-dot { width: 9px; height: 9px; background: #0f62fe; display: inline-block; flex-shrink: 0; }
+.tab-btn {
+  height: 48px;
+  padding: 0 16px;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  color: #525252;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tab-btn.active { color: #161616; border-bottom-color: #0f62fe; font-weight: 600; }
+.nav-badge {
+  margin-left: auto;
+  background: #0f62fe;
+  color: #fff;
+  font-size: 11px;
+  padding: 3px 10px;
+  white-space: nowrap;
+  align-self: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* ── LAYOUT ── */
+.page { max-width: 860px; margin: 0 auto; padding: 24px 16px 56px; }
+.section { display: none; }
+.section.active { display: block; }
+
+/* ── HERO STRIP ── */
+.hero-strip {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  padding: 28px 24px 24px;
+  margin-bottom: 24px;
+}
+.hero-strip .ey { font-size: 12px; color: #0f62fe; letter-spacing: 0.05em; margin-bottom: 8px; }
+.hero-strip h1 { font-size: 26px; font-weight: 300; line-height: 1.3; color: #161616; margin-bottom: 10px; }
+.hero-strip p { font-size: 13px; color: #525252; }
+
+/* ── CHAPTER HEAD ── */
+.ch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 32px 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #161616;
+}
+.ch-num { background: #0f62fe; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px; letter-spacing: 0.05em; }
+.ch-title { font-size: 18px; font-weight: 600; color: #161616; }
+.ch-sub { font-size: 12px; color: #525252; margin-left: auto; white-space: nowrap; }
+
+/* ── TIMELINE ── */
+.tl { display: flex; flex-direction: column; }
+.tr { display: grid; grid-template-columns: 60px 4px 1fr; gap: 0 12px; }
+.tr:last-child .tl-line { visibility: hidden; }
+.tt { padding-top: 16px; text-align: right; }
+.tt .min { font-size: 12px; font-weight: 700; color: #0f62fe; }
+.tt .dur { font-size: 10px; color: #8c8c8c; }
+.ts { display: flex; flex-direction: column; align-items: center; }
+.td {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: #0f62fe;
+  border: 2px solid #f4f4f4;
+  outline: 2px solid #0f62fe;
+  margin-top: 18px;
+  flex-shrink: 0;
+}
+.tl-line { width: 2px; background: #e0e0e0; flex: 1; margin-top: 3px; min-height: 12px; }
+.tc {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.tc-scene { font-size: 11px; color: #525252; letter-spacing: 0.05em; margin-bottom: 3px; }
+.tc-title { font-size: 14px; font-weight: 700; color: #161616; margin-bottom: 6px; line-height: 1.4; }
+.tc-script {
+  font-size: 13px;
+  color: #3a3a3a;
+  line-height: 1.7;
+  margin-bottom: 10px;
+  background: #f4f4f4;
+  padding: 10px 12px;
+  border-left: 3px solid #c8c8c8;
+}
+.tc-ops {
+  font-size: 12px;
+  color: #161616;
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  line-height: 1.5;
+}
+.tc-lbl {
+  background: #161616;
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 6px;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.tag { font-size: 11px; padding: 2px 7px; border: 1px solid #e0e0e0; color: #525252; }
+.tb { border-color: #0f62fe; color: #0f62fe; background: #edf3ff; }
+.tg { border-color: #24a148; color: #24a148; background: #e8f5ee; }
+
+/* ── KPI ROW ── */
+.kr { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid #e0e0e0; margin-bottom: 20px; }
+.kk { background: #fff; padding: 20px 16px; border-right: 1px solid #e0e0e0; }
+.kk:last-child { border-right: none; }
+.kk .n { font-size: 28px; font-weight: 300; color: #0f62fe; line-height: 1.15; margin-bottom: 5px; }
+.kk .d { font-size: 12px; color: #525252; line-height: 1.4; }
+.kk .s { font-size: 10px; color: #8c8c8c; margin-top: 3px; }
+
+/* ── QUOTE ── */
+.qt { background: #fff; border: 1px solid #e0e0e0; padding: 20px 24px; margin-bottom: 20px; }
+.qt blockquote { font-size: 15px; font-weight: 300; color: #161616; line-height: 1.6; border-left: 3px solid #0f62fe; padding-left: 14px; margin-bottom: 6px; }
+.qt cite { font-size: 11px; color: #8c8c8c; font-style: normal; }
+
+/* ── DIM GRID ── */
+.dg { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid #e0e0e0; margin-bottom: 20px; }
+.dm { background: #fff; padding: 18px; border-right: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
+.dm:nth-child(2n) { border-right: none; }
+.dm:nth-last-child(-n+2) { border-bottom: none; }
+.dm-ic { font-size: 18px; margin-bottom: 7px; }
+.dm h3 { font-size: 13px; font-weight: 700; color: #161616; margin-bottom: 5px; }
+.dm p { font-size: 12px; color: #525252; line-height: 1.6; }
+.dm-tag { display: inline-block; font-size: 10px; background: #edf3ff; border: 1px solid #0f62fe; color: #0f62fe; padding: 1px 6px; margin-top: 6px; }
+
+/* ── SDG ROW ── */
+.sdg-r { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.sdg { display: flex; align-items: center; gap: 5px; border: 1px solid #e0e0e0; background: #fff; padding: 5px 10px; font-size: 12px; color: #161616; }
+.sdg-n { background: #0f62fe; color: #fff; font-size: 10px; font-weight: 700; padding: 1px 5px; }
+
+/* ── KPI GOAL ── */
+.kg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid #e0e0e0; margin-bottom: 20px; }
+.kgc { background: #f4f4f4; padding: 18px; border-right: 1px solid #e0e0e0; }
+.kgc:last-child { border-right: none; }
+.kgc .n { font-size: 22px; font-weight: 300; color: #0f62fe; margin-bottom: 4px; }
+.kgc .l { font-size: 12px; color: #525252; }
+.kgc .nt { font-size: 10px; color: #8c8c8c; margin-top: 3px; }
+
+/* ── TABLES ── */
+.fw { background: #fff; border: 1px solid #e0e0e0; overflow-x: auto; margin-bottom: 20px; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; min-width: 520px; }
+thead th { background: #161616; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; padding: 9px 12px; text-align: left; border-right: 1px solid #393939; }
+thead th:last-child { border-right: none; }
+tbody td { font-size: 12px; color: #161616; padding: 10px 12px; border-right: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; vertical-align: top; line-height: 1.5; }
+tbody td:last-child { border-right: none; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(even) td { background: #fafafa; }
+.chip { display: inline-block; font-size: 10px; padding: 2px 6px; color: #fff; margin-right: 3px; }
+.cb { background: #0f62fe; }
+.cg { background: #24a148; }
+.cy { background: #c07f00; }
+.cgr { background: #525252; }
+
+/* ── PAGE CARDS ── */
+.pgd { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid #e0e0e0; margin-bottom: 20px; }
+.pgc { background: #fff; padding: 18px; border-right: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; }
+.pgc:nth-child(2n) { border-right: none; }
+.pgc:nth-last-child(-n+2) { border-bottom: none; }
+.pgc .pn { font-size: 10px; font-weight: 700; color: #fff; padding: 2px 6px; display: inline-block; margin-bottom: 7px; }
+.pgc .pt { font-size: 13px; font-weight: 700; color: #161616; margin-bottom: 3px; }
+.pgc .pr { font-size: 10px; color: #8c8c8c; margin-bottom: 6px; }
+.pgc ul { list-style: none; }
+.pgc li { font-size: 12px; color: #525252; padding: 2px 0 2px 10px; position: relative; line-height: 1.5; }
+.pgc li::before { content: '—'; position: absolute; left: 0; color: #0f62fe; }
+
+/* ── CTA ── */
+.cta { background: #0f62fe; padding: 24px 24px; margin-top: 24px; }
+.cta h2 { font-size: 20px; font-weight: 400; color: #fff; margin-bottom: 6px; line-height: 1.3; }
+.cta p { font-size: 13px; color: rgba(255,255,255,0.85); }
+
+/* ── FOOTER ── */
+footer { background: #161616; padding: 20px 20px 16px; }
+.fi { max-width: 860px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.fb { font-size: 13px; color: #fff; font-weight: 600; }
+.fm { font-size: 11px; color: #8c8c8c; line-height: 1.6; }
+.mw { text-align: center; font-size: 11px; color: #8c8c8c; border-top: 1px solid #393939; margin-top: 16px; padding-top: 12px; }
+
+/* ── MOBILE ── */
+@media (max-width: 600px) {
+  .kr, .dg, .kg, .pgd { grid-template-columns: 1fr; }
+  .kk, .dm, .kgc, .pgc { border-right: none !important; border-bottom: 1px solid #e0e0e0 !important; }
+  .pgd .pgc:last-child, .dg .dm:last-child { border-bottom: none !important; }
+  .tr { grid-template-columns: 52px 4px 1fr; gap: 0 8px; }
+  .hero-strip h1 { font-size: 22px; }
+  .ch-sub { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar"><strong>ShareLoop</strong><span>閒置物資共享平台 · Demo Kit · 2025</span></div>
+
+<nav class="nav">
+  <div class="nav-logo"><span class="nav-dot"></span>ShareLoop</div>
+  <button class="tab-btn active" onclick="show('demo',this)">📋 Demo 腳本</button>
+  <button class="tab-btn" onclick="show('impact',this)">💡 影響力</button>
+  <button class="tab-btn" onclick="show('flow',this)">🗂 頁面架構</button>
+  <span class="nav-badge">10 分鐘</span>
+</nav>
+
+<div class="page">
+
+<!-- ══════════ SECTION 1: DEMO ══════════ -->
+<div id="demo" class="section active">
+
+  <div class="hero-strip">
+    <div class="ey">Demo 腳本 · Live Walkthrough Script</div>
+    <h1>10 分鐘完整 Demo 流程</h1>
+    <p>共 10 個場景 · 每場景含時間點、逐字口白（引號內）、操作指示<br>建議搭配實機或 Figma Prototype 同步操作</p>
+  </div>
+
+  <div class="tl">
+
+    <div class="tr">
+      <div class="tt"><div class="min">0:00</div><div class="dur">1 min</div></div>
+      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
+      <div class="tc">
+        <div class="tc-scene">開場白</div>
+        <div class="tc-title">問題定義 — 台灣的浪費，就藏在每個人的衣櫥裡</div>
+        <div class="tc-script">「請問在座有多少人，家裡有超過三件、超過半年沒碰過的東西？（停頓）幾乎每個人。台灣每年超過 1,500 萬噸廢棄物中，有相當大比例仍具使用價值。而在同一座城市，有家庭因為缺少嬰兒推車、學習用品、保暖衣物而煩惱。問題不是物資不夠，是流通的管道斷了——現有二手平台要議價、怕詐騙、搞運費；捐贈站又不知在哪、不知收不收。ShareLoop 就是那條缺失的連結，讓捐贈像傳訊息一樣簡單。」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>投影首頁 Hero 畫面；展示痛點數據橫幅</div>
+        <div class="tags"><span class="tag tb">口白</span><span class="tag">問題量化</span><span class="tag">情境鋪陳</span></div>
+      </div>
+    </div>
+
+    <div class="tr">
+      <div class="tt"><div class="min">1:00</div><div class="dur">1 min</div></div>
+      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
+      <div class="tc">
+        <div class="tc-scene">場景一 · index.html</div>
+        <div class="tc-title">平台首頁 — 設計決策說明</div>
+        <div class="tc-script">「這是 ShareLoop 首頁。注意我們只設了兩個主要 CTA：『我要提供物資』與『尋找物資』。刻意沒有登入牆——任何人可以先瀏覽，降低心理門檻。頁面同時展示最新刊登的物品卡片，讓第一次到訪的需求者馬上感受到平台的活躍度。」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>滾動首頁 → 指出兩個 CTA → 最新刊登卡片 → 導覽列結構</div>
+        <div class="tags"><span class="tag tb">index.html</span><span class="tag">低門檻設計</span><span class="tag">UX 決策</span></div>
+      </div>
+    </div>
+
+    <div class="tr">
+      <div class="tt"><div class="min">2:00</div><div class="dur">1.5 min</div></div>
+      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
+      <div class="tc">
+        <div class="tc-scene">場景二 · donate.html</div>
+        <div class="tc-title">捐贈者旅程 — 2 分鐘完成物資刊登</div>
+        <div class="tc-script">「假設我是王先生，有台用了兩年的嬰兒推車想捐出去。點擊『我要提供物資』進入 donate.html。表單極簡：物品名稱、分類下拉、狀況描述、可取件行政區、偏好時段、上傳一到三張照片。注意這裡不要求填個人資料——刊登完成後才引導選填，降低放棄率。送出後系統提示：預計 24 小時內收到媒合通知。」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>首頁 → donate.html → 逐欄填寫 → 上傳照片 → 送出 → 成功確認頁</div>
+        <div class="tags"><span class="tag tb">donate.html</span><span class="tag tg">低摩擦設計</span><span class="tag">操作示範</span></div>
+      </div>
+    </div>
+
+    <div class="tr">
+      <div class="tt"><div class="min">3:30</div><div class="dur">1 min</div></div>
+      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
+      <div class="tc">
+        <div class="tc-scene">場景三 · browse.html</div>
+        <div class="tc-title">需求者搜尋 — 關鍵字、分類、地區三層篩選</div>
+        <div class="tc-script">「換成陳小姐的視角——剛生了第二胎，需要嬰兒推車但預算有限。她打開 browse.html，輸入『嬰兒推車』，王先生的刊登立刻出現第一筆。也可以點分類『育兒用品』，或用地區篩選縮小範圍。每張卡片顯示：縮圖、物品狀況標籤、刊登時間、距離——這三個因素是我們用研訪問發現需求者最優先考量的。」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>browse.html → 搜尋關鍵字 → 切換分類 → 地區篩選 → 點擊卡片</div>
+        <div class="tags"><span class="tag tb">browse.html</span><span class="tag">搜尋</span><span class="tag">分類篩選</span><span class="tag">地區篩選</span></div>
+      </div>
+    </div>
+
+    <div class="tr">
+      <div class="tt"><div class="min">4:30</div><div class="dur">1 min</div></div>
+      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
+      <div class="tc">
+        <div class="tc-scene">場景四 · item-detail.html</div>
+        <div class="tc-title">物品詳情 — 信任設計，消除陌生人交流的顧慮</div>
+        <div class="tc-script">「進入 item-detail.html，設計核心是『信任』。多張照片可左右切換；捐贈者的歷史捐贈筆數與評分清楚可見；地圖只顯示行政區，保護地址隱私；可取件時段一目瞭然。頁面底部是唯一的主要 CTA：『我要索取』。注意——沒有議價、沒有留言功能，刻意保持流程單純，不讓平台滑向二手買賣市場。」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>item-detail.html → 切換照片 → 捐贈者評分區 → 地圖區 → 點擊「我要索取」</div>
+        <div class="tags"><span class="tag tb">item-detail.html</span><span class="tag">信任機制</span><span class="tag">隱私設計</span></div>
+      </div>
+    </div>
+
+    <div class="tr">
+      <div class="tt"><div class="min">5:30</div><div class="dur">1 min</div></div>
+      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
+      <div class="tc">
+        <div class="tc-scene">場景五 · request.html</div>
+        <div class="tc-title">索取申請 — 全程匿名媒合，雙方隱私均受保護</div>
+        <div class="tc-script">「request.html 是媒合的關鍵節點。陳小姐選擇偏好取件時段（三選一），填一段簡短說明：『我是雙和區的新手媽媽，週六上午方便取件。』送出後系統站內通知王先生，但不暴露陳小姐的電話或地址。王先生接受後，雙方才各自收到一組一次性取件驗證碼。整個流程，個人聯絡資訊從未直接交換。」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>request.html → 選時段 → 填說明 → 送出 → 顯示「等待捐贈者確認」畫面</div>
+        <div class="tags"><span class="tag tb">request.html</span><span class="tag tg">匿名媒合</span><span class="tag">驗證碼機制</span><span class="tag">隱私保護</span></div>
+      </div>
+    </div>
+
+    <div class="tr">
+      <div class="tt"><div class="min">6:30</div><div class="dur">1 min</div></div>
+      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
+      <div class="tc">
+        <div class="tc-scene">場景六 · my-listings.html</div>
+        <div class="tc-title">捐贈者管理 — 四種狀態，物品生命週期一目瞭然</div>
+        <div class="tc-script">「回到王先生視角。他進入 my-listings.html，頁面分四個狀態分頁：『刊登中』等待申請、『待確認』已有人申請、『待取件』已接受申請、『已完成』移交完畢。他點開陳小姐的申請後點擊『接受』。系統自動發出驗證碼，狀態更新為『待取件』。每完成一筆，他的頁面新增一個『已贈出』徽章——這是我們設計的核心激勵機制。」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>my-listings.html → 切換四個狀態分頁 → 點開申請 → 接受 → 狀態更新</div>
+        <div class="tags"><span class="tag tb">my-listings.html</span><span class="tag tg">已贈出徽章</span><span class="tag">激勵設計</span><span class="tag">狀態追蹤</span></div>
+      </div>
+    </div>
+
+    <div class="tr">
+      <div class="tt"><div class="min">7:30</div><div class="dur">0.75 min</div></div>
+      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
+      <div class="tc">
+        <div class="tc-scene">場景七 · 取件核驗</div>
+        <div class="tc-title">現場驗證碼核對 → 互評機制 → 信任循環完成</div>
+        <div class="tc-script">「取件當天，陳小姐出示驗證碼，王先生在 my-listings.html 輸入確認，移交完成。系統隨即推送互評請求：五顆星 + 一句話，選填。這個機制一方面讓捐贈者累積信譽值，另一方面提供平台健康指標——我們可追蹤媒合完成率與評分分布，快速識別異常。」</div>
+        <div class="tc-ops"><span class="tc-lbl">模擬</span>輸入驗證碼 → 確認移交 → 評分彈出視窗</div>
+        <div class="tags"><span class="tag">取件核驗</span><span class="tag tb">互評機制</span><span class="tag tg">信任累積</span></div>
+      </div>
+    </div>
+
+    <div class="tr">
+      <div class="tt"><div class="min">8:15</div><div class="dur">1 min</div></div>
+      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
+      <div class="tc">
+        <div class="tc-scene">場景八 · about.html</div>
+        <div class="tc-title">社會影響力儀表板 — 讓善意可被看見、被量化</div>
+        <div class="tc-script">「進入 about.html——這不是一般的平台介紹，而是即時的社會影響力儀表板。三個數字：累積媒合件數、換算廢棄物減少重量、服務到的家庭數。這些是我們對捐贈者說的話：你的每一件閒置物品，在這裡不只是一筆交易，而是一個可被記錄的善意行為。當善意的成本降低、回饋可見，願意捐贈的人就會更多。」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>about.html → 三個即時數字 → 使命說明 → SDG 對應章節</div>
+        <div class="tags"><span class="tag tb">about.html</span><span class="tag tg">社會影響力</span><span class="tag">KPI 儀表板</span><span class="tag">SDGs</span></div>
+      </div>
+    </div>
+
+    <div class="tr">
+      <div class="tt"><div class="min">9:15</div><div class="dur">0.75 min</div></div>
+      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
+      <div class="tc">
+        <div class="tc-scene">結語 · Q&amp;A 開放</div>
+        <div class="tc-title">三句話收尾，開放提問</div>
+        <div class="tc-script">「三句話結尾。第一：我們不比二手平台，我們比的是讓善意流通的效率。第二：技術門檻不是護城河，使用者信任才是——這就是為什麼每個設計決策都優先降低風險感。第三：今天展示的是 MVP，但資料模型已為智能媒合推薦、社區地圖視覺化、社福機構 API 對接預留擴充點。請問評審有什麼想問的？」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>回到首頁靜態展示 → 開放 Q&amp;A</div>
+        <div class="tags"><span class="tag tb">結語</span><span class="tag">競爭定位</span><span class="tag">技術擴充性</span><span class="tag tg">開放 Q&amp;A</span></div>
+      </div>
+    </div>
+
+  </div><!-- /tl -->
+
+  <div class="cta">
+    <h2>讓每一件閒置物資，都不再只是「佔空間的東西」。</h2>
+    <p>ShareLoop — 讓善意的流通，比廢棄更容易。</p>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 2: IMPACT ══════════ -->
+<div id="impact" class="section">
+
+  <div class="hero-strip">
+    <div class="ey">影響力論述 · Impact Thesis</div>
+    <h1>為什麼這件事值得做？</h1>
+    <p>ShareLoop 在環境、社會、經濟、社區四個維度上同時產生可量化的正向外部性。</p>
+  </div>
+
+  <div class="ch"><span class="ch-num">問題規模</span><span class="ch-title">台灣每年的閒置浪費</span></div>
+  <div class="kr">
+    <div class="kk"><div class="n">80%</div><div class="d">家庭閒置物品從未再被使用，直接進入廢棄流程</div><div class="s">Ellen MacArthur Foundation, 2023</div></div>
+    <div class="kk"><div class="n">1/3</div><div class="d">弱勢家庭有基本物資缺口，卻缺乏管道取得捐贈品</div><div class="s">衛福部資源調查, 2022</div></div>
+    <div class="kk"><div class="n">NT$420億</div><div class="d">估計每年被廢棄但仍具使用價值的物資總價值</div><div class="s">試算：主計處家庭收支調查</div></div>
+  </div>
+
+  <div class="qt">
+    <blockquote>「最好的循環經濟，不是複雜的系統工程；而是讓一個有多的人，能一鍵找到一個有需要的人。」</blockquote>
+    <cite>ShareLoop 設計哲學 · 核心價值主張</cite>
+  </div>
+
+  <div class="ch"><span class="ch-num">四維度</span><span class="ch-title">環境 · 社會 · 經濟 · 社區</span></div>
+  <div class="dg">
+    <div class="dm"><div class="dm-ic">♻️</div><h3>環境：減少廢棄物與碳排放</h3><p>每一件被媒合的物品，就是一件不進入垃圾焚化爐的廢棄物。每 1,000 件媒合可減少約 2.3 噸固體廢棄物，以及約 4–8 噸 CO₂e 的排放。</p><span class="dm-tag">SDG 12 · 負責任消費與生產</span></div>
+    <div class="dm"><div class="dm-ic">🤝</div><h3>社會：消弭物資取得的不平等</h3><p>低收入家庭、新移民、單親家長缺乏取得二手資源的管道。ShareLoop 以零成本降低門檻，讓有需要的人直接對接鄰居。</p><span class="dm-tag">SDG 10 · 減少不平等</span></div>
+    <div class="dm"><div class="dm-ic">💰</div><h3>經濟：釋放沉睡資產的流通價值</h3><p>一個月 100 件媒合、每件平均節省 NT$800，每月為社區釋放超過 NT$8 萬的實質經濟價值。</p><span class="dm-tag">SDG 8 · 就業與經濟成長</span></div>
+    <div class="dm"><div class="dm-ic">🏘️</div><h3>社區：建立鄰里信任的連結資本</h3><p>每一次成功媒合，都在建立捐贈者與索取者之間的信任關係，並強化社區互助文化。</p><span class="dm-tag">SDG 17 · 夥伴關係</span></div>
+  </div>
+
+  <div class="ch"><span class="ch-num">SDGs</span><span class="ch-title">對應七項聯合國永續發展目標</span></div>
+  <div class="sdg-r">
+    <div class="sdg"><span class="sdg-n">SDG 1</span> 消除貧窮</div>
+    <div class="sdg"><span class="sdg-n">SDG 8</span> 就業與經濟成長</div>
+    <div class="sdg"><span class="sdg-n">SDG 10</span> 減少不平等</div>
+    <div class="sdg"><span class="sdg-n">SDG 11</span> 永續城鄉</div>
+    <div class="sdg"><span class="sdg-n">SDG 12</span> 負責任消費與生產</div>
+    <div class="sdg"><span class="sdg-n">SDG 13</span> 氣候行動</div>
+    <div class="sdg"><span class="sdg-n">SDG 17</span> 夥伴關係</div>
+  </div>
+
+  <div class="ch"><span class="ch-num">KPI</span><span class="ch-title">第一年量化目標</span></div>
+  <div class="kg">
+    <div class="kgc"><div class="n">1,000+</div><div class="l">媒合成功件數</div><div class="nt">每件 = 一件物品不進廢棄流程</div></div>
+    <div class="kgc"><div class="n">2.3 噸</div><div class="l">年減廢棄固體物重量</div><div class="nt">媒合件數 × 平均物品重量</div></div>
+    <div class="kgc"><div class="n">500+</div><div class="l">服務到的弱勢家庭數</div><div class="nt">索取者自願填寫家庭背景</div></div>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 3: FLOW ══════════ -->
+<div id="flow" class="section">
+
+  <div class="hero-strip">
+    <div class="ey">頁面架構 · Page Flow &amp; Feature Map</div>
+    <h1>6 個頁面，覆蓋完整使用者旅程</h1>
+    <p>每個頁面的核心功能、目標使用者、Demo 對應時間點。</p>
+  </div>
+
+  <div class="ch"><span class="ch-num">場景對應</span><span class="ch-title">各頁面在 10 分鐘內的位置</span></div>
+  <div class="fw">
+    <table>
+      <thead><tr><th>頁面</th><th>角色</th><th>核心功能</th><th>場景</th><th>時間</th></tr></thead>
+      <tbody>
+        <tr><td><span class="chip cgr">index</span>首頁</td><td>所有用戶</td><td>平台入口、雙向 CTA、最新刊登卡片</td><td>開場 + 場景一</td><td>0:00 / 1:00</td></tr>
+        <tr><td><span class="chip cb">donate</span>提供物資</td><td>捐贈者</td><td>刊登表單、照片上傳、無強制登入</td><td>場景二</td><td>2:00</td></tr>
+        <tr><td><span class="chip cb">browse</span>尋找物資</td><td>需求者</td><td>關鍵字搜尋、分類 + 地區篩選</td><td>場景三</td><td>3:30</td></tr>
+        <tr><td><span class="chip cy">item-detail</span>物品詳情</td><td>需求者</td><td>多圖、評分記錄、地圖、索取 CTA</td><td>場景四</td><td>4:30</td></tr>
+        <tr><td><span class="chip cy">request</span>我要索取</td><td>需求者</td><td>時段偏好、站內匿名通知、驗證碼</td><td>場景五</td><td>5:30</td></tr>
+        <tr><td><span class="chip cb">my-listings</span>我的刊登</td><td>捐贈者</td><td>四狀態分頁、接受申請、驗證碼核對</td><td>場景六 + 七</td><td>6:30 / 7:30</td></tr>
+        <tr><td><span class="chip cg">about</span>關於平台</td><td>所有 / 評審</td><td>社會使命、即時 KPI、SDG 對應</td><td>場景八</td><td>8:15</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ch"><span class="ch-num">功能地圖</span><span class="ch-title">每頁的設計重點</span></div>
+  <div class="pgd">
+    <div class="pgc"><span class="pn" style="background:#525252;">index.html</span><div class="pt">首頁</div><div class="pr">所有訪客 · 第一次接觸點</div><ul><li>兩個雙向 CTA，無登入牆</li><li>最新刊登物品卡片</li><li>平台使命文案 + 導覽列</li></ul></div>
+    <div class="pgc"><span class="pn" style="background:#0f62fe;">donate.html</span><div class="pt">我要提供物資</div><div class="pr">捐贈者 · 刊登流程</div><ul><li>物品名稱、分類下拉</li><li>狀況描述、行政區、偏好時段</li><li>照片上傳（1–3 張）</li><li>個人資料選填（刊登後引導）</li></ul></div>
+    <div class="pgc"><span class="pn" style="background:#0f62fe;">browse.html</span><div class="pt">尋找物資</div><div class="pr">需求者 · 搜尋與發現</div><ul><li>關鍵字搜尋欄</li><li>分類篩選（育兒 / 生活 / 家電…）</li><li>地區篩選（行政區多選）</li><li>物品卡片：縮圖、狀況、距離</li></ul></div>
+    <div class="pgc"><span class="pn" style="background:#c07f00;">item-detail.html</span><div class="pt">物品詳情</div><div class="pr">需求者 · 評估與決策</div><ul><li>多圖輪播（左右切換）</li><li>捐贈者評分 + 歷史捐贈記錄</li><li>取件地點大略地圖（行政區）</li><li>主要 CTA：「我要索取」</li></ul></div>
+    <div class="pgc"><span class="pn" style="background:#c07f00;">request.html</span><div class="pt">我要索取</div><div class="pr">需求者 · 申請媒合</div><ul><li>偏好取件時段（三選一）</li><li>自我介紹與說明（選填）</li><li>站內通知捐贈者，不暴露個資</li><li>接受後雙方各收一次性驗證碼</li></ul></div>
+    <div class="pgc"><span class="pn" style="background:#0f62fe;">my-listings.html</span><div class="pt">我的刊登</div><div class="pr">捐贈者 · 管理與追蹤</div><ul><li>四狀態分頁：刊登中 / 待確認 / 待取件 / 已完成</li><li>接受 / 婉拒申請</li><li>驗證碼輸入確認移交</li><li>已贈出徽章累積（激勵機制）</li></ul></div>
+  </div>
+
+  <div class="ch"><span class="ch-num">旅程摘要</span><span class="ch-title">兩條主線旅程</span></div>
+  <div class="fw">
+    <table>
+      <thead><tr><th>角色</th><th>步驟 1</th><th>步驟 2</th><th>步驟 3</th><th>步驟 4</th><th>步驟 5</th></tr></thead>
+      <tbody>
+        <tr><td><strong>捐贈者</strong><br>王先生</td><td>首頁</td><td>填寫刊登</td><td>收到申請通知</td><td>接受申請</td><td>驗證碼移交 ✓</td></tr>
+        <tr><td><strong>需求者</strong><br>陳小姐</td><td>首頁</td><td>搜尋物品</td><td>查看詳情</td><td>送出申請</td><td>出示驗證碼取件 ✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cta">
+    <h2>讓每一件閒置物資，都不再只是「佔空間的東西」。</h2>
+    <p>ShareLoop — 讓善意的流通，比廢棄更容易。</p>
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<footer>
+  <div class="fi">
+    <div><div class="fb">ShareLoop 閒置物資共享平台</div><div class="fm" style="margin-top:4px;">Demo 腳本 · 影響力論述 · 頁面架構 · 2025 Hackathon</div></div>
+    <div class="fm">系統字型版本 · 無外部依賴<br>手機 / Line 離線可正常顯示</div>
+  </div>
+  <div class="mw">Made with IBM Bob</div>
+</footer>
+
+<script>
+function show(id,btn){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
