@@ -110,6 +110,24 @@
               </div>
 
 
+              <!-- 照片上傳 -->
+              <div class="mb-3">
+                <label class="form-label fw-semibold">物品照片（選填）</label>
+                <div class="upload-area" id="upload-area">
+                  <input type="file" id="item-photo" accept="image/*" class="upload-input" />
+                  <div class="upload-placeholder" id="upload-placeholder">
+                    <div style="font-size:2rem;">📷</div>
+                    <div class="mt-1" style="font-size:0.9rem;color:#666;">點擊或拖曳照片至此</div>
+                    <div style="font-size:0.78rem;color:#aaa;">支援 JPG、PNG、GIF，建議 5MB 以下</div>
+                  </div>
+                  <img id="photo-preview" class="upload-preview d-none" alt="照片預覽" />
+                </div>
+                <div class="mt-1 d-flex justify-content-between align-items-center">
+                  <span id="photo-filename" style="font-size:0.8rem;color:#666;"></span>
+                  <button type="button" class="btn btn-outline-secondary btn-sm d-none" id="remove-photo-btn">✕ 移除照片</button>
+                </div>
+              </div>
+
               <div class="d-grid mt-3">
                 <button type="submit" class="btn btn-success btn-lg">送出物資資訊</button>
               </div>
@@ -156,6 +174,64 @@
   <script src="js/items-data.js"></script>
   <script src="js/main.js"></script>
   <script>
+    let photoBase64 = '';
+
+    // 照片上傳處理
+    const photoInput = document.getElementById('item-photo');
+    const uploadArea = document.getElementById('upload-area');
+    const placeholder = document.getElementById('upload-placeholder');
+    const preview = document.getElementById('photo-preview');
+    const filenameEl = document.getElementById('photo-filename');
+    const removeBtn = document.getElementById('remove-photo-btn');
+
+    function loadPhoto(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+      if (file.size > 5 * 1024 * 1024) {
+        alert('照片檔案超過 5MB，請選擇較小的圖片。');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        photoBase64 = e.target.result;
+        preview.src = photoBase64;
+        preview.classList.remove('d-none');
+        placeholder.classList.add('d-none');
+        filenameEl.textContent = file.name;
+        removeBtn.classList.remove('d-none');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    photoInput.addEventListener('change', function () {
+      if (this.files[0]) loadPhoto(this.files[0]);
+    });
+
+    // 拖曳上傳
+    uploadArea.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      uploadArea.classList.add('drag-over');
+    });
+    uploadArea.addEventListener('dragleave', function () {
+      uploadArea.classList.remove('drag-over');
+    });
+    uploadArea.addEventListener('drop', function (e) {
+      e.preventDefault();
+      uploadArea.classList.remove('drag-over');
+      if (e.dataTransfer.files[0]) loadPhoto(e.dataTransfer.files[0]);
+    });
+
+    // 移除照片
+    removeBtn.addEventListener('click', function () {
+      photoBase64 = '';
+      photoInput.value = '';
+      preview.src = '';
+      preview.classList.add('d-none');
+      placeholder.classList.remove('d-none');
+      filenameEl.textContent = '';
+      removeBtn.classList.add('d-none');
+    });
+
+    // 表單送出
     const form = document.getElementById('donate-form');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -164,28 +240,27 @@
         return;
       }
 
-      // 讀取表單欄位
+      const title = document.getElementById('item-title').value.trim();
       const newItem = {
         id: 'local_' + Date.now(),
-        title: document.getElementById('item-title').value.trim(),
+        title: title,
         category: document.getElementById('item-category').value,
         condition: document.getElementById('item-condition').value,
         description: document.getElementById('item-desc').value.trim(),
         location: document.getElementById('item-location').value.trim(),
         contact: document.getElementById('item-contact').value.trim(),
-        image: 'https://placehold.co/400x300/e8f5e9/2e7d32?text=' + encodeURIComponent(document.getElementById('item-title').value.trim()),
+        // 若有上傳照片使用 base64，否則用 placeholder
+        image: photoBase64 || 'https://placehold.co/400x300/e8f5e9/2e7d32?text=' + encodeURIComponent(title),
         donor: '我',
         date: new Date().toISOString().slice(0, 10),
         status: 'available',
         source: 'local'
       };
 
-      // 儲存至 localStorage
       const existing = JSON.parse(localStorage.getItem('donated_items') || '[]');
       existing.push(newItem);
       localStorage.setItem('donated_items', JSON.stringify(existing));
 
-      // 顯示成功訊息，隱藏表單
       form.classList.add('d-none');
       document.getElementById('success-msg').classList.remove('d-none');
       window.scrollTo({ top: 0, behavior: 'smooth' });
