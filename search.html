@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>搜尋物資 — 物資共享平台</title>
+<style>
+  :root {
+    --m-blue:#7e9bb5; --m-blue-l:#e8eef4;
+    --m-purple:#9b8ea8; --m-purple-l:#eeebf2;
+    --m-green:#84a898; --m-green-l:#e4eee9;
+    --m-rose:#b8958a; --m-rose-l:#f2e9e7;
+    --m-sand:#b8a98a; --m-sand-l:#f2ede3;
+    --m-teal:#7aa3a0; --m-teal-l:#e3efee;
+    --bg:#f5f4f1; --surface:#fafaf8; --border:#dedad4;
+    --text:#3a3530; --muted:#7d7570; --radius:14px;
+    --shadow:0 2px 8px rgba(58,53,48,.06),0 6px 20px rgba(58,53,48,.04);
+    --shadow-hover:0 8px 28px rgba(126,155,181,.22);
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,"Segoe UI","Noto Sans TC",system-ui,sans-serif; font-size:15px; line-height:1.7; background:var(--bg); color:var(--text); }
+
+  header {
+    background:rgba(250,250,248,.94); backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border); padding:0 36px;
+    display:flex; align-items:center; justify-content:space-between;
+    height:62px; position:sticky; top:0; z-index:200;
+    box-shadow:0 1px 10px rgba(58,53,48,.05);
+  }
+  .logo { display:flex; align-items:center; gap:10px; font-size:17px; font-weight:800; color:var(--m-blue); text-decoration:none; }
+  .logo-icon { width:34px; height:34px; background:linear-gradient(135deg,var(--m-blue),var(--m-purple)); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .back-btn { display:inline-flex; align-items:center; gap:6px; color:var(--muted); text-decoration:none; font-size:14px; font-weight:500; padding:7px 14px; border-radius:8px; transition:background .15s,color .15s; }
+  .back-btn:hover { background:var(--m-blue-l); color:var(--m-blue); }
+
+  /* search hero */
+  .search-hero {
+    background:linear-gradient(135deg,#5a7080 0%,#7a8a94 50%,#9b8ea8 100%);
+    padding:40px 24px 56px; position:relative; overflow:hidden;
+  }
+  .search-hero h1 { font-size:22px; font-weight:900; color:#fff; margin-bottom:18px; text-align:center; }
+  .search-bar-wrap { max-width:680px; margin:0 auto; display:flex; gap:10px; }
+  .search-bar-wrap input {
+    flex:1; border:none; border-radius:12px; padding:14px 20px; font-size:15px;
+    background:rgba(255,255,255,.96); color:var(--text); outline:none;
+    box-shadow:0 4px 16px rgba(0,0,0,.12);
+  }
+  .search-bar-wrap button {
+    background:linear-gradient(135deg,var(--m-blue),var(--m-purple)); color:#fff;
+    border:none; padding:14px 26px; border-radius:12px; font-size:14px;
+    font-weight:700; cursor:pointer; white-space:nowrap;
+    box-shadow:0 3px 10px rgba(126,155,181,.35);
+    transition:opacity .15s,transform .15s;
+  }
+  .search-bar-wrap button:hover { opacity:.88; transform:translateY(-1px); }
+  .wave { margin-top:-2px; line-height:0; }
+  .wave svg { display:block; width:100%; }
+
+  .container { max-width:1020px; margin:0 auto; padding:32px 24px 60px; }
+
+  /* toolbar */
+  .toolbar {
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:12px; margin-bottom:20px;
+  }
+  .result-count { font-size:14px; color:var(--muted); }
+  .result-count strong { color:var(--text); font-weight:800; }
+  .sort-select {
+    border:1.5px solid var(--border); border-radius:8px; padding:7px 30px 7px 12px;
+    font-size:13px; background:var(--surface); color:var(--text); outline:none;
+    appearance:none; cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%237d7570'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 10px center;
+  }
+
+  /* filter chips */
+  .filter-bar { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px; }
+  .chip {
+    background:var(--surface); border:1.5px solid var(--border); border-radius:20px;
+    padding:6px 16px; font-size:12px; font-weight:600; color:var(--muted);
+    cursor:pointer; transition:all .15s;
+  }
+  .chip:hover { border-color:var(--m-blue); color:var(--m-blue); background:var(--m-blue-l); }
+  .chip.active { background:linear-gradient(135deg,var(--m-blue),var(--m-purple)); border-color:transparent; color:#fff; }
+
+  /* cards grid */
+  .items-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:18px;
+  }
+  .item-card {
+    background:var(--surface); border:1.5px solid var(--border);
+    border-radius:var(--radius); overflow:hidden; cursor:pointer;
+    box-shadow:var(--shadow); transition:transform .2s,box-shadow .2s,border-color .2s;
+    display:flex; flex-direction:column;
+  }
+  .item-card:hover { transform:translateY(-5px); box-shadow:var(--shadow-hover); border-color:var(--m-blue); }
+  .item-thumb { height:108px; display:flex; align-items:center; justify-content:center; font-size:42px; }
+  .t-purple{background:linear-gradient(135deg,#e8e2ef,#d8d0e4)}
+  .t-blue  {background:linear-gradient(135deg,#dce8f0,#c8dcea)}
+  .t-sand  {background:linear-gradient(135deg,#ede8dc,#e0d8c8)}
+  .t-green {background:linear-gradient(135deg,#ddeae4,#ccddd4)}
+  .t-rose  {background:linear-gradient(135deg,#ede4e0,#e2d4cf)}
+  .t-teal  {background:linear-gradient(135deg,#d8ebea,#c4dedd)}
+  .item-body { padding:16px; flex:1; display:flex; flex-direction:column; }
+  .item-tag {
+    font-size:10px; font-weight:700; border-radius:5px; padding:2px 8px;
+    display:inline-block; margin-bottom:8px; letter-spacing:.3px;
+  }
+  .tag-purple{color:var(--m-purple);background:var(--m-purple-l)}
+  .tag-blue  {color:var(--m-blue)  ;background:var(--m-blue-l)  }
+  .tag-sand  {color:#8a7a5a        ;background:var(--m-sand-l)  }
+  .tag-green {color:var(--m-green) ;background:var(--m-green-l) }
+  .tag-rose  {color:var(--m-rose)  ;background:var(--m-rose-l)  }
+  .tag-teal  {color:var(--m-teal)  ;background:var(--m-teal-l)  }
+  .item-card h3 { font-size:13px; font-weight:800; margin-bottom:4px; line-height:1.4; }
+  .item-meta  { font-size:11px; color:var(--muted); margin-bottom:4px; }
+  .item-cond  { font-size:11px; color:var(--muted); margin-bottom:12px; flex:1; }
+  .item-footer{ display:flex; align-items:center; justify-content:space-between; font-size:11px; }
+  .item-status{ display:inline-flex; align-items:center; gap:4px; font-weight:600; color:var(--m-green); }
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--m-green)}
+  .request-btn {
+    background:linear-gradient(135deg,var(--m-blue),var(--m-purple)); color:#fff;
+    border:none; padding:5px 12px; border-radius:7px; font-size:11px; font-weight:700;
+    cursor:pointer; transition:opacity .15s,transform .15s;
+    box-shadow:0 2px 6px rgba(126,155,181,.28);
+  }
+  .request-btn:hover { opacity:.88; transform:translateY(-1px); }
+
+  .no-result { text-align:center; padding:60px 20px; color:var(--muted); }
+  .no-result .nr-icon { font-size:48px; margin-bottom:16px; }
+  .no-result p { font-size:14px; }
+
+  footer { text-align:center; font-size:12px; color:rgba(255,255,255,.5); background:#3a3530; padding:24px; margin-top:40px; }
+  footer strong { color:rgba(255,255,255,.8); }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-icon">🤝</div>
+    物資共享平台
+  </a>
+  <a class="back-btn" href="index.html">← 返回首頁</a>
+</header>
+
+<div class="search-hero">
+  <h1>🔍 搜尋物資</h1>
+  <div class="search-bar-wrap">
+    <input type="text" id="searchInput" placeholder="搜尋商品名稱、分類、刊登者…" oninput="filterItems()" />
+    <button onclick="filterItems()">搜尋</button>
+  </div>
+</div>
+<div class="wave">
+  <svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,25 C360,50 1080,0 1440,25 L1440,50 L0,50 Z" fill="#f5f4f1"/>
+  </svg>
+</div>
+
+<div class="container">
+  <div class="toolbar">
+    <div class="result-count" id="resultCount">共 <strong>100</strong> 筆物資</div>
+    <select class="sort-select" onchange="filterItems()">
+      <option>最新刊登</option>
+      <option>最多申請</option>
+      <option>狀況最佳</option>
+    </select>
+  </div>
+
+  <div class="filter-bar" id="filterBar">
+    <div class="chip active" onclick="setFilter('全部',this)">✨ 全部</div>
+    <div class="chip" onclick="setFilter('家電用品',this)">🔌 家電用品</div>
+    <div class="chip" onclick="setFilter('書籍文具',this)">📚 書籍文具</div>
+    <div class="chip" onclick="setFilter('嬰幼兒用品',this)">🍼 嬰幼兒用品</div>
+    <div class="chip" onclick="setFilter('衣物鞋包',this)">👕 衣物鞋包</div>
+    <div class="chip" onclick="setFilter('家具寢具',this)">🛋 家具寢具</div>
+    <div class="chip" onclick="setFilter('食品物資',this)">🥫 食品物資</div>
+    <div class="chip" onclick="setFilter('其他',this)">📦 其他</div>
+  </div>
+
+  <div class="items-grid" id="itemsGrid"></div>
+  <div class="no-result" id="noResult" style="display:none">
+    <div class="nr-icon">🔍</div>
+    <p>找不到符合的物資，試試其他關鍵字</p>
+  </div>
+</div>
+
+<footer>
+  <strong>物資共享平台</strong> · 讓愛流動，讓物資不浪費 · © 2025 · Made with IBM Bob
+</footer>
+
+<script>
+const ITEMS = [
+  {id:1, name:'嬰兒推車',        cat:'嬰幼兒用品', cond:'九成新',   donor:'台北小芸',   emoji:'🍼', thumb:'t-purple', tag:'tag-purple'},
+  {id:2, name:'國中參考書組',     cat:'書籍文具',   cond:'八成新',   donor:'新北阿明',   emoji:'📚', thumb:'t-blue',   tag:'tag-blue'},
+  {id:3, name:'電風扇（立扇）',   cat:'家電用品',   cond:'功能正常', donor:'桃園小珍',   emoji:'🌀', thumb:'t-sand',   tag:'tag-sand'},
+  {id:4, name:'冬季外套 M號',     cat:'衣物鞋包',   cond:'九成新',   donor:'台中小慧',   emoji:'🧥', thumb:'t-green',  tag:'tag-green'},
+  {id:5, name:'單人床墊',         cat:'家具寢具',   cond:'七成新',   donor:'台南阿賢',   emoji:'🛋', thumb:'t-rose',   tag:'tag-rose'},
+  {id:6, name:'即期罐頭組',       cat:'食品物資',   cond:'全新',     donor:'高雄小芬',   emoji:'🥫', thumb:'t-teal',   tag:'tag-teal'},
+  {id:7, name:'木製書架',         cat:'家具寢具',   cond:'八成新',   donor:'台北阿偉',   emoji:'🪑', thumb:'t-rose',   tag:'tag-rose'},
+  {id:8, name:'兒童積木組',       cat:'嬰幼兒用品', cond:'九成新',   donor:'新北小婷',   emoji:'🧩', thumb:'t-purple', tag:'tag-purple'},
+  {id:9, name:'除濕機',           cat:'家電用品',   cond:'七成新',   donor:'桃園阿強',   emoji:'💧', thumb:'t-sand',   tag:'tag-sand'},
+  {id:10,name:'瑜珈墊',           cat:'其他',       cond:'九成新',   donor:'台中阿雅',   emoji:'🧘', thumb:'t-blue',   tag:'tag-blue'},
+  {id:11,name:'小學課本套組',     cat:'書籍文具',   cond:'八成新',   donor:'台南小哲',   emoji:'📖', thumb:'t-blue',   tag:'tag-blue'},
+  {id:12,name:'嬰兒床',           cat:'嬰幼兒用品', cond:'八成新',   donor:'高雄小潔',   emoji:'🛏', thumb:'t-purple', tag:'tag-purple'},
+  {id:13,name:'微波爐',           cat:'家電用品',   cond:'功能正常', donor:'基隆阿傑',   emoji:'📡', thumb:'t-sand',   tag:'tag-sand'},
+  {id:14,name:'牛仔褲（多件）',   cat:'衣物鞋包',   cond:'七成新',   donor:'台北小美',   emoji:'👖', thumb:'t-green',  tag:'tag-green'},
+  {id:15,name:'木製餐桌椅組',     cat:'家具寢具',   cond:'六成新',   donor:'新竹阿志',   emoji:'🍽', thumb:'t-rose',   tag:'tag-rose'},
+  {id:16,name:'白米 10kg',        cat:'食品物資',   cond:'全新',     donor:'苗栗小秋',   emoji:'🍚', thumb:'t-teal',   tag:'tag-teal'},
+  {id:17,name:'電動牙刷',         cat:'其他',       cond:'九成新',   donor:'彰化阿龍',   emoji:'🪥', thumb:'t-blue',   tag:'tag-blue'},
+  {id:18,name:'高中教科書套組',   cat:'書籍文具',   cond:'七成新',   donor:'南投小玲',   emoji:'📚', thumb:'t-blue',   tag:'tag-blue'},
+  {id:19,name:'嬰兒奶瓶組',       cat:'嬰幼兒用品', cond:'全新',     donor:'雲林阿文',   emoji:'🍼', thumb:'t-purple', tag:'tag-purple'},
+  {id:20,name:'空氣清淨機',       cat:'家電用品',   cond:'八成新',   donor:'嘉義小蓮',   emoji:'🌬', thumb:'t-sand',   tag:'tag-sand'},
+  {id:21,name:'運動外套（S號）',  cat:'衣物鞋包',   cond:'九成新',   donor:'台南阿明',   emoji:'🏃', thumb:'t-green',  tag:'tag-green'},
+  {id:22,name:'折疊書桌',         cat:'家具寢具',   cond:'八成新',   donor:'高雄小珊',   emoji:'🖥', thumb:'t-rose',   tag:'tag-rose'},
+  {id:23,name:'泡麵箱',           cat:'食品物資',   cond:'全新',     donor:'屏東阿偉',   emoji:'🍜', thumb:'t-teal',   tag:'tag-teal'},
+  {id:24,name:'二手腳踏車',       cat:'其他',       cond:'七成新',   donor:'台東小芸',   emoji:'🚲', thumb:'t-blue',   tag:'tag-blue'},
+  {id:25,name:'文具整組',         cat:'書籍文具',   cond:'全新',     donor:'花蓮阿強',   emoji:'✏️', thumb:'t-blue',   tag:'tag-blue'},
+  {id:26,name:'嬰兒背帶',         cat:'嬰幼兒用品', cond:'九成新',   donor:'宜蘭小慧',   emoji:'👶', thumb:'t-purple', tag:'tag-purple'},
+  {id:27,name:'桌上型電風扇',     cat:'家電用品',   cond:'功能正常', donor:'基隆阿傑',   emoji:'🌀', thumb:'t-sand',   tag:'tag-sand'},
+  {id:28,name:'冬季毛衣（多件）', cat:'衣物鞋包',   cond:'八成新',   donor:'台北小婷',   emoji:'🧣', thumb:'t-green',  tag:'tag-green'},
+  {id:29,name:'收納櫃',           cat:'家具寢具',   cond:'七成新',   donor:'新北阿賢',   emoji:'🗄', thumb:'t-rose',   tag:'tag-rose'},
+  {id:30,name:'調理包禮盒',       cat:'食品物資',   cond:'全新',     donor:'桃園小芬',   emoji:'🥘', thumb:'t-teal',   tag:'tag-teal'},
+  {id:31,name:'滑板車',           cat:'其他',       cond:'八成新',   donor:'台中阿雅',   emoji:'🛴', thumb:'t-blue',   tag:'tag-blue'},
+  {id:32,name:'英文繪本組',       cat:'書籍文具',   cond:'九成新',   donor:'台南小哲',   emoji:'📗', thumb:'t-blue',   tag:'tag-blue'},
+  {id:33,name:'嬰兒學步車',       cat:'嬰幼兒用品', cond:'八成新',   donor:'高雄小潔',   emoji:'🚶', thumb:'t-purple', tag:'tag-purple'},
+  {id:34,name:'電暖器',           cat:'家電用品',   cond:'功能正常', donor:'新竹阿志',   emoji:'🔥', thumb:'t-sand',   tag:'tag-sand'},
+  {id:35,name:'球鞋（26cm）',     cat:'衣物鞋包',   cond:'七成新',   donor:'苗栗小秋',   emoji:'👟', thumb:'t-green',  tag:'tag-green'},
+  {id:36,name:'雙人棉被',         cat:'家具寢具',   cond:'八成新',   donor:'彰化阿龍',   emoji:'🛏', thumb:'t-rose',   tag:'tag-rose'},
+  {id:37,name:'餅乾禮盒',         cat:'食品物資',   cond:'全新',     donor:'南投小玲',   emoji:'🍪', thumb:'t-teal',   tag:'tag-teal'},
+  {id:38,name:'釣魚竿套組',       cat:'其他',       cond:'七成新',   donor:'雲林阿文',   emoji:'🎣', thumb:'t-blue',   tag:'tag-blue'},
+  {id:39,name:'大學教科書組',     cat:'書籍文具',   cond:'六成新',   donor:'嘉義小蓮',   emoji:'📘', thumb:'t-blue',   tag:'tag-blue'},
+  {id:40,name:'兒童安全座椅',     cat:'嬰幼兒用品', cond:'九成新',   donor:'台南阿明',   emoji:'💺', thumb:'t-purple', tag:'tag-purple'},
+  {id:41,name:'洗衣機',           cat:'家電用品',   cond:'功能正常', donor:'高雄小珊',   emoji:'🫧', thumb:'t-sand',   tag:'tag-sand'},
+  {id:42,name:'洋裝（多件）',     cat:'衣物鞋包',   cond:'九成新',   donor:'屏東阿偉',   emoji:'👗', thumb:'t-green',  tag:'tag-green'},
+  {id:43,name:'兒童書桌椅組',     cat:'家具寢具',   cond:'八成新',   donor:'台東小芸',   emoji:'🖊', thumb:'t-rose',   tag:'tag-rose'},
+  {id:44,name:'麵條箱',           cat:'食品物資',   cond:'全新',     donor:'花蓮阿強',   emoji:'🍝', thumb:'t-teal',   tag:'tag-teal'},
+  {id:45,name:'健身啞鈴組',       cat:'其他',       cond:'八成新',   donor:'宜蘭小慧',   emoji:'🏋', thumb:'t-blue',   tag:'tag-blue'},
+  {id:46,name:'童書繪本組',       cat:'書籍文具',   cond:'九成新',   donor:'基隆阿傑',   emoji:'📕', thumb:'t-blue',   tag:'tag-blue'},
+  {id:47,name:'尿布（多包）',     cat:'嬰幼兒用品', cond:'全新',     donor:'台北小美',   emoji:'🧷', thumb:'t-purple', tag:'tag-purple'},
+  {id:48,name:'電鍋',             cat:'家電用品',   cond:'功能正常', donor:'新北阿志',   emoji:'🍳', thumb:'t-sand',   tag:'tag-sand'},
+  {id:49,name:'皮帶（多條）',     cat:'衣物鞋包',   cond:'九成新',   donor:'桃園小秋',   emoji:'👔', thumb:'t-green',  tag:'tag-green'},
+  {id:50,name:'折疊椅（4張）',    cat:'家具寢具',   cond:'八成新',   donor:'台中阿龍',   emoji:'🪑', thumb:'t-rose',   tag:'tag-rose'},
+  {id:51,name:'泡菜罐頭組',       cat:'食品物資',   cond:'全新',     donor:'台南小玲',   emoji:'🫙', thumb:'t-teal',   tag:'tag-teal'},
+  {id:52,name:'直排輪',           cat:'其他',       cond:'七成新',   donor:'高雄阿文',   emoji:'🛼', thumb:'t-blue',   tag:'tag-blue'},
+  {id:53,name:'語文練習本',       cat:'書籍文具',   cond:'全新',     donor:'屏東小蓮',   emoji:'📓', thumb:'t-blue',   tag:'tag-blue'},
+  {id:54,name:'嬰兒玩具組',       cat:'嬰幼兒用品', cond:'九成新',   donor:'台東阿明',   emoji:'🧸', thumb:'t-purple', tag:'tag-purple'},
+  {id:55,name:'冷氣（窗型）',     cat:'家電用品',   cond:'功能正常', donor:'花蓮小珊',   emoji:'❄', thumb:'t-sand',   tag:'tag-sand'},
+  {id:56,name:'帽子（多頂）',     cat:'衣物鞋包',   cond:'八成新',   donor:'宜蘭阿偉',   emoji:'🎩', thumb:'t-green',  tag:'tag-green'},
+  {id:57,name:'置物架',           cat:'家具寢具',   cond:'八成新',   donor:'基隆小芸',   emoji:'🗂', thumb:'t-rose',   tag:'tag-rose'},
+  {id:58,name:'蛋捲禮盒',         cat:'食品物資',   cond:'全新',     donor:'台北阿強',   emoji:'🥚', thumb:'t-teal',   tag:'tag-teal'},
+  {id:59,name:'象棋組',           cat:'其他',       cond:'九成新',   donor:'新北小慧',   emoji:'♟', thumb:'t-blue',   tag:'tag-blue'},
+  {id:60,name:'國語辭典',         cat:'書籍文具',   cond:'七成新',   donor:'桃園阿賢',   emoji:'📙', thumb:'t-blue',   tag:'tag-blue'},
+  {id:61,name:'嬰兒圍欄',         cat:'嬰幼兒用品', cond:'八成新',   donor:'台中小芬',   emoji:'🏠', thumb:'t-purple', tag:'tag-purple'},
+  {id:62,name:'電熱水壺',         cat:'家電用品',   cond:'功能正常', donor:'台南阿傑',   emoji:'🫖', thumb:'t-sand',   tag:'tag-sand'},
+  {id:63,name:'牛仔外套',         cat:'衣物鞋包',   cond:'八成新',   donor:'高雄小婷',   emoji:'🧤', thumb:'t-green',  tag:'tag-green'},
+  {id:64,name:'矮凳（多個）',     cat:'家具寢具',   cond:'七成新',   donor:'屏東阿雅',   emoji:'🪑', thumb:'t-rose',   tag:'tag-rose'},
+  {id:65,name:'茶葉禮盒',         cat:'食品物資',   cond:'全新',     donor:'台東阿哲',   emoji:'🍵', thumb:'t-teal',   tag:'tag-teal'},
+  {id:66,name:'跳繩',             cat:'其他',       cond:'九成新',   donor:'花蓮小潔',   emoji:'🪢', thumb:'t-blue',   tag:'tag-blue'},
+  {id:67,name:'字典工具書組',     cat:'書籍文具',   cond:'六成新',   donor:'宜蘭阿明',   emoji:'📒', thumb:'t-blue',   tag:'tag-blue'},
+  {id:68,name:'嬰兒浴盆',         cat:'嬰幼兒用品', cond:'九成新',   donor:'基隆小珊',   emoji:'🛁', thumb:'t-purple', tag:'tag-purple'},
+  {id:69,name:'掃地機器人',       cat:'家電用品',   cond:'功能正常', donor:'台北阿偉',   emoji:'🤖', thumb:'t-sand',   tag:'tag-sand'},
+  {id:70,name:'圍巾（多條）',     cat:'衣物鞋包',   cond:'九成新',   donor:'新北小秋',   emoji:'🧣', thumb:'t-green',  tag:'tag-green'},
+  {id:71,name:'電腦椅',           cat:'家具寢具',   cond:'七成新',   donor:'桃園阿龍',   emoji:'🪑', thumb:'t-rose',   tag:'tag-rose'},
+  {id:72,name:'維他命禮盒',       cat:'食品物資',   cond:'全新',     donor:'台中小玲',   emoji:'💊', thumb:'t-teal',   tag:'tag-teal'},
+  {id:73,name:'飛盤',             cat:'其他',       cond:'八成新',   donor:'台南阿文',   emoji:'🥏', thumb:'t-blue',   tag:'tag-blue'},
+  {id:74,name:'素描本（多本）',   cat:'書籍文具',   cond:'全新',     donor:'高雄小蓮',   emoji:'🎨', thumb:'t-blue',   tag:'tag-blue'},
+  {id:75,name:'兒童帳篷',         cat:'嬰幼兒用品', cond:'九成新',   donor:'屏東阿明',   emoji:'⛺', thumb:'t-purple', tag:'tag-purple'},
+  {id:76,name:'烤箱',             cat:'家電用品',   cond:'功能正常', donor:'台東小珊',   emoji:'🍞', thumb:'t-sand',   tag:'tag-sand'},
+  {id:77,name:'背包（多個）',     cat:'衣物鞋包',   cond:'八成新',   donor:'花蓮阿偉',   emoji:'🎒', thumb:'t-green',  tag:'tag-green'},
+  {id:78,name:'沙發（兩人座）',   cat:'家具寢具',   cond:'六成新',   donor:'宜蘭小婷',   emoji:'🛋', thumb:'t-rose',   tag:'tag-rose'},
+  {id:79,name:'果醬禮盒',         cat:'食品物資',   cond:'全新',     donor:'基隆阿雅',   emoji:'🍓', thumb:'t-teal',   tag:'tag-teal'},
+  {id:80,name:'拼圖（多款）',     cat:'其他',       cond:'九成新',   donor:'台北阿哲',   emoji:'🧩', thumb:'t-blue',   tag:'tag-blue'},
+  {id:81,name:'漫畫套組',         cat:'書籍文具',   cond:'七成新',   donor:'新北小潔',   emoji:'📔', thumb:'t-blue',   tag:'tag-blue'},
+  {id:82,name:'嬰兒搖椅',         cat:'嬰幼兒用品', cond:'八成新',   donor:'桃園阿明',   emoji:'🪑', thumb:'t-purple', tag:'tag-purple'},
+  {id:83,name:'咖啡機',           cat:'家電用品',   cond:'功能正常', donor:'台中小珊',   emoji:'☕', thumb:'t-sand',   tag:'tag-sand'},
+  {id:84,name:'手提包',           cat:'衣物鞋包',   cond:'九成新',   donor:'台南阿偉',   emoji:'👜', thumb:'t-green',  tag:'tag-green'},
+  {id:85,name:'鞋架',             cat:'家具寢具',   cond:'八成新',   donor:'高雄小秋',   emoji:'👠', thumb:'t-rose',   tag:'tag-rose'},
+  {id:86,name:'堅果禮盒',         cat:'食品物資',   cond:'全新',     donor:'屏東阿龍',   emoji:'🥜', thumb:'t-teal',   tag:'tag-teal'},
+  {id:87,name:'桌遊套組',         cat:'其他',       cond:'九成新',   donor:'台東小玲',   emoji:'🎲', thumb:'t-blue',   tag:'tag-blue'},
+  {id:88,name:'英文小說套組',     cat:'書籍文具',   cond:'八成新',   donor:'花蓮阿文',   emoji:'📗', thumb:'t-blue',   tag:'tag-blue'},
+  {id:89,name:'嬰兒監視器',       cat:'嬰幼兒用品', cond:'九成新',   donor:'宜蘭小蓮',   emoji:'📷', thumb:'t-purple', tag:'tag-purple'},
+  {id:90,name:'吹風機',           cat:'家電用品',   cond:'功能正常', donor:'基隆阿明',   emoji:'💨', thumb:'t-sand',   tag:'tag-sand'},
+  {id:91,name:'布鞋（多雙）',     cat:'衣物鞋包',   cond:'七成新',   donor:'台北小珊',   emoji:'👞', thumb:'t-green',  tag:'tag-green'},
+  {id:92,name:'茶几',             cat:'家具寢具',   cond:'七成新',   donor:'新北阿偉',   emoji:'🫖', thumb:'t-rose',   tag:'tag-rose'},
+  {id:93,name:'奶粉罐',           cat:'嬰幼兒用品', cond:'全新',     donor:'桃園小婷',   emoji:'🍼', thumb:'t-purple', tag:'tag-purple'},
+  {id:94,name:'電子鍋',           cat:'家電用品',   cond:'功能正常', donor:'台中阿雅',   emoji:'🍚', thumb:'t-sand',   tag:'tag-sand'},
+  {id:95,name:'羽絨背心',         cat:'衣物鞋包',   cond:'九成新',   donor:'台南阿哲',   emoji:'🧥', thumb:'t-green',  tag:'tag-green'},
+  {id:96,name:'梳妝台',           cat:'家具寢具',   cond:'六成新',   donor:'高雄小潔',   emoji:'🪞', thumb:'t-rose',   tag:'tag-rose'},
+  {id:97,name:'蜂蜜禮盒',         cat:'食品物資',   cond:'全新',     donor:'屏東阿明',   emoji:'🍯', thumb:'t-teal',   tag:'tag-teal'},
+  {id:98,name:'帳篷（四人）',     cat:'其他',       cond:'八成新',   donor:'台東小珊',   emoji:'⛺', thumb:'t-blue',   tag:'tag-blue'},
+  {id:99,name:'鋼琴初學書',       cat:'書籍文具',   cond:'九成新',   donor:'花蓮阿偉',   emoji:'🎹', thumb:'t-blue',   tag:'tag-blue'},
+  {id:100,name:'嬰兒餐椅',        cat:'嬰幼兒用品', cond:'八成新',   donor:'宜蘭小婷',   emoji:'🍽', thumb:'t-purple', tag:'tag-purple'},
+];
+
+let currentFilter = '全部';
+
+function setFilter(cat, el) {
+  currentFilter = cat;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  filterItems();
+}
+
+function filterItems() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  let list = ITEMS;
+  if (currentFilter !== '全部') list = list.filter(i => i.cat === currentFilter);
+  if (q) list = list.filter(i =>
+    i.name.toLowerCase().includes(q) ||
+    i.cat.toLowerCase().includes(q) ||
+    i.donor.toLowerCase().includes(q) ||
+    i.cond.toLowerCase().includes(q)
+  );
+  renderItems(list);
+}
+
+function renderItems(list) {
+  const grid = document.getElementById('itemsGrid');
+  const nr   = document.getElementById('noResult');
+  const rc   = document.getElementById('resultCount');
+  rc.innerHTML = `共 <strong>${list.length}</strong> 筆物資`;
+  if (list.length === 0) {
+    grid.innerHTML = '';
+    nr.style.display = 'block';
+    return;
+  }
+  nr.style.display = 'none';
+  grid.innerHTML = list.map(i => `
+    <div class="item-card">
+      <div class="item-thumb ${i.thumb}">${i.emoji}</div>
+      <div class="item-body">
+        <span class="item-tag ${i.tag}">${i.cat}</span>
+        <h3>${i.name}</h3>
+        <div class="item-meta">🙋 ${i.donor}</div>
+        <div class="item-cond">物況：${i.cond}</div>
+        <div class="item-footer">
+          <span class="item-status"><span class="dot"></span>可索取</span>
+          <button class="request-btn">我要索取</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// 支援從首頁帶入關鍵字
+const urlQ = new URLSearchParams(location.search).get('q');
+if (urlQ) {
+  document.getElementById('searchInput').value = urlQ;
+}
+// init
+filterItems();
+</script>
+</body>
+</html>

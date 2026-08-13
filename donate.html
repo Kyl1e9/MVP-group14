@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我要提供物資 — 物資共享平台</title>
+<style>
+  :root {
+    --m-blue:#7e9bb5; --m-blue-l:#e8eef4;
+    --m-purple:#9b8ea8; --m-purple-l:#eeebf2;
+    --m-green:#84a898; --m-green-l:#e4eee9;
+    --m-rose:#b8958a; --m-rose-l:#f2e9e7;
+    --m-sand:#b8a98a; --m-sand-l:#f2ede3;
+    --bg:#f5f4f1; --surface:#fafaf8; --border:#dedad4;
+    --text:#3a3530; --muted:#7d7570; --radius:14px;
+    --shadow:0 2px 8px rgba(58,53,48,.06),0 6px 20px rgba(58,53,48,.04);
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,"Segoe UI","Noto Sans TC",system-ui,sans-serif; font-size:15px; line-height:1.7; background:var(--bg); color:var(--text); }
+
+  header {
+    background:rgba(250,250,248,.94); backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border); padding:0 36px;
+    display:flex; align-items:center; justify-content:space-between;
+    height:62px; position:sticky; top:0; z-index:200;
+    box-shadow:0 1px 10px rgba(58,53,48,.05);
+  }
+  .logo { display:flex; align-items:center; gap:10px; font-size:17px; font-weight:800; color:var(--m-blue); text-decoration:none; }
+  .logo-icon { width:34px; height:34px; background:linear-gradient(135deg,var(--m-blue),var(--m-purple)); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .back-btn { display:inline-flex; align-items:center; gap:6px; color:var(--muted); text-decoration:none; font-size:14px; font-weight:500; padding:7px 14px; border-radius:8px; transition:background .15s,color .15s; }
+  .back-btn:hover { background:var(--m-blue-l); color:var(--m-blue); }
+
+  .page-hero {
+    background:linear-gradient(135deg,#5a7080 0%,#7a8a94 50%,#9b8ea8 100%);
+    padding:44px 24px 56px; text-align:center; position:relative; overflow:hidden;
+  }
+  .page-hero::before { content:''; position:absolute; inset:0; background:rgba(255,255,255,.03); }
+  .page-hero h1 { font-size:28px; font-weight:900; color:#fff; margin-bottom:8px; letter-spacing:-0.4px; }
+  .page-hero p  { color:rgba(255,255,255,.75); font-size:14px; }
+  .wave { margin-top:-2px; line-height:0; }
+  .wave svg { display:block; width:100%; }
+
+  .container { max-width:680px; margin:0 auto; padding:40px 24px 60px; }
+
+  .form-card {
+    background:var(--surface); border:1.5px solid var(--border);
+    border-radius:var(--radius); padding:36px 40px;
+    box-shadow:var(--shadow); position:relative; overflow:hidden;
+  }
+  .form-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:4px;
+    background:linear-gradient(90deg,var(--m-blue),var(--m-purple),var(--m-rose));
+  }
+  .form-section-title { font-size:13px; font-weight:700; color:var(--m-blue); letter-spacing:1px; text-transform:uppercase; margin-bottom:18px; margin-top:32px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+  .form-section-title:first-of-type { margin-top:0; }
+
+  .form-group { margin-bottom:20px; }
+  label { display:block; font-size:13px; font-weight:700; color:var(--text); margin-bottom:7px; }
+  label span.req { color:var(--m-rose); margin-left:2px; }
+  input[type=text], input[type=tel], textarea, select {
+    width:100%; border:1.5px solid var(--border); border-radius:10px;
+    padding:11px 15px; font-size:14px; background:var(--bg); color:var(--text);
+    outline:none; transition:border-color .15s,box-shadow .15s;
+    font-family:inherit; line-height:1.6;
+  }
+  input[type=text]:focus, input[type=tel]:focus, textarea:focus, select:focus {
+    border-color:var(--m-blue); background:#fff;
+    box-shadow:0 0 0 3px rgba(126,155,181,.14);
+  }
+  textarea { resize:vertical; min-height:90px; }
+  select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%237d7570'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:36px; }
+
+  .upload-area {
+    border:2px dashed var(--border); border-radius:12px; padding:36px 20px;
+    text-align:center; background:var(--bg); cursor:pointer;
+    transition:border-color .18s,background .18s;
+  }
+  .upload-area:hover { border-color:var(--m-blue); background:var(--m-blue-l); }
+  .upload-icon { font-size:36px; margin-bottom:10px; }
+  .upload-area p { color:var(--muted); font-size:13px; line-height:1.7; }
+  .upload-area strong { color:var(--m-blue); }
+  input[type=file] { display:none; }
+
+  .condition-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .condition-opt { position:relative; }
+  .condition-opt input[type=radio] { position:absolute; opacity:0; width:0; height:0; }
+  .condition-opt label {
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    padding:14px 10px; border:1.5px solid var(--border); border-radius:10px;
+    cursor:pointer; font-size:13px; font-weight:600; text-align:center;
+    background:var(--bg); transition:all .15s; margin-bottom:0;
+  }
+  .condition-opt label .cond-icon { font-size:22px; }
+  .condition-opt input[type=radio]:checked + label {
+    border-color:var(--m-blue); background:var(--m-blue-l); color:var(--m-blue);
+    box-shadow:0 2px 8px rgba(126,155,181,.2);
+  }
+  .condition-opt label:hover { border-color:var(--m-blue); }
+
+  .hint { font-size:12px; color:var(--muted); margin-top:5px; }
+
+  .form-actions { display:flex; gap:12px; margin-top:32px; }
+  .btn-submit {
+    flex:1; background:linear-gradient(135deg,var(--m-blue),var(--m-purple));
+    color:#fff; border:none; padding:14px 20px; border-radius:12px;
+    font-size:15px; font-weight:800; cursor:pointer;
+    box-shadow:0 4px 14px rgba(126,155,181,.3);
+    transition:opacity .15s,transform .15s;
+  }
+  .btn-submit:hover { opacity:.88; transform:translateY(-2px); }
+  .btn-cancel {
+    padding:14px 24px; border:1.5px solid var(--border); background:var(--surface);
+    color:var(--muted); border-radius:12px; font-size:14px; font-weight:600;
+    cursor:pointer; text-decoration:none; display:inline-flex; align-items:center;
+    transition:background .15s,color .15s;
+  }
+  .btn-cancel:hover { background:var(--bg); color:var(--text); }
+
+  /* success modal */
+  .modal-overlay {
+    display:none; position:fixed; inset:0; background:rgba(58,53,48,.4);
+    backdrop-filter:blur(4px); z-index:500; align-items:center; justify-content:center;
+  }
+  .modal-overlay.show { display:flex; }
+  .modal {
+    background:var(--surface); border-radius:18px; padding:44px 40px;
+    text-align:center; max-width:360px; width:90%;
+    box-shadow:0 20px 60px rgba(58,53,48,.18);
+    animation:popIn .25s ease;
+  }
+  @keyframes popIn { from{transform:scale(.9);opacity:0} to{transform:scale(1);opacity:1} }
+  .modal-icon { font-size:52px; margin-bottom:16px; }
+  .modal h2 { font-size:20px; font-weight:900; margin-bottom:8px; }
+  .modal p { color:var(--muted); font-size:14px; margin-bottom:24px; line-height:1.7; }
+  .modal-btn {
+    background:linear-gradient(135deg,var(--m-blue),var(--m-purple));
+    color:#fff; border:none; padding:12px 32px; border-radius:10px;
+    font-size:14px; font-weight:700; cursor:pointer; text-decoration:none;
+    display:inline-block;
+  }
+
+  footer { text-align:center; font-size:12px; color:rgba(255,255,255,.5); background:#3a3530; padding:24px; }
+  footer strong { color:rgba(255,255,255,.8); }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-icon">🤝</div>
+    物資共享平台
+  </a>
+  <a class="back-btn" href="index.html">← 返回首頁</a>
+</header>
+
+<div class="page-hero">
+  <h1>📦 我要提供物資</h1>
+  <p>填寫物品資訊，讓需要的人找到它</p>
+</div>
+<div class="wave">
+  <svg viewBox="0 0 1440 50" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,25 C360,50 1080,0 1440,25 L1440,50 L0,50 Z" fill="#fafaf8"/>
+  </svg>
+</div>
+
+<div class="container">
+  <div class="form-card">
+
+    <div class="form-section-title">基本資訊</div>
+
+    <div class="form-group">
+      <label>商品名稱 <span class="req">*</span></label>
+      <input type="text" id="itemName" placeholder="例如：嬰兒推車、二手書、電風扇…" />
+    </div>
+
+    <div class="form-group">
+      <label>物品分類 <span class="req">*</span></label>
+      <select id="itemCategory">
+        <option value="">請選擇分類</option>
+        <option>家電用品</option>
+        <option>書籍文具</option>
+        <option>嬰幼兒用品</option>
+        <option>衣物鞋包</option>
+        <option>家具寢具</option>
+        <option>食品物資</option>
+        <option>其他</option>
+      </select>
+    </div>
+
+    <div class="form-section-title">物況</div>
+
+    <div class="form-group">
+      <label>物品狀況 <span class="req">*</span></label>
+      <div class="condition-grid">
+        <div class="condition-opt">
+          <input type="radio" name="condition" id="c1" value="全新">
+          <label for="c1"><span class="cond-icon">✨</span>全新</label>
+        </div>
+        <div class="condition-opt">
+          <input type="radio" name="condition" id="c2" value="九成新" checked>
+          <label for="c2"><span class="cond-icon">👍</span>九成新</label>
+        </div>
+        <div class="condition-opt">
+          <input type="radio" name="condition" id="c3" value="七成新">
+          <label for="c3"><span class="cond-icon">🙂</span>七成新</label>
+        </div>
+        <div class="condition-opt">
+          <input type="radio" name="condition" id="c4" value="五成新">
+          <label for="c4"><span class="cond-icon">😐</span>五成新</label>
+        </div>
+        <div class="condition-opt">
+          <input type="radio" name="condition" id="c5" value="功能正常但有外觀瑕疵">
+          <label for="c5"><span class="cond-icon">🔧</span>有外觀瑕疵</label>
+        </div>
+        <div class="condition-opt">
+          <input type="radio" name="condition" id="c6" value="零件或材料用途">
+          <label for="c6"><span class="cond-icon">🔩</span>零件用途</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>詳細描述</label>
+      <textarea id="itemDesc" placeholder="描述物品的使用年限、品牌、尺寸、附件、取貨方式等…"></textarea>
+      <p class="hint">建議填寫越詳細越好，有助於媒合成功率</p>
+    </div>
+
+    <div class="form-section-title">照片上傳</div>
+
+    <div class="form-group">
+      <label>物品照片（最多 5 張）</label>
+      <div class="upload-area" onclick="document.getElementById('photoInput').click()">
+        <div class="upload-icon">📷</div>
+        <p><strong>點擊上傳照片</strong><br>支援 JPG、PNG、HEIC，單檔最大 10MB</p>
+      </div>
+      <input type="file" id="photoInput" accept="image/*" multiple>
+      <p class="hint">清晰的照片能大幅提升索取意願</p>
+    </div>
+
+    <div class="form-section-title">聯絡資訊</div>
+
+    <div class="form-group">
+      <label>刊登者暱稱 <span class="req">*</span></label>
+      <input type="text" id="donorName" placeholder="例如：台北小明" />
+    </div>
+    <div class="form-group">
+      <label>聯絡電話</label>
+      <input type="tel" id="donorPhone" placeholder="09xx-xxx-xxx（選填）" />
+    </div>
+    <div class="form-group">
+      <label>取件地點 <span class="req">*</span></label>
+      <input type="text" id="donorLocation" placeholder="例如：台北市大安區（不需填寫詳細地址）" />
+    </div>
+
+    <div class="form-actions">
+      <a class="btn-cancel" href="index.html">取消</a>
+      <button class="btn-submit" onclick="submitForm()">🚀 確認刊登</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- 成功 Modal -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal">
+    <div class="modal-icon">🎉</div>
+    <h2>刊登成功！</h2>
+    <p>您的物資已成功刊登，<br>等待有需要的人來索取。<br>感謝您的愛心分享！</p>
+    <a class="modal-btn" href="index.html">返回首頁</a>
+  </div>
+</div>
+
+<footer>
+  <strong>物資共享平台</strong> · 讓愛流動，讓物資不浪費 · © 2025 · Made with IBM Bob
+</footer>
+
+<script>
+  function submitForm() {
+    const name = document.getElementById('itemName').value.trim();
+    const cat  = document.getElementById('itemCategory').value;
+    const loc  = document.getElementById('donorLocation').value.trim();
+    const donor= document.getElementById('donorName').value.trim();
+    if (!name || !cat || !loc || !donor) {
+      alert('請填寫所有必填欄位（標 * 的項目）');
+      return;
+    }
+    document.getElementById('successModal').classList.add('show');
+  }
+</script>
+</body>
+</html>
