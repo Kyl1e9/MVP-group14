@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>尋找物資 — 物資共享平台</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a class="nav-brand" href="index.html"><span>🌱</span> 物資共享平台</a>
+    <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">首頁</a>
+      <a href="browse.html">尋找物資</a>
+      <a href="my-listings.html">我的刊登</a>
+      <a href="about.html">關於平台</a>
+      <a href="donate.html" class="btn-nav">＋ 提供物資</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <h1 class="page-title">🔍 尋找物資</h1>
+
+    <!-- Search bar -->
+    <div class="search-bar">
+      <input class="form-control" id="searchInput" type="text" placeholder="搜尋物品名稱、描述或標籤…">
+      <button class="btn btn-primary" id="searchBtn">搜尋</button>
+      <button class="btn btn-ghost" id="clearBtn">清除</button>
+    </div>
+
+    <!-- Category filter -->
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" data-cat="全部">全部</button>
+      <button class="filter-btn" data-cat="書籍文具">書籍文具</button>
+      <button class="filter-btn" data-cat="衣物">衣物</button>
+      <button class="filter-btn" data-cat="家具家電">家具家電</button>
+      <button class="filter-btn" data-cat="嬰幼兒用品">嬰幼兒用品</button>
+      <button class="filter-btn" data-cat="玩具">玩具</button>
+      <button class="filter-btn" data-cat="生活用品">生活用品</button>
+      <button class="filter-btn" data-cat="其他">其他</button>
+    </div>
+
+    <!-- Result count -->
+    <p id="resultCount" class="text-muted mb-16" style="font-size:.88rem;"></p>
+
+    <!-- Grid -->
+    <div class="grid-3" id="itemGrid">
+      <div class="empty-state"><div class="icon">⏳</div><p>載入中…</p></div>
+    </div>
+  </div>
+</main>
+
+<footer><div class="container">© 2025 物資共享平台</div></footer>
+
+<script src="js/main.js"></script>
+<script src="js/browse.js"></script>
+</body>
+</html>

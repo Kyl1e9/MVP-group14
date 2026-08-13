@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>物資共享平台 — 首頁</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container">
+    <a class="nav-brand" href="index.html"><span>🌱</span> 物資共享平台</a>
+    <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">首頁</a>
+      <a href="browse.html">尋找物資</a>
+      <a href="my-listings.html">我的刊登</a>
+      <a href="about.html">關於平台</a>
+      <a href="donate.html" class="btn-nav">＋ 提供物資</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+
+    <!-- Hero -->
+    <section class="hero">
+      <h1>讓閒置物資找到需要的人</h1>
+      <p>免費刊登你不再需要的物品，或瀏覽社區共享的好物。一起讓資源流動，減少浪費。</p>
+      <div class="hero-actions">
+        <a href="browse.html" class="btn btn-primary btn-lg">🔍 瀏覽物資</a>
+        <a href="donate.html" class="btn btn-outline btn-lg">📦 我要提供</a>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-num" id="statItems">0</div>
+        <div class="stat-label">刊登物品</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statAvail">0</div>
+        <div class="stat-label">可索取物品</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statCats">0</div>
+        <div class="stat-label">物品分類</div>
+      </div>
+    </div>
+
+    <!-- Recent items -->
+    <div class="section-header">
+      <h2 class="section-title">最新刊登</h2>
+      <a href="browse.html" class="btn btn-ghost btn-sm">查看全部 →</a>
+    </div>
+    <div class="grid-3" id="recentGrid">
+      <div class="empty-state"><div class="icon">⏳</div><p>載入中…</p></div>
+    </div>
+
+    <!-- How it works -->
+    <section style="margin-top:56px;">
+      <h2 class="section-title mb-24 text-center">怎麼使用？</h2>
+      <div class="grid-3">
+        <div class="card" style="text-align:center;padding:32px 20px;">
+          <div style="font-size:2.5rem;margin-bottom:12px;">📦</div>
+          <h3 style="font-weight:700;margin-bottom:8px;">1. 刊登物資</h3>
+          <p class="text-muted" style="font-size:.9rem;">填寫物品基本資訊，讓有需要的人找到你</p>
+        </div>
+        <div class="card" style="text-align:center;padding:32px 20px;">
+          <div style="font-size:2.5rem;margin-bottom:12px;">🔍</div>
+          <h3 style="font-weight:700;margin-bottom:8px;">2. 瀏覽 / 搜尋</h3>
+          <p class="text-muted" style="font-size:.9rem;">依分類或關鍵字快速找到你需要的物品</p>
+        </div>
+        <div class="card" style="text-align:center;padding:32px 20px;">
+          <div style="font-size:2.5rem;margin-bottom:12px;">🤝</div>
+          <h3 style="font-weight:700;margin-bottom:8px;">3. 提出索取</h3>
+          <p class="text-muted" style="font-size:.9rem;">送出申請，與提供者聯繫，完成物資流通</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container">© 2025 物資共享平台 — 讓每份資源都有意義</div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+(async function () {
+  const items = await fetchItems();
+  // Stats
+  const avail = items.filter(i => i.available);
+  const cats  = [...new Set(items.map(i => i.category))];
+  document.getElementById('statItems').textContent = items.length;
+  document.getElementById('statAvail').textContent = avail.length;
+  document.getElementById('statCats').textContent  = cats.length;
+  // Recent: latest 6 available items
+  const recent = avail.slice(0, 6);
+  const grid = document.getElementById('recentGrid');
+  if (recent.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>目前還沒有刊登物品</p></div>';
+  } else {
+    grid.innerHTML = recent.map(buildCard).join('');
+  }
+})();
+</script>
+</body>
+</html>

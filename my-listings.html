@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我的刊登 — 物資共享平台</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a class="nav-brand" href="index.html"><span>🌱</span> 物資共享平台</a>
+    <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">首頁</a>
+      <a href="browse.html">尋找物資</a>
+      <a href="my-listings.html">我的刊登</a>
+      <a href="about.html">關於平台</a>
+      <a href="donate.html" class="btn-nav">＋ 提供物資</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+
+    <div id="toast" class="alert alert-success" style="display:none;"></div>
+
+    <div class="flex items-center justify-between mb-24">
+      <h1 class="page-title" style="margin-bottom:0;">📋 我的刊登</h1>
+      <a href="donate.html" class="btn btn-primary">＋ 新增刊登</a>
+    </div>
+
+    <!-- Tabs -->
+    <div class="filter-bar" style="margin-bottom:24px;">
+      <button class="filter-btn active" data-tab="listings">我的物資</button>
+      <button class="filter-btn" data-tab="requests">索取紀錄</button>
+    </div>
+
+    <!-- My listings -->
+    <div id="tabListings">
+      <div id="listingsContent">
+        <div class="empty-state"><div class="icon">⏳</div><p>載入中…</p></div>
+      </div>
+    </div>
+
+    <!-- My requests -->
+    <div id="tabRequests" style="display:none;">
+      <div id="requestsContent">
+        <div class="empty-state"><div class="icon">⏳</div><p>載入中…</p></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer><div class="container">© 2025 物資共享平台</div></footer>
+
+<script src="js/main.js"></script>
+<script>
+// ---------- Tab switch ----------
+document.querySelectorAll('.filter-btn[data-tab]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn[data-tab]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    document.getElementById('tabListings').style.display = tab === 'listings' ? 'block' : 'none';
+    document.getElementById('tabRequests').style.display = tab === 'requests' ? 'block' : 'none';
+  });
+});
+
+// ---------- Render listings ----------
+function renderListings() {
+  const items = Store.getListings();
+  const wrap  = document.getElementById('listingsContent');
+
+  if (items.length === 0) {
+    wrap.innerHTML = `<div class="empty-state">
+      <div class="icon">📦</div>
+      <p>你還沒有刊登任何物資</p>
+      <a href="donate.html" class="btn btn-primary mt-16">＋ 立即刊登</a>
+    </div>`;
+    return;
+  }
+
+  wrap.innerHTML = `
+    <div class="card" style="overflow:auto;">
+      <table class="listings-table">
+        <thead>
+          <tr>
+            <th>物品名稱</th>
+            <th>分類</th>
+            <th>狀態</th>
+            <th>刊登日</th>
+            <th>可索取</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items.map(item => `
+          <tr data-id="${item.id}">
+            <td>
+              <a href="item-detail.html?id=${item.id}" style="font-weight:600;">
+                ${item.title}
+              </a>
+            </td>
+            <td>${item.category}</td>
+            <td>${conditionBadge(item.condition)}</td>
+            <td>${item.postedAt}</td>
+            <td>${availableBadge(item.available)}</td>
+            <td>
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-ghost btn-sm toggle-btn" data-id="${item.id}">
+                  ${item.available ? '標為已認領' : '恢復可索取'}
+                </button>
+                <button class="btn btn-danger btn-sm delete-btn" data-id="${item.id}">刪除</button>
+              </div>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+
+  // Toggle available
+  wrap.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id  = parseInt(btn.dataset.id);
+      const all = Store.getListings();
+      const idx = all.findIndex(i => i.id === id);
+      if (idx === -1) return;
+      all[idx].available = !all[idx].available;
+      Store.set('myListings', all);
+      renderListings();
+      showToast('✅ 狀態已更新');
+    });
+  });
+
+  // Delete
+  wrap.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!confirm('確定要刪除這筆刊登嗎？')) return;
+      Store.deleteListing(parseInt(btn.dataset.id));
+      renderListings();
+      showToast('已刪除刊登', 'info');
+    });
+  });
+}
+
+// ---------- Render requests ----------
+function renderRequests() {
+  const reqs = Store.getRequests();
+  const wrap = document.getElementById('requestsContent');
+
+  if (reqs.length === 0) {
+    wrap.innerHTML = `<div class="empty-state">
+      <div class="icon">🙋</div>
+      <p>你還沒有送出任何索取申請</p>
+      <a href="browse.html" class="btn btn-outline mt-16">瀏覽物資</a>
+    </div>`;
+    return;
+  }
+
+  wrap.innerHTML = `
+    <div class="card" style="overflow:auto;">
+      <table class="listings-table">
+        <thead>
+          <tr>
+            <th>申請物品 ID</th>
+            <th>申請人</th>
+            <th>聯絡方式</th>
+            <th>索取原因</th>
+            <th>申請日期</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${reqs.map(r => `
+          <tr>
+            <td>${r.itemId ? `<a href="item-detail.html?id=${r.itemId}">#${r.itemId}</a>` : '—'}</td>
+            <td>${r.name}</td>
+            <td>${r.contact}</td>
+            <td>${r.reason || '—'}</td>
+            <td>${r.sentAt}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+renderListings();
+renderRequests();
+</script>
+</body>
+</html>

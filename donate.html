@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>提供物資 — 物資共享平台</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a class="nav-brand" href="index.html"><span>🌱</span> 物資共享平台</a>
+    <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">首頁</a>
+      <a href="browse.html">尋找物資</a>
+      <a href="my-listings.html">我的刊登</a>
+      <a href="about.html">關於平台</a>
+      <a href="donate.html" class="btn-nav">＋ 提供物資</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container" style="max-width:680px;">
+
+    <div id="toast" class="alert alert-success" style="display:none;"></div>
+
+    <h1 class="page-title">📦 提供物資</h1>
+    <p class="text-muted mb-24">填寫以下資訊，將物品刊登給有需要的人</p>
+
+    <div class="card" style="padding:32px;">
+      <form id="donateForm" novalidate>
+
+        <div class="form-group">
+          <label class="form-label" for="title">物品名稱 <span class="required">*</span></label>
+          <input class="form-control" id="title" type="text" placeholder="例：兒童故事書（10本）" required>
+          <div class="form-error">請填寫物品名稱</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="category">分類 <span class="required">*</span></label>
+          <select class="form-control" id="category" required>
+            <option value="">— 選擇分類 —</option>
+            <option>書籍文具</option>
+            <option>衣物</option>
+            <option>家具家電</option>
+            <option>嬰幼兒用品</option>
+            <option>玩具</option>
+            <option>生活用品</option>
+            <option>其他</option>
+          </select>
+          <div class="form-error">請選擇分類</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="condition">物品狀態 <span class="required">*</span></label>
+          <select class="form-control" id="condition" required>
+            <option value="">— 選擇狀態 —</option>
+            <option>全新</option>
+            <option>九成新</option>
+            <option>良好</option>
+            <option>普通</option>
+          </select>
+          <div class="form-error">請選擇物品狀態</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="description">物品描述 <span class="required">*</span></label>
+          <textarea class="form-control" id="description" rows="4"
+            placeholder="詳細描述物品狀況、數量、尺寸等資訊…" required></textarea>
+          <div class="form-error">請填寫物品描述</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="location">所在地區 <span class="required">*</span></label>
+          <input class="form-control" id="location" type="text" placeholder="例：台北市大安區" required>
+          <div class="form-error">請填寫所在地區</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="donor">刊登者姓名 <span class="required">*</span></label>
+          <input class="form-control" id="donor" type="text" placeholder="你的姓名或暱稱" required>
+          <div class="form-error">請填寫刊登者姓名</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="imageUrl">圖片網址</label>
+          <input class="form-control" id="imageUrl" type="url" placeholder="https://…（選填）">
+          <div class="form-hint">可貼上公開圖片連結，留空將使用預設圖片</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="tags">標籤</label>
+          <input class="form-control" id="tags" type="text" placeholder="以逗號分隔，例：繪本, 兒童, 中文（選填）">
+          <div class="form-hint">可填入多個關鍵字方便搜尋</div>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:8px;">
+          <button type="submit" class="btn btn-primary btn-lg" style="flex:1;">刊登物資</button>
+          <a href="index.html" class="btn btn-ghost btn-lg">取消</a>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</main>
+
+<footer><div class="container">© 2025 物資共享平台</div></footer>
+
+<script src="js/main.js"></script>
+<script>
+document.getElementById('donateForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  let valid = true;
+
+  const fields = ['title', 'category', 'condition', 'description', 'location', 'donor'];
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.classList.add('error');
+      valid = false;
+    } else {
+      el.classList.remove('error');
+    }
+  });
+
+  if (!valid) return;
+
+  const imageVal = document.getElementById('imageUrl').value.trim();
+  const tagsVal  = document.getElementById('tags').value.trim();
+
+  const item = {
+    id:          Store.nextId(),
+    title:       document.getElementById('title').value.trim(),
+    category:    document.getElementById('category').value,
+    condition:   document.getElementById('condition').value,
+    description: document.getElementById('description').value.trim(),
+    location:    document.getElementById('location').value.trim(),
+    donor:       document.getElementById('donor').value.trim(),
+    image:       imageVal || 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=400&q=80',
+    postedAt:    new Date().toISOString().slice(0, 10),
+    available:   true,
+    tags:        tagsVal ? tagsVal.split(',').map(t => t.trim()).filter(Boolean) : [],
+    isLocal:     true
+  };
+
+  Store.addListing(item);
+  showToast('✅ 物資已成功刊登！');
+  document.getElementById('donateForm').reset();
+
+  setTimeout(() => { window.location.href = 'my-listings.html'; }, 1800);
+});
+
+// Remove error class on input
+['title','category','condition','description','location','donor'].forEach(id => {
+  document.getElementById(id).addEventListener('input', function () {
+    this.classList.remove('error');
+  });
+});
+</script>
+</body>
+</html>

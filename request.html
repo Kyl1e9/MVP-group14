@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我要索取 — 物資共享平台</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a class="nav-brand" href="index.html"><span>🌱</span> 物資共享平台</a>
+    <div class="nav-toggle" id="navToggle"><span></span><span></span><span></span></div>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">首頁</a>
+      <a href="browse.html">尋找物資</a>
+      <a href="my-listings.html">我的刊登</a>
+      <a href="about.html">關於平台</a>
+      <a href="donate.html" class="btn-nav">＋ 提供物資</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container" style="max-width:680px;">
+
+    <div id="toast" class="alert alert-success" style="display:none;"></div>
+
+    <div style="margin-bottom:20px;">
+      <a id="backLink" href="browse.html" class="btn btn-ghost btn-sm">← 返回物品頁</a>
+    </div>
+
+    <h1 class="page-title">🙋 我要索取</h1>
+
+    <!-- Item summary card -->
+    <div class="card mb-24" id="itemSummary" style="display:flex;gap:16px;padding:16px;align-items:center;">
+      <div class="empty-state" style="padding:12px;"><div class="icon">⏳</div></div>
+    </div>
+
+    <div class="card" style="padding:32px;">
+      <form id="requestForm" novalidate>
+
+        <div class="form-group">
+          <label class="form-label" for="reqName">你的姓名 <span class="required">*</span></label>
+          <input class="form-control" id="reqName" type="text" placeholder="你的姓名或暱稱" required>
+          <div class="form-error">請填寫姓名</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reqContact">聯絡方式 <span class="required">*</span></label>
+          <input class="form-control" id="reqContact" type="text" placeholder="電話 / Email / LINE ID" required>
+          <div class="form-error">請填寫聯絡方式</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reqReason">索取原因</label>
+          <textarea class="form-control" id="reqReason" rows="3"
+            placeholder="說明你需要這個物品的原因（選填），有助於提供者做決定…"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reqPickup">可取貨時間</label>
+          <input class="form-control" id="reqPickup" type="text" placeholder="例：平日下午、週末均可（選填）">
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:8px;">
+          <button type="submit" class="btn btn-accent btn-lg" style="flex:1;">送出申請</button>
+          <a id="cancelBtn" href="browse.html" class="btn btn-ghost btn-lg">取消</a>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</main>
+
+<footer><div class="container">© 2025 物資共享平台</div></footer>
+
+<script src="js/main.js"></script>
+<script>
+(async function () {
+  const params = new URLSearchParams(location.search);
+  const id     = parseInt(params.get('id'));
+
+  if (id) {
+    document.getElementById('backLink').href  = `item-detail.html?id=${id}`;
+    document.getElementById('cancelBtn').href = `item-detail.html?id=${id}`;
+
+    const remote = await fetchItems();
+    const local  = Store.getListings();
+    const item   = [...local, ...remote].find(i => i.id === id);
+    const summary = document.getElementById('itemSummary');
+
+    if (item) {
+      summary.innerHTML = `
+        <img src="${item.image}" alt="${item.title}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;flex-shrink:0;"
+             onerror="this.src='https://via.placeholder.com/80?text=圖'">
+        <div>
+          <div style="font-weight:700;">${item.title}</div>
+          <div class="text-muted" style="font-size:.85rem;">📍 ${item.location} &nbsp;|&nbsp; ${item.category}</div>
+          <div style="margin-top:4px;">${conditionBadge(item.condition)}</div>
+        </div>`;
+    }
+  }
+
+  document.getElementById('requestForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    let valid = true;
+
+    ['reqName', 'reqContact'].forEach(fid => {
+      const el = document.getElementById(fid);
+      if (!el.value.trim()) { el.classList.add('error'); valid = false; }
+      else el.classList.remove('error');
+    });
+    if (!valid) return;
+
+    const req = {
+      id:       Store.nextId(),
+      itemId:   id || null,
+      name:     document.getElementById('reqName').value.trim(),
+      contact:  document.getElementById('reqContact').value.trim(),
+      reason:   document.getElementById('reqReason').value.trim(),
+      pickup:   document.getElementById('reqPickup').value.trim(),
+      sentAt:   new Date().toISOString().slice(0, 10)
+    };
+    Store.addRequest(req);
+    showToast('✅ 申請已送出！提供者將會與你聯繫。');
+    document.getElementById('requestForm').reset();
+    setTimeout(() => { window.location.href = 'browse.html'; }, 2000);
+  });
+
+  ['reqName','reqContact'].forEach(fid => {
+    document.getElementById(fid).addEventListener('input', function () {
+      this.classList.remove('error');
+    });
+  });
+})();
+</script>
+</body>
+</html>
