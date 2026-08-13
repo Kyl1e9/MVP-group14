@@ -10,7 +10,7 @@ const ITEMS_DATA = [
     "condition": "七成新",
     "description": "TECO 東元立扇，高度可調節，三段風速，功能正常。因換新冷氣，不再需要，希望給有需要的人。尺寸約高 120cm。",
     "location": "台北市大安區",
-    "image": "https://placehold.co/400x300/e8f5e9/2e7d32?text=電風扇",
+    "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
     "donor": "王小明",
     "date": "2025-06-01",
     "status": "available"
@@ -142,7 +142,7 @@ const ITEMS_DATA = [
     "condition": "全新",
     "description": "全新未拆封桌扇，品牌聲寶，原廠包裝完整，為贈品未使用。USB 供電，靜音設計，適合桌面使用。",
     "location": "新竹市東區",
-    "image": "https://placehold.co/400x300/e8f5e9/1b5e20?text=桌上型電扇",
+    "image": "https://images.unsplash.com/photo-1625961332771-3f40b0e2bdcf?w=400&h=300&fit=crop",
     "donor": "賴秀珍",
     "date": "2025-06-14",
     "status": "available"
