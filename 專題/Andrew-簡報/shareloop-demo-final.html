@@ -273,128 +273,80 @@ footer { background: #161616; padding: 20px 20px 16px; }
   <div class="hero-strip">
     <div class="ey">Demo 腳本 · Live Walkthrough Script</div>
     <h1>10 分鐘完整 Demo 流程</h1>
-    <p>共 10 個場景 · 每場景含時間點、逐字口白（引號內）、操作指示<br>建議搭配實機或 Figma Prototype 同步操作</p>
+    <p>共 6 個場景 · 每場景含時間點、逐字口白（引號內）、操作指示<br>建議搭配實機或 Figma Prototype 同步操作</p>
   </div>
 
   <div class="tl">
 
     <div class="tr">
-      <div class="tt"><div class="min">0:00</div><div class="dur">1 min</div></div>
+      <div class="tt"><div class="min">0:00</div><div class="dur">50 sec</div></div>
       <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
       <div class="tc">
         <div class="tc-scene">開場白</div>
-        <div class="tc-title">問題定義 — 台灣的浪費，就藏在每個人的衣櫥裡</div>
-        <div class="tc-script">「請問在座有多少人，家裡有超過三件、超過半年沒碰過的東西？（停頓）幾乎每個人。台灣每年超過 1,500 萬噸廢棄物中，有相當大比例仍具使用價值。而在同一座城市，有家庭因為缺少嬰兒推車、學習用品、保暖衣物而煩惱。問題不是物資不夠，是流通的管道斷了——現有二手平台要議價、怕詐騙、搞運費；捐贈站又不知在哪、不知收不收。ShareLoop 就是那條缺失的連結，讓捐贈像傳訊息一樣簡單。」</div>
-        <div class="tc-ops"><span class="tc-lbl">操作</span>投影首頁 Hero 畫面；展示痛點數據橫幅</div>
-        <div class="tags"><span class="tag tb">口白</span><span class="tag">問題量化</span><span class="tag">情境鋪陳</span></div>
+        <div class="tc-title">問題定義 — 閒置物資與物資缺口同時存在</div>
+        <div class="tc-script">「家裡有超過半年沒用過的東西嗎？幾乎每個人都有。而在同一座城市，有家庭缺少嬰兒推車、學習用品、保暖衣物。問題不是物資不夠，是流通的管道斷了。ShareLoop 就是那條連結。」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>投影首頁 index.html；指出兩個主要 CTA</div>
+        <div class="tags"><span class="tag tb">口白</span><span class="tag">問題定義</span><span class="tag">情境鋪陳</span></div>
       </div>
     </div>
 
     <div class="tr">
-      <div class="tt"><div class="min">1:00</div><div class="dur">1 min</div></div>
+      <div class="tt"><div class="min">0:50</div><div class="dur">1 min</div></div>
       <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
       <div class="tc">
-        <div class="tc-scene">場景一 · index.html</div>
-        <div class="tc-title">平台首頁 — 設計決策說明</div>
-        <div class="tc-script">「這是 ShareLoop 首頁。注意我們只設了兩個主要 CTA：『我要提供物資』與『尋找物資』。刻意沒有登入牆——任何人可以先瀏覽，降低心理門檻。頁面同時展示最新刊登的物品卡片，讓第一次到訪的需求者馬上感受到平台的活躍度。」</div>
-        <div class="tc-ops"><span class="tc-lbl">操作</span>滾動首頁 → 指出兩個 CTA → 最新刊登卡片 → 導覽列結構</div>
-        <div class="tags"><span class="tag tb">index.html</span><span class="tag">低門檻設計</span><span class="tag">UX 決策</span></div>
+        <div class="tc-scene">場景一 · donate.html</div>
+        <div class="tc-title">捐贈者旅程 — 30 秒完成物資刊登</div>
+        <div class="tc-script">「我是王先生，有台嬰兒推車想捐出去。點『我要提供物資』，填物品名稱、分類、狀況、行政區、上傳照片——完成。不需要先登入，降低第一次使用的門檻。送出後系統告知 24 小時內收到媒合通知。」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>首頁 → donate.html → 填表單 → 上傳照片 → 送出 → 成功頁</div>
+        <div class="tags"><span class="tag tb">donate.html</span><span class="tag tg">低摩擦</span><span class="tag">操作示範</span></div>
       </div>
     </div>
 
     <div class="tr">
-      <div class="tt"><div class="min">2:00</div><div class="dur">1.5 min</div></div>
+      <div class="tt"><div class="min">1:50</div><div class="dur">1 min</div></div>
       <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
       <div class="tc">
-        <div class="tc-scene">場景二 · donate.html</div>
-        <div class="tc-title">捐贈者旅程 — 2 分鐘完成物資刊登</div>
-        <div class="tc-script">「假設我是王先生，有台用了兩年的嬰兒推車想捐出去。點擊『我要提供物資』進入 donate.html。表單極簡：物品名稱、分類下拉、狀況描述、可取件行政區、偏好時段、上傳一到三張照片。注意這裡不要求填個人資料——刊登完成後才引導選填，降低放棄率。送出後系統提示：預計 24 小時內收到媒合通知。」</div>
-        <div class="tc-ops"><span class="tc-lbl">操作</span>首頁 → donate.html → 逐欄填寫 → 上傳照片 → 送出 → 成功確認頁</div>
-        <div class="tags"><span class="tag tb">donate.html</span><span class="tag tg">低摩擦設計</span><span class="tag">操作示範</span></div>
+        <div class="tc-scene">場景二 · browse.html + item-detail.html</div>
+        <div class="tc-title">需求者搜尋與詳情 — 找到、確認、準備索取</div>
+        <div class="tc-script">「換成陳小姐。她在 browse.html 搜尋『嬰兒推車』，王先生的刊登第一筆出現。點進 item-detail.html，看到多張照片、捐贈者評分、行政區地圖、可取件時段。設計核心是信任——沒有議價、沒有留言，流程單純。頁面底部點『我要索取』。」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>browse.html 搜尋 → 點卡片 → item-detail.html 滾動 → 點「我要索取」</div>
+        <div class="tags"><span class="tag tb">browse.html</span><span class="tag tb">item-detail.html</span><span class="tag">信任機制</span></div>
       </div>
     </div>
 
     <div class="tr">
-      <div class="tt"><div class="min">3:30</div><div class="dur">1 min</div></div>
+      <div class="tt"><div class="min">2:50</div><div class="dur">50 sec</div></div>
       <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
       <div class="tc">
-        <div class="tc-scene">場景三 · browse.html</div>
-        <div class="tc-title">需求者搜尋 — 關鍵字、分類、地區三層篩選</div>
-        <div class="tc-script">「換成陳小姐的視角——剛生了第二胎，需要嬰兒推車但預算有限。她打開 browse.html，輸入『嬰兒推車』，王先生的刊登立刻出現第一筆。也可以點分類『育兒用品』，或用地區篩選縮小範圍。每張卡片顯示：縮圖、物品狀況標籤、刊登時間、距離——這三個因素是我們用研訪問發現需求者最優先考量的。」</div>
-        <div class="tc-ops"><span class="tc-lbl">操作</span>browse.html → 搜尋關鍵字 → 切換分類 → 地區篩選 → 點擊卡片</div>
-        <div class="tags"><span class="tag tb">browse.html</span><span class="tag">搜尋</span><span class="tag">分類篩選</span><span class="tag">地區篩選</span></div>
+        <div class="tc-scene">場景三 · request.html</div>
+        <div class="tc-title">索取申請 — 全程匿名，個資不直接交換</div>
+        <div class="tc-script">「陳小姐在 request.html 選偏好取件時段、填一段簡短說明。送出後系統站內通知王先生，但不暴露她的電話或地址。王先生接受後，雙方才各收到一組一次性驗證碼，現場核對用。」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>request.html → 選時段 → 填說明 → 送出 → 「等待捐贈者確認」畫面</div>
+        <div class="tags"><span class="tag tb">request.html</span><span class="tag tg">匿名媒合</span><span class="tag">驗證碼</span><span class="tag">隱私保護</span></div>
       </div>
     </div>
 
     <div class="tr">
-      <div class="tt"><div class="min">4:30</div><div class="dur">1 min</div></div>
+      <div class="tt"><div class="min">3:40</div><div class="dur">50 sec</div></div>
       <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
       <div class="tc">
-        <div class="tc-scene">場景四 · item-detail.html</div>
-        <div class="tc-title">物品詳情 — 信任設計，消除陌生人交流的顧慮</div>
-        <div class="tc-script">「進入 item-detail.html，設計核心是『信任』。多張照片可左右切換；捐贈者的歷史捐贈筆數與評分清楚可見；地圖只顯示行政區，保護地址隱私；可取件時段一目瞭然。頁面底部是唯一的主要 CTA：『我要索取』。注意——沒有議價、沒有留言功能，刻意保持流程單純，不讓平台滑向二手買賣市場。」</div>
-        <div class="tc-ops"><span class="tc-lbl">操作</span>item-detail.html → 切換照片 → 捐贈者評分區 → 地圖區 → 點擊「我要索取」</div>
-        <div class="tags"><span class="tag tb">item-detail.html</span><span class="tag">信任機制</span><span class="tag">隱私設計</span></div>
+        <div class="tc-scene">場景四 · my-listings.html</div>
+        <div class="tc-title">捐贈者管理 — 四種狀態，生命週期一目瞭然</div>
+        <div class="tc-script">「王先生進入 my-listings.html，看到四個狀態分頁：刊登中、待確認、待取件、已完成。他點開陳小姐的申請、看到說明後點『接受』。系統自動發出驗證碼，狀態更新。每完成一筆多一個『已贈出』徽章——這是平台的核心激勵設計。」</div>
+        <div class="tc-ops"><span class="tc-lbl">操作</span>my-listings.html → 切換狀態分頁 → 點開申請 → 接受 → 狀態更新</div>
+        <div class="tags"><span class="tag tb">my-listings.html</span><span class="tag tg">已贈出徽章</span><span class="tag">激勵設計</span></div>
       </div>
     </div>
 
     <div class="tr">
-      <div class="tt"><div class="min">5:30</div><div class="dur">1 min</div></div>
-      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
-      <div class="tc">
-        <div class="tc-scene">場景五 · request.html</div>
-        <div class="tc-title">索取申請 — 全程匿名媒合，雙方隱私均受保護</div>
-        <div class="tc-script">「request.html 是媒合的關鍵節點。陳小姐選擇偏好取件時段（三選一），填一段簡短說明：『我是雙和區的新手媽媽，週六上午方便取件。』送出後系統站內通知王先生，但不暴露陳小姐的電話或地址。王先生接受後，雙方才各自收到一組一次性取件驗證碼。整個流程，個人聯絡資訊從未直接交換。」</div>
-        <div class="tc-ops"><span class="tc-lbl">操作</span>request.html → 選時段 → 填說明 → 送出 → 顯示「等待捐贈者確認」畫面</div>
-        <div class="tags"><span class="tag tb">request.html</span><span class="tag tg">匿名媒合</span><span class="tag">驗證碼機制</span><span class="tag">隱私保護</span></div>
-      </div>
-    </div>
-
-    <div class="tr">
-      <div class="tt"><div class="min">6:30</div><div class="dur">1 min</div></div>
-      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
-      <div class="tc">
-        <div class="tc-scene">場景六 · my-listings.html</div>
-        <div class="tc-title">捐贈者管理 — 四種狀態，物品生命週期一目瞭然</div>
-        <div class="tc-script">「回到王先生視角。他進入 my-listings.html，頁面分四個狀態分頁：『刊登中』等待申請、『待確認』已有人申請、『待取件』已接受申請、『已完成』移交完畢。他點開陳小姐的申請後點擊『接受』。系統自動發出驗證碼，狀態更新為『待取件』。每完成一筆，他的頁面新增一個『已贈出』徽章——這是我們設計的核心激勵機制。」</div>
-        <div class="tc-ops"><span class="tc-lbl">操作</span>my-listings.html → 切換四個狀態分頁 → 點開申請 → 接受 → 狀態更新</div>
-        <div class="tags"><span class="tag tb">my-listings.html</span><span class="tag tg">已贈出徽章</span><span class="tag">激勵設計</span><span class="tag">狀態追蹤</span></div>
-      </div>
-    </div>
-
-    <div class="tr">
-      <div class="tt"><div class="min">7:30</div><div class="dur">0.75 min</div></div>
-      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
-      <div class="tc">
-        <div class="tc-scene">場景七 · 取件核驗</div>
-        <div class="tc-title">現場驗證碼核對 → 互評機制 → 信任循環完成</div>
-        <div class="tc-script">「取件當天，陳小姐出示驗證碼，王先生在 my-listings.html 輸入確認，移交完成。系統隨即推送互評請求：五顆星 + 一句話，選填。這個機制一方面讓捐贈者累積信譽值，另一方面提供平台健康指標——我們可追蹤媒合完成率與評分分布，快速識別異常。」</div>
-        <div class="tc-ops"><span class="tc-lbl">模擬</span>輸入驗證碼 → 確認移交 → 評分彈出視窗</div>
-        <div class="tags"><span class="tag">取件核驗</span><span class="tag tb">互評機制</span><span class="tag tg">信任累積</span></div>
-      </div>
-    </div>
-
-    <div class="tr">
-      <div class="tt"><div class="min">8:15</div><div class="dur">1 min</div></div>
-      <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
-      <div class="tc">
-        <div class="tc-scene">場景八 · about.html</div>
-        <div class="tc-title">社會影響力儀表板 — 讓善意可被看見、被量化</div>
-        <div class="tc-script">「進入 about.html——這不是一般的平台介紹，而是即時的社會影響力儀表板。三個數字：累積媒合件數、換算廢棄物減少重量、服務到的家庭數。這些是我們對捐贈者說的話：你的每一件閒置物品，在這裡不只是一筆交易，而是一個可被記錄的善意行為。當善意的成本降低、回饋可見，願意捐贈的人就會更多。」</div>
-        <div class="tc-ops"><span class="tc-lbl">操作</span>about.html → 三個即時數字 → 使命說明 → SDG 對應章節</div>
-        <div class="tags"><span class="tag tb">about.html</span><span class="tag tg">社會影響力</span><span class="tag">KPI 儀表板</span><span class="tag">SDGs</span></div>
-      </div>
-    </div>
-
-    <div class="tr">
-      <div class="tt"><div class="min">9:15</div><div class="dur">0.75 min</div></div>
+      <div class="tt"><div class="min">4:30</div><div class="dur">30 sec</div></div>
       <div class="ts"><div class="td"></div><div class="tl-line"></div></div>
       <div class="tc">
         <div class="tc-scene">結語 · Q&amp;A 開放</div>
         <div class="tc-title">三句話收尾，開放提問</div>
-        <div class="tc-script">「三句話結尾。第一：我們不比二手平台，我們比的是讓善意流通的效率。第二：技術門檻不是護城河，使用者信任才是——這就是為什麼每個設計決策都優先降低風險感。第三：今天展示的是 MVP，但資料模型已為智能媒合推薦、社區地圖視覺化、社福機構 API 對接預留擴充點。請問評審有什麼想問的？」</div>
+        <div class="tc-script">「我們不比二手平台，我們比的是讓善意流通的效率。使用者信任是護城河，所以每個設計決策都優先降低風險感。今天展示的是 MVP，資料模型已為未來的智能媒合、社區地圖、社福機構 API 對接預留擴充點。請問評審有什麼想問的？」</div>
         <div class="tc-ops"><span class="tc-lbl">操作</span>回到首頁靜態展示 → 開放 Q&amp;A</div>
-        <div class="tags"><span class="tag tb">結語</span><span class="tag">競爭定位</span><span class="tag">技術擴充性</span><span class="tag tg">開放 Q&amp;A</span></div>
+        <div class="tags"><span class="tag tb">結語</span><span class="tag">競爭定位</span><span class="tag tg">開放 Q&amp;A</span></div>
       </div>
     </div>
 
